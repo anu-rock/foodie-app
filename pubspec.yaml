@@ -1,0 +1,31 @@
+name: foodieapp
+description: Discover the thousand words a food&#x27;s picture is worth.
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.3.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.2
+  provider: ^4.0.4
+  firebase_auth: ^0.15.5+3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  test: any
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - images/breakfast-1425702_1280.jpg
+    - images/yummy-pot.png
+    - images/sandwich-434658_1280.jpg
+    - images/image-loading.gif
