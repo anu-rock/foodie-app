@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodieapp/constants.dart';
 import 'package:foodieapp/models/app_state.dart';
-import 'package:foodieapp/screens/browse/browse_screen.dart';
-import 'package:foodieapp/screens/home/home_screen.dart';
-import 'package:foodieapp/screens/profile/profile_screen.dart';
-import 'package:foodieapp/screens/shop/shop_screen.dart';
+import 'package:foodieapp/tabs/browse_tab_navigator.dart';
+import 'package:foodieapp/tabs/home_tab_navigator.dart';
+import 'package:foodieapp/tabs/profile_tab_navigator.dart';
+import 'package:foodieapp/tabs/shop_tab_navigator.dart';
 import 'package:provider/provider.dart';
 
 const TAB_ICON_SIZE = 25.0;
@@ -40,20 +40,21 @@ class TabsBar extends StatelessWidget {
               IconButton(
                 key: Key('tab_home'),
                 icon: Icon(Icons.home),
-                color: appState.selectedTab == HomeScreen.id
+                color: appState.selectedTab == HomeTabNavigator.id
                     ? kColorBlue
                     : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () => appState.setTab(context, HomeScreen.id),
+                onPressed: () => appState.setTab(context, HomeTabNavigator.id),
               ),
               IconButton(
                 key: Key('tab_browse'),
                 icon: Icon(Icons.fastfood),
-                color: appState.selectedTab == BrowseScreen.id
+                color: appState.selectedTab == BrowseTabNavigator.id
                     ? kColorBlue
                     : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () => appState.setTab(context, BrowseScreen.id),
+                onPressed: () =>
+                    appState.setTab(context, BrowseTabNavigator.id),
               ),
               Opacity(
                 opacity: 0,
@@ -68,20 +69,21 @@ class TabsBar extends StatelessWidget {
               IconButton(
                 key: Key('tab_shop'),
                 icon: Icon(Icons.shopping_cart),
-                color: appState.selectedTab == ShopScreen.id
+                color: appState.selectedTab == ShopTabNavigator.id
                     ? kColorBlue
                     : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () => appState.setTab(context, ShopScreen.id),
+                onPressed: () => appState.setTab(context, ShopTabNavigator.id),
               ),
               IconButton(
                 key: Key('tab_profile'),
                 icon: Icon(Icons.person),
-                color: appState.selectedTab == ProfileScreen.id
+                color: appState.selectedTab == ProfileTabNavigator.id
                     ? kColorBlue
                     : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () => appState.setTab(context, ProfileScreen.id),
+                onPressed: () =>
+                    appState.setTab(context, ProfileTabNavigator.id),
               ),
             ],
           ),

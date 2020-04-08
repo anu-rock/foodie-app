@@ -5,7 +5,6 @@ import 'package:foodieapp/screens/recipe_cook/recipe_cook_screen.dart';
 import 'package:foodieapp/screens/recipe_overview/prop_tile.dart';
 import 'package:foodieapp/widgets/heading_2.dart';
 import 'package:foodieapp/widgets/page_action_button.dart';
-import 'package:foodieapp/widgets/tabs_bar.dart';
 
 class RecipeOverviewScreen extends StatelessWidget {
   static const id = 'recipe_overview';
@@ -127,7 +126,6 @@ class RecipeOverviewScreen extends StatelessWidget {
         title: Heading2(recipe != null ? recipe.name : 'Recipe Overview'),
       ),
       body: mainBody,
-      bottomNavigationBar: TabsBar(),
     );
   }
 }

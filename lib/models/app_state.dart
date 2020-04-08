@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foodieapp/models/user.dart';
-import 'package:foodieapp/screens/home/home_screen.dart';
+import 'package:foodieapp/tabs/home_tab_navigator.dart';
 
 class AppState extends ChangeNotifier {
-  String _selectedTab = HomeScreen.id;
+  String _selectedTab = HomeTabNavigator.id;
   User _currentUser = User(
     id: 1,
     firstName: 'Gaurav',
@@ -24,7 +24,6 @@ class AppState extends ChangeNotifier {
   /// Marks the given tab (id) as the selected one,
   /// navigates to its route, and triggers state change.
   void setTab(BuildContext context, String id) {
-    Navigator.pushReplacementNamed(context, id);
     this._selectedTab = id;
     this.notifyListeners();
   }

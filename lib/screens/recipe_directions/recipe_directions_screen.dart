@@ -3,7 +3,6 @@ import 'package:foodieapp/constants.dart';
 import 'package:foodieapp/models/recipe.dart';
 import 'package:foodieapp/screens/recipe_directions/recipe_direction.dart';
 import 'package:foodieapp/widgets/heading_2.dart';
-import 'package:foodieapp/widgets/tabs_bar.dart';
 
 class RecipeDirectionsScreen extends StatelessWidget {
   static const id = 'recipe_directions';
@@ -88,7 +87,6 @@ class RecipeDirectionsScreen extends StatelessWidget {
         title: Heading2(recipe != null ? recipe.name : 'Recipe Directions'),
       ),
       body: mainBody,
-      bottomNavigationBar: TabsBar(),
     );
   }
 }
