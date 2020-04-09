@@ -22,3 +22,6 @@ const kPaddingHorizontal = EdgeInsets.symmetric(horizontal: kPaddingUnits);
 const kPaddingHorizontalSm = EdgeInsets.symmetric(horizontal: kPaddingUnitsSm);
 const kPaddingAll = EdgeInsets.all(kPaddingUnits);
 const kPaddingAllSm = EdgeInsets.all(kPaddingUnitsSm);
+
+// Miscellaneous
+const kDefaultUsername = 'Rockstar';

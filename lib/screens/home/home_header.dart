@@ -42,7 +42,7 @@ class HomeHeader extends StatelessWidget {
                   left: kPaddingUnits,
                 ),
                 child: Text(
-                  'Hi ${appState.currentUser.firstName}',
+                  'Howdy, ${appState.currentUser.displayName ?? kDefaultUsername}',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 30.0,

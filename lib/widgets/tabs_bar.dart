@@ -44,7 +44,7 @@ class TabsBar extends StatelessWidget {
                     ? kColorBlue
                     : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () => appState.setTab(context, HomeTabNavigator.id),
+                onPressed: () => appState.setTab(HomeTabNavigator.id),
               ),
               IconButton(
                 key: Key('tab_browse'),
@@ -53,8 +53,7 @@ class TabsBar extends StatelessWidget {
                     ? kColorBlue
                     : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () =>
-                    appState.setTab(context, BrowseTabNavigator.id),
+                onPressed: () => appState.setTab(BrowseTabNavigator.id),
               ),
               Opacity(
                 opacity: 0,
@@ -73,7 +72,7 @@ class TabsBar extends StatelessWidget {
                     ? kColorBlue
                     : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () => appState.setTab(context, ShopTabNavigator.id),
+                onPressed: () => appState.setTab(ShopTabNavigator.id),
               ),
               IconButton(
                 key: Key('tab_profile'),
@@ -82,8 +81,7 @@ class TabsBar extends StatelessWidget {
                     ? kColorBlue
                     : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () =>
-                    appState.setTab(context, ProfileTabNavigator.id),
+                onPressed: () => appState.setTab(ProfileTabNavigator.id),
               ),
             ],
           ),

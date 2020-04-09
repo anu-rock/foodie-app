@@ -22,7 +22,9 @@ class AppRootScreen extends StatelessWidget {
     final selectedTab = appState.selectedTab;
 
     return WillPopScope(
-      // a fix to handle back button per tabnavigator
+      // A fix to handle back button per tabnavigator
+      // See "One more thing" section here:
+      // https://medium.com/coding-with-flutter/flutter-case-study-multiple-navigators-with-bottomnavigationbar-90eb6caa6dbf
       onWillPop: () async =>
           !await this.navigatorKeys[selectedTab].currentState.maybePop(),
       child: Scaffold(

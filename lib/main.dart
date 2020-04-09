@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodieapp/screens/app_root/app_root_screen.dart';
+import 'package:foodieapp/screens/login/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:foodieapp/models/app_state.dart';
 
@@ -19,7 +21,17 @@ class FoodieApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: AppRootScreen(),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.onAuthStateChanged,
+          builder: (context, snapshot) {
+            final user = snapshot.data;
+            if (user == null) {
+              return LoginScreen();
+            }
+            this.appState.setCurrentUser(user);
+            return AppRootScreen();
+          },
+        ),
       ),
     );
   }
