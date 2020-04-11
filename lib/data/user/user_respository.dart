@@ -1,6 +1,13 @@
 import 'user.dart';
 
 /// A class that helps with user-related data and actions.
+///
+/// Defines an interface or contract for concrete user repositories.
+///
+/// Today there's a Firebase-based user repository,
+/// tomorrow there could be an API-based user repository,
+/// or even a local storage based user repository (for caching),
+/// and so on.
 abstract class UserRepository {
   AuthStatus get authStatus;
 
