@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:foodieapp/data/user/user.dart';
 import 'package:foodieapp/models/app_state.dart';
 import 'package:foodieapp/screens/home/home_screen.dart';
 import 'package:foodieapp/screens/home/home_header.dart';
@@ -23,6 +24,7 @@ void main() {
 
 Widget wrappedHomeScreen() {
   var appState = AppState();
+  appState.setCurrentUser(User());
   return ChangeNotifierProvider(
     create: (context) => appState,
     child: MaterialApp(home: HomeScreen()),
