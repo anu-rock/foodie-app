@@ -1,11 +1,18 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/data/user/user.dart';
 import 'package:foodieapp/tabs/home_tab_navigator.dart';
 
 class AppState extends ChangeNotifier {
+  /// It's always useful to know the currently selected tab.
+  /// This information may be used inside any screen/widget
+  /// to take tab-based decisions.
   String _selectedTab = HomeTabNavigator.id;
-  FirebaseUser _currentUser;
+
+  /// Useful to instantly get currentUser,
+  /// without the overhead of async methods in
+  /// [FirebaseAuth] and [UserRepository] classes.
+  User _currentUser;
 
   /// Getter for selectedTab state.
   String get selectedTab {
@@ -13,7 +20,7 @@ class AppState extends ChangeNotifier {
   }
 
   /// Getter for currentUser state.
-  FirebaseUser get currentUser {
+  User get currentUser {
     return this._currentUser;
   }
 
@@ -25,7 +32,7 @@ class AppState extends ChangeNotifier {
   }
 
   /// Updates `currentUser` state to the given user object.
-  void setCurrentUser(FirebaseUser user) {
+  void setCurrentUser(User user) {
     this._currentUser = user;
   }
 }

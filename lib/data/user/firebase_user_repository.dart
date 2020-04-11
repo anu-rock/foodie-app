@@ -9,18 +9,19 @@ import 'user.dart';
 /// [FirebaseAuth] package internally takes care of caching data,
 /// so a separate implementation of [UserRepository] for caching is not required.
 class FirebaseUserRepository implements UserRepository {
-  // Getting this from outside makes this class testable
-  FirebaseAuth authInstance;
+  FirebaseAuth _auth;
   AuthStatus _status = AuthStatus.Uninitialized;
 
-  FirebaseUserRepository({this.authInstance});
+  // Getting this from outside makes this class testable
+  FirebaseUserRepository({FirebaseAuth authInstance})
+      : this._auth = authInstance ?? FirebaseAuth.instance;
 
   @override
   AuthStatus get authStatus => this._status;
 
   @override
   Future<User> getCurrentUser() async {
-    var fbUser = await this.authInstance.currentUser();
+    var fbUser = await this._auth.currentUser();
 
     if (fbUser != null) {
       return this._fromFirebaseUser(fbUser);
@@ -34,7 +35,7 @@ class FirebaseUserRepository implements UserRepository {
     try {
       this._status = AuthStatus.Authenticating;
       await this
-          .authInstance
+          ._auth
           .signInWithEmailAndPassword(email: email, password: password);
       this._status = AuthStatus.Authenticated;
       return Future<LoginResult>.value(
@@ -57,12 +58,12 @@ class FirebaseUserRepository implements UserRepository {
   @override
   Future<void> logout() async {
     this._status = AuthStatus.Unauthenticated;
-    await this.authInstance.signOut();
+    await this._auth.signOut();
   }
 
   @override
   Stream<User> onAuthChanged() {
-    return this.authInstance.onAuthStateChanged.map((fbUser) {
+    return this._auth.onAuthStateChanged.map((fbUser) {
       if (fbUser == null) {
         this._status = AuthStatus.Unauthenticated;
         return null;

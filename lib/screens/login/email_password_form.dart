@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:foodieapp/constants.dart';
+import 'package:foodieapp/data/user/firebase_user_repository.dart';
+import 'package:foodieapp/data/user/user_respository.dart';
 import 'package:foodieapp/widgets/page_action_button.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
+final UserRepository user = FirebaseUserRepository();
 
 class EmailPasswordForm extends StatefulWidget {
   @override
@@ -16,7 +16,7 @@ class EmailPasswordFormState extends State<EmailPasswordForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  String _errorMsg = '';
+  String _authMsg = '';
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class EmailPasswordFormState extends State<EmailPasswordForm> {
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(
-                      this._errorMsg,
+                      this._authMsg,
                       style: TextStyle(
                         color: Colors.red,
                       ),
@@ -85,16 +85,13 @@ class EmailPasswordFormState extends State<EmailPasswordForm> {
 
   void _submitForm() async {
     if (_formKey.currentState.validate()) {
-      try {
-        await _auth.signInWithEmailAndPassword(
-          email: this._emailController.text,
-          password: this._passwordController.text,
-        );
-      } on PlatformException catch (e) {
-        setState(() {
-          this._errorMsg = e.message;
-        });
-      }
+      var result = await user.loginWithEmail(
+        this._emailController.text,
+        this._passwordController.text,
+      );
+      setState(() {
+        this._authMsg = result.message;
+      });
     }
   }
 
