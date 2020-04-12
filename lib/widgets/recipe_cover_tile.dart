@@ -78,21 +78,23 @@ class RecipeCoverTile extends StatelessWidget {
                   children: <Widget>[
                     Text(this.recipe.name),
                     SizedBox(height: 20.0),
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.timer,
-                          size: 10.0,
-                        ),
-                        SizedBox(width: 5.0),
-                        Text(
-                          '${this.recipe.cookingTime} mins',
-                          style: TextStyle(
-                            fontSize: 10.0,
-                            color: Colors.grey,
+                    Expanded(
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.timer,
+                            size: 10.0,
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 5.0),
+                          Text(
+                            '${this.recipe.cookingTime} mins',
+                            style: TextStyle(
+                              fontSize: 10.0,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
