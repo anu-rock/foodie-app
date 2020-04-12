@@ -23,5 +23,9 @@ const kPaddingHorizontalSm = EdgeInsets.symmetric(horizontal: kPaddingUnitsSm);
 const kPaddingAll = EdgeInsets.all(kPaddingUnits);
 const kPaddingAllSm = EdgeInsets.all(kPaddingUnitsSm);
 
+// Firestore collections
+const kFirestoreIngredients = 'ingredients';
+const kFirestoreUserIngredients = 'user_ingredients';
+
 // Miscellaneous
 const kDefaultUsername = 'Rockstar';
