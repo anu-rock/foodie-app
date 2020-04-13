@@ -135,17 +135,17 @@ void main() {
         expect(first[0].id, isNotNull);
       });
 
-      // test('should throw exception when user is not logged in', () {
-      //   final _authSignedOut = MockFirebaseAuth(signedIn: false);
-      //   final _repoWihoutUser = FirebaseIngredientRepository(
-      //     storeInstance: _store,
-      //     authInstance: _authSignedOut,
-      //   );
+      test('should throw exception when user is not logged in', () {
+        final _authSignedOut = MockFirebaseAuth(signedIn: false);
+        final _repoWihoutUser = FirebaseIngredientRepository(
+          storeInstance: _store,
+          authInstance: _authSignedOut,
+        );
 
-      //   var ingredients = _repoWihoutUser.getIngredients();
+        var ingredients = _repoWihoutUser.getIngredients();
 
-      //   expect(ingredients, emitsError(AuthException));
-      // });
+        expect(ingredients, emitsError(isA<AuthException>()));
+      });
     });
 
     group('updateIngredient()', () {
