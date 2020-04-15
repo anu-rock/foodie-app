@@ -17,23 +17,42 @@
   - [ ] Favorite
   - [ ] Play
   - [ ] Share
+- [ ] User Profile screen
+  - [ ] profile settings
+  - [ ] account settings
+- [ ] Friend Profile screen
+  - [ ] friend's user profile details
 - [ ] Better login screen
 - [ ] Sign up screen
-- [ ] Status screen (optional)
+- [ ] Status screen
 - [ ] Splash screen
 - [ ] Launcher icon
 - [ ] Refactor styling into ThemeData (optional)
 
 ## Business Logic
 
-- [ ] Recipe repository
-- [ ] Status repository (optional)
+- [ ] User repository
+  - [ ] store users in Firestore
+- [ ] Friend repository
+- [ ] Recipe repository (recipes + user_recipes collections)
+  - [ ] find recipes by ingredients
+  - [ ] add recipe (automatically done by viewing a recipe the first time from search results)
+  - [ ] get recipe by id/title
+  - [ ] get popular recipes
+- [ ] Status repository
   - [ ] "my next cook is \_\_\_" message
   - [ ] now playing recipe (à la Steam)
   - [ ] custom status message (à la WhatsApp)
-- [ ] History respository
-  - [ ] recipes played
-  - [ ] recipes shared
+- [ ] Log respository
+  - [ ] recipe search
+  - [ ] errors
+- [ ] Push Notifications (use Firebase Functions)
+  - [ ] status updates for friends
+- [ ] Email Notifications (use Firebase Functions)
+  - [ ] email verification
+  - [ ] welcome email
+  - [ ] password reset
+  - [ ] all push notification scenarios
 - [ ] Facebook login
 - [ ] Google login
 - [ ] iOS support (Firebase and smoke testing)
