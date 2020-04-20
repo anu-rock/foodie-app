@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodieapp/util/template_string.dart';
 
 // Container attributes
 const kContShadowColor = Colors.black38;
@@ -26,6 +27,26 @@ const kPaddingAllSm = EdgeInsets.all(kPaddingUnitsSm);
 // Firestore collections
 const kFirestoreIngredients = 'ingredients';
 const kFirestoreUserIngredients = 'user_ingredients';
+const kFirestoreRecipes = 'recipes';
+const kFirestoreUserRecipes = 'user_recipes';
 
 // Miscellaneous
 const kDefaultUsername = 'Rockstar';
+
+// API urls
+final kUrlFindRecipesApi = TemplateString(
+  'http://www.recipepuppy.com/api/?i={ingredients}',
+);
+final kUrlGetRecipeApi = TemplateString(
+  'https://api.spoonacular.com/recipes/{id}/information?apiKey=$kSpoonacularApiKey',
+);
+final kUrlExtractRecipeApi = TemplateString(
+  'https://api.spoonacular.com/recipes/extract/{url}?apiKey=$kSpoonacularApiKey',
+);
+
+// Regular expressions
+final kRegexUrl = RegExp(
+    '^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?\$');
+
+// Secrets
+const kSpoonacularApiKey = '72f3276161d847358a527b7b0d303941';
