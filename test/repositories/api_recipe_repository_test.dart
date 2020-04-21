@@ -33,6 +33,8 @@ void main() {
 
         var expectedSearchResults = RecipeMockData.searchResults['results'] as List;
         expect(foundRecipes.length, expectedSearchResults.length);
+        expect(foundRecipes[0], isA<Recipe>());
+        expect(foundRecipes[0].id, isNotEmpty);
       });
 
       test('should return an empty list when invalid ingredients are given', () async {
@@ -320,30 +322,38 @@ class RecipeMockData {
     "message": "The recipe could not be extracted."
   };
   static final searchResults = {
-    "title": "Recipe Puppy",
-    "version": 0.1,
-    "href": "http://www.recipepuppy.com/",
     "results": [
       {
-        "title":
-            "Roasted Garlic Grilling Sauce \r\n\t\t\r\n\t\r\n\t\t\r\n\t\r\n\t\t\r\n\t\r\n\t\r\n\r\n",
-        "href": "http://www.kraftfoods.com/kf/recipes/roasted-garlic-grilling-sauce-56344.aspx",
-        "ingredients": "garlic, onions, hot sauce",
-        "thumbnail": "http://img.recipepuppy.com/634118.jpg"
+        "id": 209715,
+        "usedIngredientCount": 1,
+        "missedIngredientCount": 4,
+        "likes": 0,
+        "title": "Mango, pear & ginger crumble",
+        "image": "https://spoonacular.com/recipeImages/209715-312x231.jpg",
+        "imageType": "jpg"
       },
       {
-        "title": "Steamed Mussels I",
-        "href": "http://allrecipes.com/Recipe/Steamed-Mussels-I/Detail.aspx",
-        "ingredients": "garlic, mussels, onions",
-        "thumbnail": "http://img.recipepuppy.com/29318.jpg"
+        "id": 210509,
+        "usedIngredientCount": 1,
+        "missedIngredientCount": 4,
+        "likes": 0,
+        "title": "Clotted cream & stem ginger ice cream",
+        "image": "https://spoonacular.com/recipeImages/210509-312x231.jpg",
+        "imageType": "jpg"
       },
       {
-        "title": "Braised Beef and Onions",
-        "href": "http://www.epicurious.com/recipes/food/views/Braised-Beef-and-Onions-232969",
-        "ingredients": "allspice, garlic, onions",
-        "thumbnail": "http://img.recipepuppy.com/103021.jpg"
-      }
-    ]
+        "id": 215178,
+        "usedIngredientCount": 1,
+        "missedIngredientCount": 4,
+        "likes": 0,
+        "title": "Mini chocolate & ginger brownies",
+        "image": "https://spoonacular.com/recipeImages/215178-312x231.jpg",
+        "imageType": "jpg"
+      },
+    ],
+    "offset": 0,
+    "number": 10,
+    "totalResults": 45
   };
   static final emptySearchResults = {
     "title": "Recipe Puppy",

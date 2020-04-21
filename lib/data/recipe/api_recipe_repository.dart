@@ -36,7 +36,9 @@ class ApiRecipeRepository implements RecipeRepository {
       case 200:
         var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
         var searchResults = jsonResponse['results'] as List;
-        return searchResults.map((r) => this._parseFromRecipePuppy(r)).toList();
+        return searchResults.map((r) => this._parseFromSpoonacularSearch(r)).toList();
+      case 402:
+        throw QuotaExceededException('Daily API quota exhausted.');
       default:
         throw Exception('Request failed with status: ${response.statusCode}.');
     }
@@ -126,7 +128,6 @@ class ApiRecipeRepository implements RecipeRepository {
 
   Recipe _parseFromRecipePuppy(Map<String, dynamic> json) {
     return Recipe(
-      sourceRecipeId: json['sourceRecipeId '] as String,
       sourceName: 'Recipe Puppy',
       sourceUrl: json['href'] as String,
       title: json['title'] as String,
@@ -145,7 +146,7 @@ class ApiRecipeRepository implements RecipeRepository {
     }
 
     return Recipe(
-      sourceRecipeId: json['sourceRecipeId '] as String,
+      sourceRecipeId: json['id'] as String,
       sourceName: json['sourceName'] as String,
       sourceUrl: json['sourceUrl'] as String,
       title: json['title'] as String,
@@ -153,6 +154,16 @@ class ApiRecipeRepository implements RecipeRepository {
       cookingTime: json['readyInMinutes'] as int,
       desc: json['summary'] as String,
       instructions: instructions,
+    );
+  }
+
+  Recipe _parseFromSpoonacularSearch(Map<String, dynamic> json) {
+    return Recipe(
+      id: (json['id'] as int).toString(), // not sourceRecipeId to keep things consistent with
+      //search results from other implementations of RecipeRepository
+      sourceName: 'Spoonacular',
+      title: json['title'] as String,
+      photoUrl: json['image'] as String,
     );
   }
 }
