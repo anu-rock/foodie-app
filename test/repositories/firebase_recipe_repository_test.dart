@@ -58,6 +58,38 @@ void main() {
       });
     });
 
+    group('getRecipeBySourceRecipeId()', () {
+      setUp(() async {
+        // Seed data
+        await store
+            .collection(kFirestoreRecipes)
+            .document(RecipeMockData.existingRecipeId)
+            .setData(RecipeMockData.existingRecipe.toMap());
+      });
+
+      test('should return recipe when valid id is given', () async {
+        var recipe =
+            await repo.getRecipeBySourceRecipeId(RecipeMockData.existingRecipe.sourceRecipeId);
+
+        expect(recipe, isA<Recipe>());
+        expect(recipe.id, RecipeMockData.existingRecipeId);
+      });
+
+      test('should return null when non-existent id is given', () async {
+        var recipe = await repo.getRecipeBySourceRecipeId(RecipeMockData.nonExistentSourceRecipeId);
+
+        expect(recipe, isNull);
+      });
+
+      test('should throw exception when empty id is given', () async {
+        var callback = () async {
+          await repo.getRecipeBySourceRecipeId(null);
+        };
+
+        expect(callback, throwsArgumentError);
+      });
+    });
+
     group('getRecipeBySourceUrl()', () {
       setUp(() async {
         // Seed data
@@ -400,11 +432,18 @@ void main() {
       });
 
       test('should mark recipe viewed when previously viewed recipe id is given', () async {
-        var recipe = await repo.viewRecipe(RecipeMockData.existingRecipeId);
+        var recipe = Recipe(
+          id: RecipeMockData.existingRecipeId,
+          title: RecipeMockData.existingRecipe.title,
+          ingredients: RecipeMockData.existingRecipe.ingredients,
+          sourceUrl: RecipeMockData.existingRecipe.sourceUrl,
+        );
 
-        expect(recipe, isA<UserRecipe>());
-        expect(recipe.viewedAt, isA<List>());
-        expect(recipe.viewedAt, hasLength(2));
+        var userRecipe = await repo.viewRecipe(recipe);
+
+        expect(userRecipe, isA<UserRecipe>());
+        expect(userRecipe.viewedAt, isA<List>());
+        expect(userRecipe.viewedAt, hasLength(2));
       });
 
       test('should mark recipe viewed when unviewed recipe id is given', () async {
@@ -413,22 +452,37 @@ void main() {
             .document(RecipeMockData.existingUserRecipeId)
             .delete();
 
-        var recipe = await repo.viewRecipe(RecipeMockData.existingRecipeId);
+        var recipe = Recipe(
+          id: RecipeMockData.existingRecipeId,
+          title: RecipeMockData.existingRecipe.title,
+          ingredients: RecipeMockData.existingRecipe.ingredients,
+          sourceUrl: RecipeMockData.existingRecipe.sourceUrl,
+        );
 
-        expect(recipe, isA<UserRecipe>());
-        expect(recipe.viewedAt, isA<List>());
-        expect(recipe.viewedAt, isNotEmpty);
+        var userRecipe = await repo.viewRecipe(recipe);
 
-        recipe = await repo.viewRecipe(RecipeMockData.existingRecipeId);
+        expect(userRecipe, isA<UserRecipe>());
+        expect(userRecipe.viewedAt, isA<List>());
+        expect(userRecipe.viewedAt, isNotEmpty);
 
-        expect(recipe, isA<UserRecipe>());
-        expect(recipe.viewedAt, isA<List>());
-        expect(recipe.viewedAt, hasLength(2));
+        userRecipe = await repo.viewRecipe(recipe);
+
+        expect(userRecipe, isA<UserRecipe>());
+        expect(userRecipe.viewedAt, isA<List>());
+        expect(userRecipe.viewedAt, hasLength(2));
       });
 
       test('should throw exception when non-existent recipe id is given', () async {
         var callback = () async {
-          await repo.viewRecipe(RecipeMockData.nonExistentRecipeId);
+          await repo.viewRecipe(Recipe(id: RecipeMockData.nonExistentRecipeId));
+        };
+
+        expect(callback, throwsArgumentError);
+      });
+
+      test('should throw exception when recipe without id is given', () async {
+        var callback = () async {
+          await repo.viewRecipe(RecipeMockData.existingRecipe);
         };
 
         expect(callback, throwsArgumentError);
@@ -448,9 +502,15 @@ void main() {
           storeInstance: store,
           authInstance: authSignedOut,
         );
+        var recipe = Recipe(
+          id: RecipeMockData.existingRecipeId,
+          title: RecipeMockData.existingRecipe.title,
+          ingredients: RecipeMockData.existingRecipe.ingredients,
+          sourceUrl: RecipeMockData.existingRecipe.sourceUrl,
+        );
 
         var callback = () async {
-          await repoWihoutUser.viewRecipe(RecipeMockData.existingRecipeId);
+          await repoWihoutUser.viewRecipe(recipe);
         };
 
         expect(callback, throwsA(predicate((e) => e is AuthException)));
@@ -480,9 +540,12 @@ void main() {
 class RecipeMockData {
   static final existingRecipeId = '1';
   static final nonExistentRecipeId = '999';
+  static final existingSourceRecipeId = '111111';
+  static final nonExistentSourceRecipeId = '999999';
   static final existingRecipe = Recipe(
     title: 'Rajma Masala',
     ingredients: ['rajma', 'spices', 'love'],
+    sourceRecipeId: existingSourceRecipeId,
     sourceUrl: 'https://foodienetwork.com/recipes/rajma-masala',
   );
   static final validSourceUrl = 'https://allrecipes.com/recipes/blueberry-cheesecake';

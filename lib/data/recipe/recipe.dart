@@ -68,7 +68,7 @@ class Recipe {
     this.title,
     this.desc,
     this.photoUrl,
-    this.ingredients,
+    this.ingredients = const [],
     this.cookingTime,
     this.difficulty,
     this.servings,
@@ -78,7 +78,7 @@ class Recipe {
     this.plays,
     this.favs,
     this.views,
-    this.instructions,
+    this.instructions = const [],
   });
 
   @override
@@ -138,7 +138,7 @@ class Recipe {
       plays: map['plays'] as int,
       favs: map['favs'] as int,
       views: map['views'] as int,
-      instructions: map['instructions'] as List<String>,
+      instructions: (map['instructions'] as List).map((i) => i as String).toList(),
     );
   }
 

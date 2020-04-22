@@ -58,6 +58,21 @@ class FirebaseRecipeRepository implements RecipeRepository {
   }
 
   @override
+  Future<Recipe> getRecipeBySourceRecipeId(String id) async {
+    if (id == null || id.isEmpty) {
+      throw ArgumentError('id cannot be null or empty');
+    }
+
+    var snapshot =
+        await this._recipesCollection.where('sourceRecipeId', isEqualTo: id).getDocuments();
+    if (snapshot.documents.length == 0) {
+      return null;
+    }
+    snapshot.documents[0].data['id'] = snapshot.documents[0].documentID;
+    return Recipe.fromMap(snapshot.documents[0].data);
+  }
+
+  @override
   Future<List<Recipe>> findRecipesByIngredients(List<String> ingredients) async {
     if (ingredients == null || ingredients.length == 0) {
       throw ArgumentError('ingredients cannot be null or empty');
@@ -216,14 +231,16 @@ class FirebaseRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<UserRecipe> viewRecipe(String recipeId) async {
-    if (recipeId == null || recipeId.isEmpty) {
-      throw ArgumentError('recipeId cannot be null or empty.');
+  Future<UserRecipe> viewRecipe(Recipe recipe) async {
+    if (recipe == null) {
+      throw ArgumentError('recipe cannot be null or empty.');
+    } else if (recipe.id == null || recipe.id.isEmpty) {
+      throw ArgumentError('recipe does not exist in store.');
     }
 
-    var recipe = await this._recipesCollection.document(recipeId).get();
-    if (!recipe.exists) {
-      throw ArgumentError('No recipe exists identified by given recipeId.');
+    var storedRecipe = await this._recipesCollection.document(recipe.id).get();
+    if (!storedRecipe.exists) {
+      throw ArgumentError('recipe does not exist in store.');
     }
 
     var currentUser = await this._auth.currentUser();
@@ -234,15 +251,15 @@ class FirebaseRecipeRepository implements RecipeRepository {
 
     var docs = await this
         ._userRecipesCollection
-        .where('recipeId', isEqualTo: recipeId)
+        .where('recipeId', isEqualTo: recipe.id)
         .where('userId', isEqualTo: currentUser.uid)
         .getDocuments();
 
     // Create corresponding UserRecipe when it doesn't already exist
     if (docs.documents.isEmpty) {
       var newUserRecipe = UserRecipe(
-        recipeId: recipeId,
-        recipeTitle: recipe.data['title'] as String,
+        recipeId: recipe.id,
+        recipeTitle: storedRecipe.data['title'] as String,
         userId: currentUser.uid,
         userName: currentUser.displayName,
         viewedAt: [DateTime.now()],

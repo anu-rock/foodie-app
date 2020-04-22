@@ -17,6 +17,9 @@ abstract class RecipeRepository {
   /// Returns a [Recipe] identified by given unique id.
   Future<Recipe> getRecipe(String id);
 
+  /// Returns a [Recipe] identified by given source recipe id.
+  Future<Recipe> getRecipeBySourceRecipeId(String id);
+
   /// Returns a [Recipe] found at `url`.
   Future<Recipe> getRecipeBySourceUrl(String url);
 
@@ -46,8 +49,17 @@ abstract class RecipeRepository {
   /// Consequentially, presence of a corresponding [UserRecipe] indicates
   /// that given recipe has been viewed by current user.
   ///
+  /// Note that this method expects the complete [Recipe] object rather than
+  /// only a recipe id. This is to handle the case when a recipe is being viewed
+  /// for the first time ever, and hence the need to save it before viewing.
+  /// Saving will generate a new recipe id that can then be used to create
+  /// a corresponding [UserRecipe].
+  ///
+  /// Also note that it is not the responsibility of this method to perform
+  /// the save operation. This will be handled by `RecipeRepository.saveRecipe`.
+  ///
   /// Returns the created or updated [UserRecipe].
-  Future<UserRecipe> viewRecipe(String recipeId);
+  Future<UserRecipe> viewRecipe(Recipe recipe);
 
   /// Mark given recipe as played by current user.
   ///

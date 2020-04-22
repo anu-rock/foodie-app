@@ -87,6 +87,11 @@ class ApiRecipeRepository implements RecipeRepository {
   }
 
   @override
+  Future<Recipe> getRecipeBySourceRecipeId(String id) {
+    throw UnsupportedError('This operation is not supported.');
+  }
+
+  @override
   Future<UserRecipe> toggleFavorite(String recipeId) {
     throw UnsupportedError('This operation is not supported.');
   }
@@ -122,17 +127,8 @@ class ApiRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<UserRecipe> viewRecipe(String recipeId) {
+  Future<UserRecipe> viewRecipe(Recipe recipe) {
     throw UnsupportedError('This operation is not supported.');
-  }
-
-  Recipe _parseFromRecipePuppy(Map<String, dynamic> json) {
-    return Recipe(
-      sourceName: 'Recipe Puppy',
-      sourceUrl: json['href'] as String,
-      title: json['title'] as String,
-      photoUrl: json['thumbnail'] as String,
-    );
   }
 
   Recipe _parseFromSpoonacular(Map<String, dynamic> json) {
@@ -146,7 +142,7 @@ class ApiRecipeRepository implements RecipeRepository {
     }
 
     return Recipe(
-      sourceRecipeId: json['id'] as String,
+      sourceRecipeId: (json['id'] as int).toString(),
       sourceName: json['sourceName'] as String,
       sourceUrl: json['sourceUrl'] as String,
       title: json['title'] as String,
