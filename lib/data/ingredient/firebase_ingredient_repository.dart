@@ -33,9 +33,10 @@ class FirebaseIngredientRepository implements IngredientRepository {
       throw ArgumentError('keyword cannot be null or empty');
     }
 
-    var docs = await this._ingredientsCollection.where('name', isEqualTo: keyword).getDocuments();
-    // .orderBy('name') // may become a performance bottleneck later
-    // .startAt([keyword]).endAt([keyword + "\uf8ff"]).getDocuments();
+    var docs = await this
+        ._ingredientsCollection
+        .orderBy('name') // may become a performance bottleneck later
+        .startAt([keyword]).endAt([keyword + "\uf8ff"]).getDocuments();
 
     return docs.documents.map((snapshot) => Ingredient.fromMap(snapshot.data)).toList();
   }
@@ -68,9 +69,9 @@ class FirebaseIngredientRepository implements IngredientRepository {
       return null;
     }
 
-    var newDoc = await result.get();
-    newDoc.data['id'] = result.documentID;
-    return UserIngredient.fromMap(newDoc.data);
+    var data = (await result.get()).data;
+    data['id'] = result.documentID;
+    return UserIngredient.fromMap(data);
   }
 
   @override
@@ -85,11 +86,17 @@ class FirebaseIngredientRepository implements IngredientRepository {
           'not_logged_in', 'No current user found probably because user is not logged in.');
     }
 
-    yield* _userIngredientsCollection.where('userId', isEqualTo: currentUser.uid).snapshots().map(
+    yield* _userIngredientsCollection
+        .where('userId', isEqualTo: currentUser.uid)
+        .where('removedAt', isEqualTo: '')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
           (snapshot) => snapshot.documents.map(
             (doc) {
-              doc.data['id'] = doc.documentID;
-              return UserIngredient.fromMap(doc.data);
+              var data = doc.data;
+              data['id'] = doc.documentID;
+              return UserIngredient.fromMap(data);
             },
           ).toList(),
         );

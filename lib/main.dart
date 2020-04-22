@@ -1,24 +1,36 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:foodieapp/screens/app_root/app_root_screen.dart';
 import 'package:foodieapp/screens/login/login_screen.dart';
-import 'package:provider/provider.dart';
 import 'package:foodieapp/models/app_state.dart';
 import 'package:foodieapp/data/user/user_respository.dart';
 import 'package:foodieapp/data/user/firebase_user_repository.dart';
+import 'package:foodieapp/data/ingredient/firebase_ingredient_repository.dart';
+import 'package:foodieapp/data/ingredient/ingredient_repository.dart';
 
 void main() => runApp(FoodieApp());
 
 class FoodieApp extends StatelessWidget {
-  final appState = AppState();
+  final _appState = AppState();
 
   // This widget is the root of our application.
   @override
   Widget build(BuildContext context) {
     UserRepository user = FirebaseUserRepository();
 
-    return ChangeNotifierProvider(
-      create: (context) => this.appState,
+    return MultiProvider(
+      providers: [
+        // State
+        ChangeNotifierProvider<AppState>(
+          create: (context) => this._appState,
+        ),
+        // Dependency injection
+        Provider<IngredientRepository>(
+          create: (context) => FirebaseIngredientRepository(),
+        ),
+      ],
       child: MaterialApp(
         title: 'Foodie App',
         theme: ThemeData(
@@ -31,7 +43,7 @@ class FoodieApp extends StatelessWidget {
             if (user == null) {
               return LoginScreen();
             }
-            this.appState.setCurrentUser(user);
+            this._appState.setCurrentUser(user);
             return AppRootScreen();
           },
         ),

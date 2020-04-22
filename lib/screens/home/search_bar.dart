@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:foodieapp/constants.dart';
+import 'package:foodieapp/data/ingredient/ingredient.dart';
+import 'package:foodieapp/data/ingredient/ingredient_repository.dart';
+import 'package:provider/provider.dart';
 
 class SearchBar extends StatelessWidget {
+  final TextEditingController _typeAheadController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    var ingredientRepo = Provider.of<IngredientRepository>(context);
+
     return Material(
       elevation: kContElevation,
       shadowColor: kContShadowColor,
@@ -25,15 +33,42 @@ class SearchBar extends StatelessWidget {
               ),
               Expanded(
                 flex: 5,
-                child: TextField(
+                child: TypeAheadField(
                   key: Key('search_input'),
-                  decoration: InputDecoration(
-                    hintText: 'Search for recipes',
-                    hintStyle: TextStyle(
-                      fontSize: 15.0,
+                  textFieldConfiguration: TextFieldConfiguration(
+                    controller: this._typeAheadController,
+                    decoration: InputDecoration(
+                      hintText: 'Find ingredients to add',
+                      hintStyle: TextStyle(
+                        fontSize: 15.0,
+                      ),
+                      border: InputBorder.none,
                     ),
-                    border: InputBorder.none,
                   ),
+                  suggestionsBoxDecoration: SuggestionsBoxDecoration(
+                    offsetX: -(kPaddingUnitsSm * 2 + 24.0),
+                    constraints: BoxConstraints(
+                      minWidth: 300.0,
+                    ),
+                  ),
+                  suggestionsCallback: (pattern) async {
+                    return await ingredientRepo.getSuggestionsByKeyword(pattern);
+                  },
+                  itemBuilder: (context, Ingredient suggestion) {
+                    return ListTile(
+                      leading: Icon(Icons.playlist_add),
+                      title: Text(suggestion.name),
+                    );
+                  },
+                  onSuggestionSelected: (Ingredient suggestion) async {
+                    var addResult = await ingredientRepo.addIngredient(
+                      ingredient: suggestion,
+                      quantity: 0,
+                    );
+                    if (addResult != null) {
+                      this._typeAheadController.clear();
+                    }
+                  },
                 ),
               ),
               Expanded(
