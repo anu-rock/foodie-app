@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+
 import 'package:foodieapp/constants.dart';
 import 'package:foodieapp/data/ingredient/ingredient.dart';
 import 'package:foodieapp/data/ingredient/ingredient_repository.dart';
-import 'package:provider/provider.dart';
+import 'package:foodieapp/screens/recipe_search/recipe_search_screen.dart';
 
 class SearchBar extends StatelessWidget {
   final TextEditingController _typeAheadController = TextEditingController();
@@ -82,7 +84,9 @@ class SearchBar extends StatelessWidget {
                       Icons.more_horiz,
                       color: Colors.white,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, RecipeSearchScreen.id);
+                    },
                   ),
                 ),
               ),

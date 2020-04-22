@@ -45,7 +45,10 @@ class RecipeCoverTile extends StatelessWidget {
                 horizontal: 10.0,
                 vertical: 5.0,
               ),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: kContBorderRadiusSm),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: kContBorderRadiusSm,
+              ),
               child: Row(
                 children: <Widget>[
                   Icon(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodieapp/screens/home/home_screen.dart';
 import 'package:foodieapp/screens/recipe_directions/recipe_directions_screen.dart';
 import 'package:foodieapp/screens/recipe_overview/recipe_overview_screen.dart';
+import 'package:foodieapp/screens/recipe_search/recipe_search_screen.dart';
 
 class HomeTabNavigator extends StatelessWidget {
   static const id = 'home_tab';
@@ -24,6 +25,11 @@ class HomeTabNavigator extends StatelessWidget {
 
   Route _buildRoute(RouteSettings settings) {
     switch (settings.name) {
+      case RecipeSearchScreen.id:
+        return CupertinoPageRoute(
+          builder: (context) => RecipeSearchScreen(),
+          settings: settings,
+        );
       case RecipeOverviewScreen.id:
         return CupertinoPageRoute(
           builder: (context) => RecipeOverviewScreen(),
