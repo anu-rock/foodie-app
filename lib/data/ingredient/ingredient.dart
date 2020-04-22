@@ -47,11 +47,14 @@ class Ingredient {
   }
 
   static Ingredient fromMap(Map<String, Object> map) {
+    if (map.isEmpty) {
+      return Ingredient();
+    }
+
     return Ingredient(
       id: map['id'] as String,
       name: map['name'] as String,
-      unitOfMeasure:
-          getMeasuringUnitfromString(map['unitOfMeasure'].toString()),
+      unitOfMeasure: getMeasuringUnitfromString(map['unitOfMeasure'].toString()),
     );
   }
 
