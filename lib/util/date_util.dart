@@ -32,7 +32,11 @@ class DateUtil {
       return null;
     }
 
-    return DateTime.parse(date).toLocal();
+    try {
+      return DateTime.parse(date).toLocal();
+    } on FormatException {
+      return null;
+    }
   }
 
   /// Converts a list of standardized timestamps (ISO 8601 representations
