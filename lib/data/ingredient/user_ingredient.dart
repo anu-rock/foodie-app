@@ -1,3 +1,5 @@
+import 'package:foodieapp/util/date_util.dart';
+
 import 'ingredient.dart';
 
 /// Represents an [Ingredient] mapped to a [User].
@@ -62,11 +64,9 @@ class UserIngredient extends Ingredient {
       'unitOfMeasure': this.unitOfMeasure.toString(),
       'userId': this.userId,
       'quantity': this.quantity,
-      'createdAt': this.createdAt.toUtc().toIso8601String(),
-      'updatedAt': this.updatedAt.toUtc().toIso8601String(),
-      'removedAt': this.removedAt != null
-          ? this.removedAt.toUtc().toIso8601String()
-          : null,
+      'createdAt': DateUtil.dateToUtcIsoString(this.createdAt),
+      'updatedAt': DateUtil.dateToUtcIsoString(this.updatedAt),
+      'removedAt': DateUtil.dateToUtcIsoString(this.removedAt),
     };
   }
 
@@ -74,15 +74,12 @@ class UserIngredient extends Ingredient {
     return UserIngredient(
       id: map['id'] as String,
       name: map['name'] as String,
-      unitOfMeasure: Ingredient.getMeasuringUnitfromString(
-          map['unitOfMeasure'].toString()),
+      unitOfMeasure: Ingredient.getMeasuringUnitfromString(map['unitOfMeasure'].toString()),
       userId: map['userId'] as String,
       quantity: map['quantity'] as double,
-      createdAt: DateTime.parse(map['createdAt'] as String).toLocal(),
-      updatedAt: DateTime.parse(map['updatedAt'] as String).toLocal(),
-      removedAt: map['removedAt'] != null
-          ? DateTime.parse(map['removedAt'] as String).toLocal()
-          : null,
+      createdAt: DateUtil.dateFromUtcIsoString(map['createdAt'] as String),
+      updatedAt: DateUtil.dateFromUtcIsoString(map['updatedAt'] as String),
+      removedAt: DateUtil.dateFromUtcIsoString(map['removedAt'] as String),
     );
   }
 }
