@@ -9,11 +9,10 @@ import 'package:foodieapp/screens/home/search_bar.dart';
 import 'package:foodieapp/screens/home/home_cta_tile.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/mocked_network_image_provider.dart';
+import '../mocked_network_image_provider.dart';
 
 void main() {
-  testWidgets('HomeScreen implementation matches its design',
-      (WidgetTester tester) async {
+  testWidgets('HomeScreen implementation matches its design', (WidgetTester tester) async {
     provideMockedNetworkImages(() async {
       await tester.pumpWidget(wrappedHomeScreen());
 
