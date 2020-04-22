@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodieapp/constants.dart';
-import 'package:foodieapp/models/recipe.dart';
+import 'package:foodieapp/data/recipe/recipe.dart';
 import 'package:foodieapp/screens/recipe_overview/recipe_overview_screen.dart';
 
 class RecipeCoverTile extends StatelessWidget {
@@ -30,7 +30,7 @@ class RecipeCoverTile extends StatelessWidget {
                 borderRadius: kContBorderRadiusSm,
                 child: FadeInImage.assetNetwork(
                   placeholder: 'images/image-loading.gif',
-                  image: recipe.pic,
+                  image: recipe.photoUrl,
                   height: 200.0,
                   fit: BoxFit.cover,
                 ),
@@ -45,8 +45,7 @@ class RecipeCoverTile extends StatelessWidget {
                 horizontal: 10.0,
                 vertical: 5.0,
               ),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: kContBorderRadiusSm),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: kContBorderRadiusSm),
               child: Row(
                 children: <Widget>[
                   Icon(
@@ -56,7 +55,7 @@ class RecipeCoverTile extends StatelessWidget {
                   SizedBox(
                     width: 5.0,
                   ),
-                  Text(this.recipe.likes.toString()),
+                  Text(this.recipe.favs.toString()),
                 ],
               ),
             ),
@@ -76,7 +75,7 @@ class RecipeCoverTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(this.recipe.name),
+                    Text(this.recipe.title),
                     SizedBox(height: 20.0),
                     Expanded(
                       child: Row(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodieapp/constants.dart';
-import 'package:foodieapp/models/recipe.dart';
+import 'package:foodieapp/data/recipe/recipe.dart';
 import 'package:foodieapp/screens/recipe_directions/recipe_direction.dart';
 import 'package:foodieapp/widgets/heading_2.dart';
 
@@ -28,7 +28,7 @@ class RecipeDirectionsScreen extends StatelessWidget {
                 height: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(recipe.pic),
+                    image: NetworkImage(recipe.photoUrl),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -55,13 +55,12 @@ class RecipeDirectionsScreen extends StatelessWidget {
                         SizedBox(
                           height: 20.0,
                         ),
-                        ...recipe.directions
+                        ...recipe.ingredients
                             .asMap()
                             .map((idx, direction) => MapEntry(
                                   idx,
                                   Container(
-                                    margin:
-                                        EdgeInsets.only(bottom: kPaddingUnits),
+                                    margin: EdgeInsets.only(bottom: kPaddingUnits),
                                     child: RecipeDirection(
                                       step: idx + 1,
                                       directionText: direction,
@@ -84,7 +83,7 @@ class RecipeDirectionsScreen extends StatelessWidget {
         leading: BackButton(
           color: kColorBluegrey,
         ),
-        title: Heading2(recipe != null ? recipe.name : 'Recipe Directions'),
+        title: Heading2(recipe != null ? recipe.title : 'Recipe Directions'),
       ),
       body: mainBody,
     );

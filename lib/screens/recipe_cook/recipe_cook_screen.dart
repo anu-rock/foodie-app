@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodieapp/constants.dart';
-import 'package:foodieapp/models/recipe.dart';
+import 'package:foodieapp/data/recipe/recipe.dart';
 import 'package:foodieapp/screens/recipe_cook/serving_size_tile.dart';
 import 'package:foodieapp/screens/recipe_directions/recipe_directions_screen.dart';
 import 'package:foodieapp/widgets/handle_line.dart';

@@ -4,7 +4,6 @@ import 'package:foodieapp/screens/home/home_cta_tile.dart';
 import 'package:foodieapp/screens/home/home_header.dart';
 import 'package:foodieapp/widgets/heading_2.dart';
 import 'package:foodieapp/widgets/recipe_cover_tile.dart';
-import 'package:foodieapp/data/popular_recipes.dart';
 
 class HomeScreen extends StatelessWidget {
   static const id = 'home';
@@ -12,7 +11,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> recipeTiles = [];
-    popularRecipes.forEach((recipe) {
+    [].forEach((recipe) {
       recipeTiles.add(RecipeCoverTile(recipe: recipe));
       recipeTiles.add(SizedBox(height: 20.0));
     });

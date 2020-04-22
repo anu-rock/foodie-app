@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodieapp/constants.dart';
-import 'package:foodieapp/models/recipe.dart';
+import 'package:foodieapp/data/recipe/recipe.dart';
 import 'package:foodieapp/screens/recipe_cook/recipe_cook_screen.dart';
 import 'package:foodieapp/screens/recipe_overview/prop_tile.dart';
 import 'package:foodieapp/widgets/heading_2.dart';
@@ -32,7 +32,7 @@ class RecipeOverviewScreen extends StatelessWidget {
                   height: 250.0,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(recipe.pic),
+                      image: NetworkImage(recipe.photoUrl),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -96,10 +96,8 @@ class RecipeOverviewScreen extends StatelessWidget {
                                 context: context,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(
-                                        kModalBorderRadiusUnits),
-                                    topRight: Radius.circular(
-                                        kModalBorderRadiusUnits),
+                                    topLeft: Radius.circular(kModalBorderRadiusUnits),
+                                    topRight: Radius.circular(kModalBorderRadiusUnits),
                                   ),
                                 ),
                                 builder: (context) => RecipeCookScreen(
@@ -123,7 +121,7 @@ class RecipeOverviewScreen extends StatelessWidget {
         leading: BackButton(
           color: kColorBluegrey,
         ),
-        title: Heading2(recipe != null ? recipe.name : 'Recipe Overview'),
+        title: Heading2(recipe != null ? recipe.title : 'Recipe Overview'),
       ),
       body: mainBody,
     );
