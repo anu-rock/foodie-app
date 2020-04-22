@@ -27,6 +27,9 @@ class FoodieApp extends StatelessWidget {
           create: (context) => this._appState,
         ),
         // Dependency injection
+        Provider<UserRepository>(
+          create: (context) => FirebaseUserRepository(),
+        ),
         Provider<IngredientRepository>(
           create: (context) => FirebaseIngredientRepository(),
         ),
