@@ -45,7 +45,7 @@ void main() {
         var callback = () async {
           await _repo.getSuggestionsByKeyword(null);
         };
-        expect(callback, throwsFormatException);
+        expect(callback, throwsArgumentError);
       });
     });
 
@@ -65,7 +65,7 @@ void main() {
             quantity: 1.0,
           );
         };
-        expect(callback, throwsFormatException);
+        expect(callback, throwsArgumentError);
       });
 
       test('should throw exception when negative quantity is given', () {
@@ -75,7 +75,7 @@ void main() {
             quantity: -1.0,
           );
         };
-        expect(callback, throwsFormatException);
+        expect(callback, throwsArgumentError);
       });
 
       test('should throw exception when user is not logged in', () {
@@ -160,26 +160,22 @@ void main() {
 
         await _repo.updateIngredient(ingredientId, quantity: newQuantity);
 
-        var ingredient = await _store
-            .collection(kFirestoreUserIngredients)
-            .document(ingredientId)
-            .get();
+        var ingredient =
+            await _store.collection(kFirestoreUserIngredients).document(ingredientId).get();
 
         // quantity got updated successfully
         expect(ingredient.data['quantity'] as double, newQuantity);
         // createdAt remains unchanged
-        expect(ingredient.data['createdAt'],
-            addedIngredient.createdAt.toUtc().toIso8601String());
+        expect(ingredient.data['createdAt'], addedIngredient.createdAt.toUtc().toIso8601String());
         // updatedAt got revised
-        expect(ingredient['updatedAt'],
-            isNot(addedIngredient.updatedAt.toUtc().toIso8601String()));
+        expect(ingredient['updatedAt'], isNot(addedIngredient.updatedAt.toUtc().toIso8601String()));
       });
 
       test('should throw exception when null is given', () {
         var callback = () async {
           await _repo.updateIngredient(null);
         };
-        expect(callback, throwsFormatException);
+        expect(callback, throwsArgumentError);
       });
 
       test('should throw exception when user is not logged in', () {
@@ -208,10 +204,8 @@ void main() {
 
         await _repo.removeIngredient(ingredientId);
 
-        var ingredient = await _store
-            .collection(kFirestoreUserIngredients)
-            .document(ingredientId)
-            .get();
+        var ingredient =
+            await _store.collection(kFirestoreUserIngredients).document(ingredientId).get();
 
         expect(ingredient.data['removedAt'], isNotNull);
         expect(ingredient.data['removedAt'], TypeMatcher<String>());

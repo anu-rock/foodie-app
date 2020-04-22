@@ -24,42 +24,35 @@ class FirebaseIngredientRepository implements IngredientRepository {
   })  : this._store = storeInstance ?? Firestore.instance,
         this._auth = authInstance ?? FirebaseAuth.instance {
     this._ingredientsCollection = _store.collection(kFirestoreIngredients);
-    this._userIngredientsCollection =
-        _store.collection(kFirestoreUserIngredients);
+    this._userIngredientsCollection = _store.collection(kFirestoreUserIngredients);
   }
 
   @override
   Future<List<Ingredient>> getSuggestionsByKeyword(String keyword) async {
     if (keyword == null || keyword.isEmpty) {
-      throw FormatException('keyword cannot be null or empty');
+      throw ArgumentError('keyword cannot be null or empty');
     }
 
-    var docs = await this
-        ._ingredientsCollection
-        .where('name', isEqualTo: keyword)
-        .getDocuments();
+    var docs = await this._ingredientsCollection.where('name', isEqualTo: keyword).getDocuments();
     // .orderBy('name') // may become a performance bottleneck later
     // .startAt([keyword]).endAt([keyword + "\uf8ff"]).getDocuments();
 
-    return docs.documents
-        .map((snapshot) => Ingredient.fromMap(snapshot.data))
-        .toList();
+    return docs.documents.map((snapshot) => Ingredient.fromMap(snapshot.data)).toList();
   }
 
   @override
-  Future<UserIngredient> addIngredient(
-      {Ingredient ingredient, double quantity}) async {
+  Future<UserIngredient> addIngredient({Ingredient ingredient, double quantity}) async {
     if (ingredient == null) {
-      throw FormatException('ingredient cannot be null');
+      throw ArgumentError('ingredient cannot be null');
     }
     if (quantity < 0) {
-      throw FormatException('quantity cannot be negative');
+      throw ArgumentError('quantity cannot be negative');
     }
 
     var currentUser = await this._auth.currentUser();
     if (currentUser == null) {
-      throw AuthException('not_logged_in',
-          'No current user found probably because user is not logged in.');
+      throw AuthException(
+          'not_logged_in', 'No current user found probably because user is not logged in.');
     }
 
     var result = await this._userIngredientsCollection.add(UserIngredient(
@@ -88,14 +81,11 @@ class FirebaseIngredientRepository implements IngredientRepository {
     // a Future rather than a Stream.
     var currentUser = await this._auth.currentUser();
     if (currentUser == null) {
-      throw AuthException('not_logged_in',
-          'No current user found probably because user is not logged in.');
+      throw AuthException(
+          'not_logged_in', 'No current user found probably because user is not logged in.');
     }
 
-    yield* _userIngredientsCollection
-        .where('userId', isEqualTo: currentUser.uid)
-        .snapshots()
-        .map(
+    yield* _userIngredientsCollection.where('userId', isEqualTo: currentUser.uid).snapshots().map(
           (snapshot) => snapshot.documents.map(
             (doc) {
               doc.data['id'] = doc.documentID;
@@ -113,22 +103,20 @@ class FirebaseIngredientRepository implements IngredientRepository {
     DateTime removedAt,
   }) async {
     if (ingredientId == null || ingredientId.isEmpty) {
-      throw FormatException('ingredientId cannot be null or empty');
+      throw ArgumentError('ingredientId cannot be null or empty');
     }
 
     var currentUser = await this._auth.currentUser();
     if (currentUser == null) {
-      throw AuthException('not_logged_in',
-          'No current user found probably because user is not logged in.');
+      throw AuthException(
+          'not_logged_in', 'No current user found probably because user is not logged in.');
     }
 
     var dataToUpdate = Map<String, dynamic>();
     dataToUpdate['updatedAt'] = DateTime.now().toUtc().toIso8601String();
     if (quantity != null) dataToUpdate['quantity'] = quantity;
-    if (unitOfMeasure != null)
-      dataToUpdate['unitOfMeasure'] = unitOfMeasure.toString();
-    if (removedAt != null)
-      dataToUpdate['removedAt'] = removedAt.toUtc().toIso8601String();
+    if (unitOfMeasure != null) dataToUpdate['unitOfMeasure'] = unitOfMeasure.toString();
+    if (removedAt != null) dataToUpdate['removedAt'] = removedAt.toUtc().toIso8601String();
 
     await _userIngredientsCollection
         .document(ingredientId)
