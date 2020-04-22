@@ -21,11 +21,12 @@ https://www.youtube.com/watch?v=haMOUb3KVSo&list=LLwzfmF6Imu2lIG3IhQsa84w&index=
   email: string,
   phoneNumber: string,
   photoUrl: string,
-  favorite_recipes: number, // kept in sync via Cloud Function
-  played_recipes: number, // kept in sync via Cloud Function
+  favoriteRecipes: number, // kept in sync via Cloud Function
+  playedRecipes: number, // kept in sync via Cloud Function
   private: [ // subcollection
     {
-      key: string, value: dynamic // eg. 'isEmailVerified': true
+      key: string,value: dynamic
+      // eg. 'isEmailVerified': true
     }
   ],
 }
@@ -49,7 +50,7 @@ This is just a static, one-time master list mostly for typeahead searching.
   name: string,
   unitOfMeasure: string,
   quantity: number,
-  user_id: string,
+  userId: string,
   createdAt: string,
   updatedAt: string,
   removedAt: string,
@@ -65,16 +66,16 @@ This is just a static, one-time master list mostly for typeahead searching.
   desc: string,
   photoUrl: string,
   ingredients: string[]
+  sourceRecipeId: string,
+  sourceName: string,
   sourceUrl: string,
+  difficulty: string,
+  cookingTime: string,
+  servings: string,
   plays: number, // kept in sync via Cloud Function
   favs: number, // kept in sync via Cloud Function
   views: number, // kept in sync via Cloud Function
-  instructions: [ // subcollection
-    {
-      step_num: int,
-      step_inst: string,
-    }
-  ],
+  instructions: string[],
 }
 ```
 
@@ -82,15 +83,16 @@ This is just a static, one-time master list mostly for typeahead searching.
 
 ```
 {
-  user_id: string,
-  user_name: string, // kept in sync via Cloud Function
-  user_photoUrl: string,
-  recipe_id: string,
-  recipe_title: string,
-  favorite: bool,
-  favorited_on: string
-  plays: string[], // timestamps
-  views: string[], // timestamps
+  recipeId: string,
+  recipeTitle: string,
+  userId: string,
+  userName: string, // kept in sync via Cloud Function
+  userPhotoUrl: string,
+  isFavorite: bool,
+  isPlayed: bool,
+  favoritedAt: string // timestamp
+  playedAt: string[] // timestamps
+  viewedAt: string[], // timestamps
 }
 ```
 
@@ -98,12 +100,12 @@ This is just a static, one-time master list mostly for typeahead searching.
 
 ```
 {
-  user_id: string,
-  user_name: string, // kept in sync via Cloud Function
-  user_photoUrl: string, // kept in sync via Cloud Function
-  friend_id: string,
-  friend_name: string, // kept in sync via Cloud Function
-  friend_photoUrl: string, // kept in sync via Cloud Function
+  userId: string,
+  userName: string, // kept in sync via Cloud Function
+  userPhotoUrl: string, // kept in sync via Cloud Function
+  friendId: string,
+  friendName: string, // kept in sync via Cloud Function
+  friendPhotoUrl: string, // kept in sync via Cloud Function
 }
 ```
 
@@ -111,8 +113,9 @@ This is just a static, one-time master list mostly for typeahead searching.
 
 ```
 {
-  user_id: string,
+  userId: string,
   status: string,
+  photoUrl: string,
 }
 ```
 
@@ -122,7 +125,7 @@ This is just a static, one-time master list mostly for typeahead searching.
 {
   code: string,
   message: string,
-  user_id: string,
+  userId: string,
   data: map
 }
 ```
