@@ -35,9 +35,9 @@
   - [ ] store users in Firestore
 - [ ] Friend repository
 - [ ] Recipe repository (recipes + user_recipes collections)
-  - [ ] find recipes by ingredients
-  - [ ] add recipe (automatically done by viewing a recipe the first time from search results)
-  - [ ] get recipe by id/title
+  - [x] find recipes by ingredients
+  - [x] add recipe (automatically done by viewing a recipe the first time from search results)
+  - [x] get recipe by id/title
   - [ ] get popular recipes
 - [ ] Status repository
   - [ ] "my next cook is \_\_\_" message
@@ -65,3 +65,17 @@
 ## CI/CD
 
 - [ ] Build automation
+
+# Phase 2
+
+#### Ingredients from photo
+
+Use image classification to identify ingredient names (and possibly quantities) from photo clicked from camera.
+
+#### Cook along
+
+Option to set photo status at each step of recipe instructions. Friends/followers to be able to get "live" status update about the recipe being played/cooked. This feature will help in creating **food influencers**.
+
+#### Karaoke-style play/cook screen
+
+Playing a recipe will be like playing a song in karaoke mode (more precisely like lyrics mode in Apple Music).
