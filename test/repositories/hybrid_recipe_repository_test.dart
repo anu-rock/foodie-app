@@ -80,7 +80,7 @@ void main() {
 
         expect(recipe, isA<Recipe>());
         expect(recipe, isNotNull);
-        expect(recipe.id, isNull); // Recipe received from API will not have id set
+        expect(recipe.id, id); // Recipe received from API will have id same as source id
         expect(recipe.sourceRecipeId, id);
       });
 
