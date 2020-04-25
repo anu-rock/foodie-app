@@ -55,7 +55,7 @@ class RecipeDirectionsScreen extends StatelessWidget {
                         SizedBox(
                           height: 20.0,
                         ),
-                        ...recipe.ingredients
+                        ...recipe.instructions
                             .asMap()
                             .map((idx, direction) => MapEntry(
                                   idx,
