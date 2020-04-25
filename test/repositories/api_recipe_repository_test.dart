@@ -34,7 +34,9 @@ void main() {
         var expectedSearchResults = RecipeMockData.searchResults['results'] as List;
         expect(foundRecipes.length, expectedSearchResults.length);
         expect(foundRecipes[0], isA<Recipe>());
-        expect(foundRecipes[0].id, isNotEmpty);
+        expect(foundRecipes[0].id, isNull);
+        expect(foundRecipes[0].sourceRecipeId, isNotEmpty);
+        expect(foundRecipes[0].instructions, isA<List>());
       });
 
       test('should return an empty list when invalid ingredients are given', () async {
@@ -324,35 +326,187 @@ class RecipeMockData {
   static final searchResults = {
     "results": [
       {
-        "id": 209715,
-        "usedIngredientCount": 1,
-        "missedIngredientCount": 4,
-        "likes": 0,
-        "title": "Mango, pear & ginger crumble",
-        "image": "https://spoonacular.com/recipeImages/209715-312x231.jpg",
-        "imageType": "jpg"
+        "vegetarian": false,
+        "vegan": false,
+        "glutenFree": true,
+        "dairyFree": false,
+        "veryHealthy": false,
+        "cheap": false,
+        "veryPopular": false,
+        "sustainable": false,
+        "weightWatcherSmartPoints": 20,
+        "gaps": "no",
+        "lowFodmap": false,
+        "preparationMinutes": 10,
+        "cookingMinutes": 20,
+        "aggregateLikes": 1,
+        "spoonacularScore": 81.0,
+        "healthScore": 49.0,
+        "creditsText": "Casaveneracion",
+        "sourceName": "Casaveneracion",
+        "pricePerServing": 233.75,
+        "id": 522119,
+        "title": "Swiss rösti salad",
+        "readyInMinutes": 30,
+        "servings": 1,
+        "sourceUrl": "http://casaveneracion.com/swiss-rosti-salad-2/",
+        "image": "https://spoonacular.com/recipeImages/522119-312x231.jpg",
+        "imageType": "jpg",
+        "summary":
+            "Swiss rösti salad might be just the main course you are searching for. One serving contains <b>538 calories</b>, <b>18g of protein</b>, and <b>34g of fat</b>. This recipe serves 1 and costs \$2.47 per serving. 1 person has made this recipe and would make it again. From preparation to the plate, this recipe takes around <b>30 minutes</b>. It is a good option if you're following a <b>gluten free</b> diet. Head to the store and pick up tomatoes, cheese, milk, and a few other things to make it today. To use up the cheese you could follow this main course with the <a href=\"https://spoonacular.com/recipes/the-bianca-dessert-grilled-cheese-586550\">The Bianca Dessert Grilled Cheese</a> as a dessert. All things considered, we decided this recipe <b>deserves a spoonacular score of 78%</b>. This score is solid. Try <a href=\"https://spoonacular.com/recipes/ham-swiss-rosti-697040\">Ham & Swiss Rosti</a>, <a href=\"https://spoonacular.com/recipes/rsti-with-papaya-salad-658827\">Rösti With Papaya Salad</a>, and <a href=\"https://spoonacular.com/recipes/rosti-753840\">Rosti</a> for similar recipes.",
+        "cuisines": [],
+        "dishTypes": ["salad"],
+        "diets": ["gluten free"],
+        "occasions": [],
+        "winePairing": {},
+        "analyzedInstructions": [
+          {
+            "name": "",
+            "steps": [
+              {
+                "number": 1,
+                "step":
+                    "Cook the whole and unpeeled potato in boiling water for about 10 minutes. Scoop out and dump in a bowl of iced water until cool. Peel and grate coarsely. Toss with salt, pepper and a bit of chili.",
+                "ingredients": [
+                  {"id": 2047, "name": "salt", "image": "salt.jpg"}
+                ],
+                "equipment": [
+                  {"id": 404783, "name": "bowl", "image": "bowl.jpg"}
+                ],
+                "length": {"number": 10, "unit": "minutes"}
+              },
+              {
+                "number": 2,
+                "step": "Heat the butter in a frying pan.",
+                "ingredients": [
+                  {"id": 1001, "name": "butter", "image": "butter-sliced.jpg"}
+                ],
+                "equipment": [
+                  {"id": 404645, "name": "frying pan", "image": "pan.png"}
+                ]
+              },
+              {
+                "number": 3,
+                "step":
+                    "Spread the grated potato at the bottom of the pan, pushing down lightly to make the shreds stick together. Fry over medium heat for three to four minutes per side or until golden and crisp outside.",
+                "ingredients": [],
+                "equipment": [
+                  {"id": 404645, "name": "frying pan", "image": "pan.png"}
+                ],
+                "length": {"number": 3, "unit": "minutes"}
+              },
+              {
+                "number": 4,
+                "step":
+                    "Place the cheese and milk in a microwaveable cup. Microwave on HIGH for a minute until the cheese is very soft. Stir to melt it completely. Season with salt, pepper and some chili.Arrange the lettuce, cucumber slices and tomato slices on a plate.",
+                "ingredients": [
+                  {"id": 10511529, "name": "tomato slices", "image": "sliced-tomato.jpg"},
+                  {"id": 11206, "name": "cucumber", "image": "cucumber.jpg"},
+                  {"id": 11252, "name": "lettuce", "image": "iceberg-lettuce.jpg"},
+                  {"id": 1041009, "name": "cheese", "image": "cheddar-cheese.png"},
+                  {"id": 1077, "name": "milk", "image": "milk.png"},
+                  {"id": 2047, "name": "salt", "image": "salt.jpg"}
+                ],
+                "equipment": [
+                  {"id": 404762, "name": "microwave", "image": "microwave.jpg"}
+                ]
+              },
+              {
+                "number": 5,
+                "step": "Place the rösti at the center.",
+                "ingredients": [],
+                "equipment": []
+              },
+              {
+                "number": 6,
+                "step": "Pour the milk-cheese dressing over. Sprinkle with parsley and serve.",
+                "ingredients": [
+                  {"id": 11297, "name": "parsley", "image": "parsley.jpg"},
+                  {"id": 1041009, "name": "cheese", "image": "cheddar-cheese.png"},
+                  {"id": 1077, "name": "milk", "image": "milk.png"}
+                ],
+                "equipment": []
+              }
+            ]
+          }
+        ],
+        "usedIngredientCount": 2,
+        "missedIngredientCount": 6,
+        "likes": 0
       },
       {
-        "id": 210509,
-        "usedIngredientCount": 1,
-        "missedIngredientCount": 4,
-        "likes": 0,
-        "title": "Clotted cream & stem ginger ice cream",
-        "image": "https://spoonacular.com/recipeImages/210509-312x231.jpg",
-        "imageType": "jpg"
-      },
-      {
-        "id": 215178,
-        "usedIngredientCount": 1,
-        "missedIngredientCount": 4,
-        "likes": 0,
-        "title": "Mini chocolate & ginger brownies",
-        "image": "https://spoonacular.com/recipeImages/215178-312x231.jpg",
-        "imageType": "jpg"
+        "vegetarian": false,
+        "vegan": false,
+        "glutenFree": false,
+        "dairyFree": false,
+        "veryHealthy": false,
+        "cheap": false,
+        "veryPopular": false,
+        "sustainable": false,
+        "weightWatcherSmartPoints": 13,
+        "gaps": "no",
+        "lowFodmap": false,
+        "preparationMinutes": 5,
+        "cookingMinutes": 15,
+        "aggregateLikes": 304,
+        "spoonacularScore": 90.0,
+        "healthScore": 24.0,
+        "creditsText": "Veg Recipes of India",
+        "sourceName": "Veg Recipes of India",
+        "pricePerServing": 103.24,
+        "id": 488463,
+        "title": "bread tartlets , quick bread tartlets with potato cheese",
+        "readyInMinutes": 20,
+        "servings": 2,
+        "sourceUrl": "http://www.vegrecipesofindia.com/bread-tartlets-quick-bread-tartlets/",
+        "image": "https://spoonacular.com/recipeImages/488463-312x231.jpg",
+        "imageType": "jpg",
+        "summary":
+            "Bread tartlets , quick bread tartlets with potato cheese is a <b>vegan</b> morn meal. One serving contains <b>465 calories</b>, <b>13g of protein</b>, and <b>19g of fat</b>. This recipe serves 2 and costs \$1.07 per serving. 304 people have made this recipe and would make it again. If you have chili powder, potato, onion, and a few other ingredients on hand, you can make it. From preparation to the plate, this recipe takes about <b>20 minutes</b>. All things considered, we decided this recipe <b>deserves a spoonacular score of 92%</b>. This score is awesome. Try <a href=\"https://spoonacular.com/recipes/sweet-potato-tartlets-404046\">Sweet Potato Tartlets</a>, <a href=\"https://spoonacular.com/recipes/potato-gruyre-tartlets-706232\">Potato-Gruyère Tartlets</a>, and <a href=\"https://spoonacular.com/recipes/potato-gruyre-tartlets-72562\">Potato & Gruyère Tartlets</a> for similar recipes.",
+        "cuisines": [],
+        "dishTypes": [],
+        "diets": [],
+        "occasions": [],
+        "winePairing": {"pairedWines": [], "pairingText": "", "productMatches": []},
+        "analyzedInstructions": [
+          {
+            "name": "",
+            "steps": [
+              {
+                "number": 1,
+                "step":
+                    "trim the edges of the bread.flatten each piece with a rolling pinplace the bread in a muffin tinbrush with some oil or melted buttersecure a piece of crumpled foil on each breadbake in a preheated oven at 190 degrees C for 10-12 mins till the breads are crisp and browned.chop the potato, onion and tomatoes.remove the muffin tin from the oven and throw away the foil.arrange the potatoes, tomatoes and onions on the bread.sprinkle the dry herbs and the chili powder along with some salt.top up with the grated cheese.bake again in the oven at 190 degrees C for 3-5 mins till the cheese gets browned.garnish with fresh sprigs of cilantro or parsley and serve quick bread tartlets.",
+                "ingredients": [
+                  {"id": 2009, "name": "chili powder", "image": "chili-powder.jpg"},
+                  {"id": 11529, "name": "tomato", "image": "tomato.png"},
+                  {"id": 1041009, "name": "cheese", "image": "cheddar-cheese.png"},
+                  {"id": 11282, "name": "onion", "image": "brown-onion.png"},
+                  {"id": 18064, "name": "bread", "image": "white-bread.jpg"},
+                  {"id": 1002044, "name": "herbs", "image": "mixed-fresh-herbs.jpg"},
+                  {"id": 2047, "name": "salt", "image": "salt.jpg"}
+                ],
+                "equipment": [
+                  {"id": 404671, "name": "muffin tray", "image": "muffin-tray.jpg"},
+                  {"id": 404765, "name": "aluminum foil", "image": "aluminum-foil.png"},
+                  {
+                    "id": 404784,
+                    "name": "oven",
+                    "image": "oven.jpg",
+                    "temperature": {"number": 190.0, "unit": "Celsius"}
+                  }
+                ],
+                "length": {"number": 17, "unit": "minutes"}
+              }
+            ]
+          }
+        ],
+        "usedIngredientCount": 2,
+        "missedIngredientCount": 7,
+        "likes": 0
       },
     ],
     "offset": 0,
-    "number": 10,
+    "number": 3,
     "totalResults": 45
   };
   static final emptySearchResults = {

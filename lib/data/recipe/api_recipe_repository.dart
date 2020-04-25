@@ -36,7 +36,7 @@ class ApiRecipeRepository implements RecipeRepository {
       case 200:
         var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
         var searchResults = jsonResponse['results'] as List;
-        return searchResults.map((r) => this._parseFromSpoonacularSearch(r)).toList();
+        return searchResults.map((r) => this._parseFromSpoonacular(r)).toList();
       case 402:
         throw QuotaExceededException('Daily API quota exhausted.');
       default:
@@ -132,13 +132,22 @@ class ApiRecipeRepository implements RecipeRepository {
   }
 
   Recipe _parseFromSpoonacular(Map<String, dynamic> json) {
-    var instructions = [];
-    var analyzedInstructions = json['analyzedInstructions'] as List;
+    List<String> instructions = [];
+    List<String> ingredients = [];
+    final analyzedInstructions = json['analyzedInstructions'] as List;
 
     if (analyzedInstructions.length > 0) {
       var firstAnalyzedInstructions = analyzedInstructions[0] as Map<String, dynamic>;
       var steps = firstAnalyzedInstructions['steps'] as List;
-      instructions = steps.map<String>((i) => (i as Map<String, dynamic>)['step']).toList();
+      steps.forEach((s) {
+        final step = s as Map<String, dynamic>;
+        instructions.add(step['step']);
+        final stepIngredients = step['ingredients'] as List;
+        ingredients = [
+          ...ingredients,
+          ...stepIngredients.map<String>((si) => si['name'] as String).toList(),
+        ];
+      });
     }
 
     return Recipe(
@@ -150,16 +159,7 @@ class ApiRecipeRepository implements RecipeRepository {
       cookingTime: json['readyInMinutes'] as int,
       desc: json['summary'] as String,
       instructions: instructions,
-    );
-  }
-
-  Recipe _parseFromSpoonacularSearch(Map<String, dynamic> json) {
-    return Recipe(
-      id: (json['id'] as int).toString(), // not sourceRecipeId to keep things consistent with
-      //search results from other implementations of RecipeRepository
-      sourceName: 'Spoonacular',
-      title: json['title'] as String,
-      photoUrl: json['image'] as String,
+      ingredients: ingredients,
     );
   }
 }

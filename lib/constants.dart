@@ -35,7 +35,7 @@ const kDefaultUsername = 'Rockstar';
 
 // API urls
 final kUrlFindRecipesApi = TemplateString(
-  'https://api.spoonacular.com/recipes/complexSearch?includeIngredients={ingredients}&apiKey=$kSpoonacularApiKey',
+  'https://api.spoonacular.com/recipes/complexSearch?includeIngredients={ingredients}&addRecipeInformation=true&apiKey=$kSpoonacularApiKey',
 );
 final kUrlFindRecipesApiRP = TemplateString(
   'http://www.recipepuppy.com/api/?i={ingredients}',
