@@ -37,8 +37,9 @@ class FirebaseRecipeRepository implements RecipeRepository {
     if (snapshot.data == null) {
       return null;
     }
-    snapshot.data['id'] = snapshot.documentID;
-    return Recipe.fromMap(snapshot.data);
+    var data = snapshot.data;
+    data['id'] = snapshot.documentID;
+    return Recipe.fromMap(data);
   }
 
   @override
@@ -53,8 +54,9 @@ class FirebaseRecipeRepository implements RecipeRepository {
     if (snapshot.documents.length == 0) {
       return null;
     }
-    snapshot.documents[0].data['id'] = snapshot.documents[0].documentID;
-    return Recipe.fromMap(snapshot.documents[0].data);
+    var data = snapshot.documents[0].data;
+    data['id'] = snapshot.documents[0].documentID;
+    return Recipe.fromMap(data);
   }
 
   @override
@@ -68,8 +70,9 @@ class FirebaseRecipeRepository implements RecipeRepository {
     if (snapshot.documents.length == 0) {
       return null;
     }
-    snapshot.documents[0].data['id'] = snapshot.documents[0].documentID;
-    return Recipe.fromMap(snapshot.documents[0].data);
+    var data = snapshot.documents[0].data;
+    data['id'] = snapshot.documents[0].documentID;
+    return Recipe.fromMap(data);
   }
 
   @override
@@ -88,8 +91,9 @@ class FirebaseRecipeRepository implements RecipeRepository {
         .getDocuments();
 
     return snapshot.documents.map((doc) {
-      doc.data['id'] = doc.documentID;
-      return Recipe.fromMap(doc.data);
+      var data = doc.data;
+      data['id'] = doc.documentID;
+      return Recipe.fromMap(data);
     }).toList();
   }
 

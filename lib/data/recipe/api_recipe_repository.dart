@@ -151,6 +151,7 @@ class ApiRecipeRepository implements RecipeRepository {
     }
 
     return Recipe(
+      id: (json['id'] as int).toString(), // to keep it consistent with other repos
       sourceRecipeId: (json['id'] as int).toString(),
       sourceName: json['sourceName'] as String,
       sourceUrl: json['sourceUrl'] as String,
@@ -158,6 +159,7 @@ class ApiRecipeRepository implements RecipeRepository {
       photoUrl: json['image'] as String,
       cookingTime: json['readyInMinutes'] as int,
       desc: json['summary'] as String,
+      servings: json['servings'] as int,
       instructions: instructions,
       ingredients: ingredients,
     );

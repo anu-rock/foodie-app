@@ -63,9 +63,13 @@ class HybridRecipeRepository implements RecipeRepository {
       updatedUserRecipe = await this._fbRepo.viewRecipe(recipe);
     } on ArgumentError {
       // When given recipe DOES NOT exist in store:
-      // first add it to store and
-      // then "view" it and return updated UserRecipe
+      // first remove id, if any
+      var recipeMap = recipe.toMap();
+      recipeMap['id'] = null;
+      recipe = Recipe.fromMap(recipeMap);
+      // then add it to store
       recipe = await this._fbRepo.saveRecipe(recipe);
+      // finally "view" it and return updated UserRecipe
       updatedUserRecipe = await this._fbRepo.viewRecipe(recipe);
     }
 

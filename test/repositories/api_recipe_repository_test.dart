@@ -34,8 +34,8 @@ void main() {
         var expectedSearchResults = RecipeMockData.searchResults['results'] as List;
         expect(foundRecipes.length, expectedSearchResults.length);
         expect(foundRecipes[0], isA<Recipe>());
-        expect(foundRecipes[0].id, isNull);
-        expect(foundRecipes[0].sourceRecipeId, isNotEmpty);
+        expect(foundRecipes[0].id, isNotNull);
+        expect(foundRecipes[0].sourceRecipeId, isNotNull);
         expect(foundRecipes[0].instructions, isA<List>());
       });
 
