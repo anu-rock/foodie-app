@@ -2,18 +2,17 @@
 
 ## Database
 
-- [ ] Ingredients master list
+- [x] Ingredients master list
 
 ## UI
 
 - [ ] Ingredients screen
-  - [ ] Add/remove (manual)
+  - [x] Add/remove (manual)
   - [ ] Add from receipt (OCR)
   - [ ] Time machine (see ingredients during a time range)
-  - [ ] Get recipe suggestions
-- [ ] Recipe suggestions screen (wire up repository with existing screen)
+- [x] Recipe suggestions screen (wire up repository with existing screen)
 - [ ] Recipe details screen (wire up repository with existing screen)
-  - [ ] Save
+  - [x] Save
   - [ ] Favorite
   - [ ] Play
   - [ ] Share
@@ -34,7 +33,7 @@
 - [ ] User repository
   - [ ] store users in Firestore
 - [ ] Friend repository
-- [ ] Recipe repository (recipes + user_recipes collections)
+- [x] Recipe repository (recipes + user_recipes collections)
   - [x] find recipes by ingredients
   - [x] add recipe (automatically done by viewing a recipe the first time from search results)
   - [x] get recipe by id/title
