@@ -37,6 +37,8 @@ class SearchBar extends StatelessWidget {
                 flex: 5,
                 child: TypeAheadField(
                   key: Key('search_input'),
+                  hideOnLoading: true,
+                  hideOnError: true,
                   textFieldConfiguration: TextFieldConfiguration(
                     controller: this._typeAheadController,
                     decoration: InputDecoration(
@@ -62,14 +64,12 @@ class SearchBar extends StatelessWidget {
                       title: Text(suggestion.name),
                     );
                   },
-                  onSuggestionSelected: (Ingredient suggestion) async {
-                    var addResult = await ingredientRepo.addIngredient(
+                  onSuggestionSelected: (Ingredient suggestion) {
+                    ingredientRepo.addIngredient(
                       ingredient: suggestion,
                       quantity: 0,
                     );
-                    if (addResult != null) {
-                      this._typeAheadController.clear();
-                    }
+                    this._typeAheadController.clear();
                   },
                 ),
               ),

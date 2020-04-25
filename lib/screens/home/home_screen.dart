@@ -1,10 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/constants.dart';
 import 'package:foodieapp/data/ingredient/ingredient.dart';
 import 'package:foodieapp/widgets/heading_2.dart';
-import 'package:foodieapp/widgets/recipe_cover_tile.dart';
 import 'package:foodieapp/data/ingredient/ingredient_repository.dart';
 import 'home_header.dart';
 import 'ingredient_tile.dart';
@@ -16,12 +16,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var ingredientRepo = Provider.of<IngredientRepository>(context);
-
-    List<Widget> recipeTiles = [];
-    [].forEach((recipe) {
-      recipeTiles.add(RecipeCoverTile(recipe: recipe));
-      recipeTiles.add(SizedBox(height: 20.0));
-    });
 
     return ListView(
       children: <Widget>[
@@ -35,8 +29,12 @@ class HomeScreen extends StatelessWidget {
           padding: kPaddingHorizontal,
           child: StreamBuilder<List<Ingredient>>(
             stream: ingredientRepo.getIngredients(),
-            initialData: [],
+            initialData: null,
             builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return CupertinoActivityIndicator();
+              }
+
               var ingredients = snapshot.data;
 
               return (ingredients.length == 0)
