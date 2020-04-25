@@ -21,8 +21,7 @@ abstract class IngredientRepository {
   ///
   /// Returns the added ingredient database object if successful,
   /// and null otherwise.
-  Future<UserIngredient> addIngredient(
-      {Ingredient ingredient, double quantity});
+  Future<UserIngredient> addIngredient({Ingredient ingredient, double quantity});
 
   /// Updates the current user's ingredient as per given values.
   ///
@@ -43,4 +42,7 @@ abstract class IngredientRepository {
 
   /// Returns all ingredients from current user's collection.
   Stream<List<UserIngredient>> getIngredients();
+
+  /// Returns all ingredients from current user's collection as a Future list.
+  Future<List<UserIngredient>> getIngredientsAsFuture();
 }

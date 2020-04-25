@@ -103,6 +103,27 @@ class FirebaseIngredientRepository implements IngredientRepository {
   }
 
   @override
+  Future<List<UserIngredient>> getIngredientsAsFuture() async {
+    var currentUser = await this._auth.currentUser();
+    if (currentUser == null) {
+      throw AuthException(
+          'not_logged_in', 'No current user found probably because user is not logged in.');
+    }
+
+    final snapshot = await _userIngredientsCollection
+        .where('userId', isEqualTo: currentUser.uid)
+        .where('removedAt', isEqualTo: '')
+        .orderBy('createdAt', descending: true)
+        .getDocuments();
+
+    return snapshot.documents.map((doc) {
+      var data = doc.data;
+      data['id'] = doc.documentID;
+      return UserIngredient.fromMap(data);
+    }).toList();
+  }
+
+  @override
   Future<bool> updateIngredient(
     String ingredientId, {
     double quantity,
