@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:foodieapp/constants.dart';
+import 'package:provider/provider.dart';
+
 import 'package:foodieapp/models/app_state.dart';
 import 'package:foodieapp/screens/home/search_bar.dart';
-import 'package:provider/provider.dart';
+import 'package:foodieapp/util/string_util.dart';
 
 class HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
+    final userName = StringUtil.ifNullOrEmpty(appState.currentUser.displayName, kDefaultUsername);
 
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
@@ -42,7 +45,7 @@ class HomeHeader extends StatelessWidget {
                   left: kPaddingUnits,
                 ),
                 child: Text(
-                  'Howdy, ${appState.currentUser.displayName ?? kDefaultUsername}',
+                  'Howdy, $userName',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 30.0,
