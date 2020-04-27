@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/widgets/text_icon_button.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/constants.dart';
@@ -99,14 +100,42 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
   Widget _hero() {
     return Hero(
       tag: 'recipe_pic_${this.recipeFromRoute.id}',
-      child: Container(
-        height: 250.0,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(this.recipeFromRoute.photoUrl),
-            fit: BoxFit.cover,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            height: 250.0,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(this.recipeFromRoute.photoUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
+          this.userRecipe == null
+              ? SizedBox(width: 0, height: 0)
+              : Positioned(
+                  top: 10.0,
+                  right: 10.0,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 5.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: kContBorderRadiusSm,
+                    ),
+                    child: TextIconButton(
+                      text: this.recipe.favs.toString(),
+                      leadingIcon: Icon(
+                        Icons.favorite,
+                        color: userRecipe.isFavorite ? Colors.red : Colors.grey,
+                      ),
+                      onPressed: this._onFavoritePressed,
+                    ),
+                  ),
+                ),
+        ],
       ),
     );
   }
@@ -187,5 +216,20 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
         ),
       ),
     );
+  }
+
+  void _onFavoritePressed() async {
+    final recipeRepo = Provider.of<RecipeRepository>(context, listen: false);
+    final updatedUserRecipe = await recipeRepo.toggleFavorite(this.recipe.id);
+    this.setState(() {
+      this.userRecipe = updatedUserRecipe;
+      var recipeMap = this.recipe.toMap();
+      if (updatedUserRecipe.isFavorite) {
+        recipeMap['favs'] = this.recipe.favs + 1;
+      } else {
+        recipeMap['favs'] = this.recipe.favs - 1;
+      }
+      this.recipe = Recipe.fromMap(recipeMap);
+    });
   }
 }
