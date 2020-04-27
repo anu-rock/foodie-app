@@ -38,32 +38,6 @@ class RecipeCoverTile extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 10.0,
-            right: 10.0,
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 10.0,
-                vertical: 5.0,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: kContBorderRadiusSm,
-              ),
-              child: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  ),
-                  SizedBox(
-                    width: 5.0,
-                  ),
-                  Text(this.recipe.favs.toString()),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
             left: -10.0,
             bottom: 20.0,
             child: Material(
