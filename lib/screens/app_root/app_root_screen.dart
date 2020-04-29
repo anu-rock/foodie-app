@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodieapp/models/app_state.dart';
 import 'package:foodieapp/tabs/browse_tab_navigator.dart';
 import 'package:foodieapp/tabs/home_tab_navigator.dart';
 import 'package:foodieapp/tabs/profile_tab_navigator.dart';
 import 'package:foodieapp/tabs/shop_tab_navigator.dart';
 import 'package:foodieapp/widgets/tabs_bar.dart';
-import 'package:provider/provider.dart';
 
-class AppRootScreen extends StatelessWidget {
+class AppRootScreen extends StatefulWidget {
+  @override
+  _AppRootScreenState createState() => _AppRootScreenState();
+}
+
+class _AppRootScreenState extends State<AppRootScreen> {
   final navigatorKeys = {
     HomeTabNavigator.id: GlobalKey<NavigatorState>(),
     BrowseTabNavigator.id: GlobalKey<NavigatorState>(),
@@ -16,57 +19,60 @@ class AppRootScreen extends StatelessWidget {
     ProfileTabNavigator.id: GlobalKey<NavigatorState>(),
   };
 
+  String selectedTab = HomeTabNavigator.id;
+
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
-    final selectedTab = appState.selectedTab;
-
     return WillPopScope(
       // A fix to handle back button per tabnavigator
       // See "One more thing" section here:
       // https://medium.com/coding-with-flutter/flutter-case-study-multiple-navigators-with-bottomnavigationbar-90eb6caa6dbf
-      onWillPop: () async =>
-          !await this.navigatorKeys[selectedTab].currentState.maybePop(),
+      onWillPop: () async => !await this.navigatorKeys[selectedTab].currentState.maybePop(),
       child: Scaffold(
-        bottomNavigationBar: TabsBar(),
-        body: Stack(
+        bottomNavigationBar: TabsBar(
+          selectedTab: this.selectedTab,
+          onTabPress: (String tabId) {
+            this.setState(() {
+              this.selectedTab = tabId;
+            });
+          },
+        ),
+        body: IndexedStack(
+          index: this._getIndexOfTab(this.selectedTab),
           children: <Widget>[
-            _buildOffstageNavigator(HomeTabNavigator.id, selectedTab),
-            _buildOffstageNavigator(BrowseTabNavigator.id, selectedTab),
-            _buildOffstageNavigator(ShopTabNavigator.id, selectedTab),
-            _buildOffstageNavigator(ProfileTabNavigator.id, selectedTab),
+            HomeTabNavigator(
+              navigatorKey: navigatorKeys[HomeTabNavigator.id],
+            ),
+            BrowseTabNavigator(
+              navigatorKey: navigatorKeys[BrowseTabNavigator.id],
+            ),
+            ShopTabNavigator(
+              navigatorKey: navigatorKeys[ShopTabNavigator.id],
+            ),
+            ProfileTabNavigator(
+              navigatorKey: navigatorKeys[ProfileTabNavigator.id],
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildOffstageNavigator(String tabId, String selectedTab) {
-    return Offstage(
-      offstage: selectedTab != tabId,
-      child: Builder(
-        builder: (context) {
-          switch (tabId) {
-            case BrowseTabNavigator.id:
-              return BrowseTabNavigator(
-                navigatorKey: this.navigatorKeys[tabId],
-              );
-            case ShopTabNavigator.id:
-              return ShopTabNavigator(
-                navigatorKey: this.navigatorKeys[tabId],
-              );
-            case ProfileTabNavigator.id:
-              return ProfileTabNavigator(
-                navigatorKey: this.navigatorKeys[tabId],
-              );
-            case HomeTabNavigator.id:
-            default:
-              return HomeTabNavigator(
-                navigatorKey: this.navigatorKeys[tabId],
-              );
-          }
-        },
-      ),
-    );
+  /// TODO: Fix potential bug:
+  /// Maintaining indexes of navigators separately from navigator list
+  /// used inside [IndexStack] may introduce issues later when we add/remove
+  /// navigators. A more elegant solution would probably use a map.
+  int _getIndexOfTab(String tabId) {
+    switch (tabId) {
+      case BrowseTabNavigator.id:
+        return 1;
+      case ShopTabNavigator.id:
+        return 2;
+      case ProfileTabNavigator.id:
+        return 3;
+      case HomeTabNavigator.id:
+      default:
+        return 0;
+    }
   }
 }

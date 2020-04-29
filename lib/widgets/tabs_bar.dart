@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodieapp/constants.dart';
-import 'package:foodieapp/models/app_state.dart';
 import 'package:foodieapp/tabs/browse_tab_navigator.dart';
 import 'package:foodieapp/tabs/home_tab_navigator.dart';
 import 'package:foodieapp/tabs/profile_tab_navigator.dart';
 import 'package:foodieapp/tabs/shop_tab_navigator.dart';
-import 'package:provider/provider.dart';
 
 const TAB_ICON_SIZE = 25.0;
 
@@ -16,10 +14,16 @@ const TAB_ICON_SIZE = 25.0;
 /// When using it with [Scaffold], attached it to its
 /// [bottomNavigationBar] property.
 class TabsBar extends StatelessWidget {
+  final String selectedTab;
+  final Function onTabPress;
+
+  TabsBar({
+    @required this.selectedTab,
+    @required this.onTabPress,
+  });
+
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
-
     return Container(
       height: 50.0,
       decoration: BoxDecoration(
@@ -40,20 +44,16 @@ class TabsBar extends StatelessWidget {
               IconButton(
                 key: Key('tab_home'),
                 icon: Icon(Icons.home),
-                color: appState.selectedTab == HomeTabNavigator.id
-                    ? kColorBlue
-                    : kColorBluegrey,
+                color: this.selectedTab == HomeTabNavigator.id ? kColorBlue : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () => appState.setTab(HomeTabNavigator.id),
+                onPressed: () => this.onTabPress(HomeTabNavigator.id),
               ),
               IconButton(
                 key: Key('tab_browse'),
                 icon: Icon(Icons.fastfood),
-                color: appState.selectedTab == BrowseTabNavigator.id
-                    ? kColorBlue
-                    : kColorBluegrey,
+                color: this.selectedTab == BrowseTabNavigator.id ? kColorBlue : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () => appState.setTab(BrowseTabNavigator.id),
+                onPressed: () => this.onTabPress(BrowseTabNavigator.id),
               ),
               Opacity(
                 opacity: 0,
@@ -68,20 +68,16 @@ class TabsBar extends StatelessWidget {
               IconButton(
                 key: Key('tab_shop'),
                 icon: Icon(Icons.shopping_cart),
-                color: appState.selectedTab == ShopTabNavigator.id
-                    ? kColorBlue
-                    : kColorBluegrey,
+                color: this.selectedTab == ShopTabNavigator.id ? kColorBlue : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () => appState.setTab(ShopTabNavigator.id),
+                onPressed: () => this.onTabPress(ShopTabNavigator.id),
               ),
               IconButton(
                 key: Key('tab_profile'),
                 icon: Icon(Icons.person),
-                color: appState.selectedTab == ProfileTabNavigator.id
-                    ? kColorBlue
-                    : kColorBluegrey,
+                color: this.selectedTab == ProfileTabNavigator.id ? kColorBlue : kColorBluegrey,
                 iconSize: TAB_ICON_SIZE,
-                onPressed: () => appState.setTab(ProfileTabNavigator.id),
+                onPressed: () => this.onTabPress(ProfileTabNavigator.id),
               ),
             ],
           ),
