@@ -1,5 +1,21 @@
 # TODO
 
+## Micro Tasks
+
+#### Remove tasks when they get completed
+
+- App shell interface for `RecipeSearchScreen`
+- Try and replace all futures with streams in Firebase repositories (for better performance)
+- Add tests for each model class (esp. for `toMap()` and `fromMap()` methods)
+- Widget tests for `RecipeOverviewScreen`
+  - is recipe displayed when coming from search screen?
+  - is recipe displayed when coming from some other screen?
+  - is favorite button visible?
+  - is total favorites for recipe data visible?
+- Infinite scroll based pagination on search screen
+- Move User’s `email`, `phoneNumber`, `isEmailVerified` fields to private_data subcollection
+- Add `playedRecipes` and `favoriteRecipes` (count) fields to User
+
 ## Database
 
 - [x] Ingredients master list
@@ -13,7 +29,7 @@
 - [x] Recipe suggestions screen (wire up repository with existing screen)
 - [ ] Recipe details screen (wire up repository with existing screen)
   - [x] Save
-  - [ ] Favorite
+  - [x] Favorite
   - [ ] Play
   - [ ] Share
 - [ ] User Profile screen
