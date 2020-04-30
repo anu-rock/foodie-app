@@ -14,7 +14,7 @@ const kModalBorderRadiusUnits = 30.0;
 const kColorGreen = Color(0xff28d488);
 const kColorBlue = Colors.blue;
 const kColorBluegrey = Color(0xff353d52);
-const kColorLightGrey = Color(0xffe4e4e4);
+const kColorLightGrey = Color(0xffefefef);
 const kColorYellow = Colors.amber;
 
 // White spaces

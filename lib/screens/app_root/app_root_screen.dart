@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/constants.dart';
 import 'package:foodieapp/tabs/browse_tab_navigator.dart';
 import 'package:foodieapp/tabs/home_tab_navigator.dart';
 import 'package:foodieapp/tabs/profile_tab_navigator.dart';
@@ -54,6 +55,12 @@ class _AppRootScreenState extends State<AppRootScreen> {
             ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.blur_on),
+          backgroundColor: kColorGreen,
+          onPressed: () {},
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
