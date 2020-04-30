@@ -10,7 +10,6 @@ import 'package:foodieapp/data/user/user.dart';
 import 'package:foodieapp/models/app_state.dart';
 import 'package:foodieapp/screens/home/home_screen.dart';
 import 'package:foodieapp/screens/home/home_header.dart';
-import 'package:foodieapp/screens/home/search_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../mocked_network_image_provider.dart';
@@ -27,7 +26,6 @@ void main() {
       await tester.pumpWidget(wrappedHomeScreen());
 
       expect(find.byType(HomeHeader), findsOneWidget);
-      expect(find.byType(SearchBar), findsOneWidget);
     });
   });
 }
