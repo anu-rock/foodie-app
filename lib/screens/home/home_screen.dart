@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/screens/ingredient_add/ingredient_add_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/constants.dart';
@@ -17,35 +18,42 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var ingredientRepo = Provider.of<IngredientRepository>(context);
 
-    return ListView(
-      children: <Widget>[
-        HomeHeader(),
-        SizedBox(height: 40.0),
-        Padding(
-          padding: kPaddingAll,
-          child: Heading2('Your Ingredients'),
-        ),
-        Padding(
-          padding: kPaddingHorizontal,
-          child: StreamBuilder<List<Ingredient>>(
-            stream: ingredientRepo.getIngredients(),
-            initialData: null,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return CupertinoActivityIndicator();
-              }
-
-              var ingredients = snapshot.data;
-
-              return (ingredients.length == 0)
-                  ? IngredientsPlaceholder()
-                  : Column(
-                      children: ingredients.map((i) => IngredientTile(ingredient: i)).toList(),
-                    );
-            },
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, IngredientAddScreen.id),
+        child: Icon(Icons.add),
+        backgroundColor: kColorYellow,
+      ),
+      body: ListView(
+        children: <Widget>[
+          HomeHeader(),
+          SizedBox(height: 10.0),
+          Padding(
+            padding: kPaddingAll,
+            child: Heading2('Your Ingredients'),
           ),
-        ),
-      ],
+          Padding(
+            padding: kPaddingHorizontal,
+            child: StreamBuilder<List<Ingredient>>(
+              stream: ingredientRepo.getIngredients(),
+              initialData: null,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CupertinoActivityIndicator();
+                }
+
+                var ingredients = snapshot.data;
+
+                return (ingredients.length == 0)
+                    ? IngredientsPlaceholder()
+                    : Column(
+                        children: ingredients.map((i) => IngredientTile(ingredient: i)).toList(),
+                      );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

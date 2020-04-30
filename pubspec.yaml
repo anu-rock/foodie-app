@@ -37,3 +37,4 @@ flutter:
     - images/yummy-pot.png
     - images/sandwich-434658_1280.jpg
     - images/image-loading.gif
+    - lib/data/ingredient/ingredients.json

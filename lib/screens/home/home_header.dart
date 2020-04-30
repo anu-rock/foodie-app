@@ -3,7 +3,6 @@ import 'package:foodieapp/constants.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/models/app_state.dart';
-import 'package:foodieapp/screens/home/search_bar.dart';
 import 'package:foodieapp/util/string_util.dart';
 
 class HomeHeader extends StatelessWidget {
@@ -55,10 +54,6 @@ class HomeHeader extends StatelessWidget {
               ),
             ],
           ),
-        ),
-        Positioned(
-          bottom: -25.0,
-          child: SearchBar(),
         ),
       ],
     );
