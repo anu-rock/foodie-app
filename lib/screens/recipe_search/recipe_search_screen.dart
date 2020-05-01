@@ -66,7 +66,12 @@ class _RecipeSearchScreenState extends State<RecipeSearchScreen> {
 
   Widget _buildSuggestionList(List<Recipe> recipes) {
     return Container(
-      padding: kPaddingAll,
+      color: kColorLightGrey,
+      padding: EdgeInsets.only(
+        top: kPaddingUnitsSm,
+        left: kPaddingUnitsSm,
+        right: kPaddingUnitsSm,
+      ),
       child: ListView(
         children: recipes
             .map(

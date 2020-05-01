@@ -14,7 +14,7 @@ class Heading3 extends StatelessWidget {
       style: TextStyle(
         fontSize: 16.0,
         color: kColorBluegrey,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w700,
       ),
     );
   }

@@ -47,5 +47,50 @@ void main() {
         expect(result, origString);
       });
     });
+
+    group('truncateString()', () {
+      test('should return truncated string with ellipses', () {
+        final str = 'Hello, friend. How are you doing?';
+        final truncatedStr = StringUtil.truncateString(str: str);
+
+        expect(truncatedStr, hasLength(28)); // including ellipses
+      });
+
+      test('should return truncated string without ellipses', () {
+        final str = 'Hello, friend. How are you doing?';
+        final truncatedStr = StringUtil.truncateString(
+          str: str,
+          endWithEllipses: false,
+        );
+
+        expect(truncatedStr, hasLength(25));
+      });
+
+      test('should return truncated string of given max length', () {
+        final str = 'Hello, friend. How are you doing?';
+        final truncatedStr = StringUtil.truncateString(
+          str: str,
+          maxLen: 10,
+          endWithEllipses: false,
+        );
+
+        expect(truncatedStr, hasLength(10));
+      });
+
+      test('should return original string when given string is shorter than max length', () {
+        final str = 'Hello, friend.';
+        final truncatedStr = StringUtil.truncateString(str: str);
+
+        expect(truncatedStr, str);
+      });
+
+      test('should throw error when null is given', () {
+        final callback = () {
+          StringUtil.truncateString(str: null);
+        };
+
+        expect(callback, throwsArgumentError);
+      });
+    });
   });
 }

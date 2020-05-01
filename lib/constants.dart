@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodieapp/util/template_string.dart';
 
 // Container attributes
-const kContShadowColor = Colors.black38;
+const kContShadowColor = Colors.black45;
 const kContElevation = 5.0;
 const kContBorderRadiusSm = BorderRadius.all(Radius.circular(10.0));
 const kContBorderRadiusLg = BorderRadius.all(Radius.circular(20.0));
@@ -51,6 +51,7 @@ final kUrlExtractRecipeApi = TemplateString(
 // Regular expressions
 final kRegexUrl = RegExp(
     '^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?\$');
+final kRegexHtml = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
 
 // Secrets
 const kSpoonacularApiKey = '72f3276161d847358a527b7b0d303941';
