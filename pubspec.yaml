@@ -17,7 +17,7 @@ dependencies:
   cloud_functions: ^0.4.2+3
   rxdart: ^0.23.1
   http: ^0.12.0+4
-  flutter_typeahead: ^1.8.0
+  timeago: ^2.0.26
 
 dev_dependencies:
   flutter_test:
