@@ -18,6 +18,7 @@ dependencies:
   rxdart: ^0.23.1
   http: ^0.12.0+4
   timeago: ^2.0.26
+  simple_animations: ^2.1.1
 
 dev_dependencies:
   flutter_test:
