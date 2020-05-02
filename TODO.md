@@ -4,9 +4,6 @@
 
 #### Remove tasks when they get completed
 
-- App shell interface for `RecipeSearchScreen`
-- Try and replace all futures with streams in Firebase repositories (for better performance)
-- Fancy background animation on `RecipeDirectionsScreen`
 - Add tests for each model class (esp. for `toMap()` and `fromMap()` methods)
 - Widget tests for `RecipeOverviewScreen`
   - is recipe displayed when coming from search screen?
