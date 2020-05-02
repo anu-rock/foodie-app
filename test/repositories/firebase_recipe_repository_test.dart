@@ -36,25 +36,23 @@ void main() {
             .setData(RecipeMockData.existingRecipe.toMap());
       });
 
-      test('should return recipe when valid id is given', () async {
-        var recipe = await repo.getRecipe(RecipeMockData.existingRecipeId);
-
-        expect(recipe, isA<Recipe>());
-        expect(recipe.id, RecipeMockData.existingRecipeId);
+      test('should return recipe when valid id is given', () {
+        repo.getRecipe(RecipeMockData.existingRecipeId).listen((recipe) {
+          expect(recipe, isA<Recipe>());
+          expect(recipe.id, RecipeMockData.existingRecipeId);
+        });
       });
 
-      test('should return null when non-existent id is given', () async {
-        var recipe = await repo.getRecipe(RecipeMockData.nonExistentRecipeId);
+      test('should return null when non-existent id is given', () {
+        final recipe = repo.getRecipe(RecipeMockData.nonExistentRecipeId);
 
-        expect(recipe, isNull);
+        expect(recipe, emits(isNull));
       });
 
-      test('should throw exception when empty id is given', () async {
-        var callback = () async {
-          await repo.getRecipe(null);
-        };
+      test('should throw exception when empty id is given', () {
+        final recipe = repo.getRecipe(null);
 
-        expect(callback, throwsArgumentError);
+        expect(recipe, emitsError(isArgumentError));
       });
     });
 
@@ -67,26 +65,25 @@ void main() {
             .setData(RecipeMockData.existingRecipe.toMap());
       });
 
-      test('should return recipe when valid id is given', () async {
-        var recipe =
-            await repo.getRecipeBySourceRecipeId(RecipeMockData.existingRecipe.sourceRecipeId);
-
-        expect(recipe, isA<Recipe>());
-        expect(recipe.id, RecipeMockData.existingRecipeId);
+      test('should return recipe when valid id is given', () {
+        repo.getRecipeBySourceRecipeId(RecipeMockData.existingRecipe.sourceRecipeId).listen(
+          (recipe) {
+            expect(recipe, isA<Recipe>());
+            expect(recipe.id, RecipeMockData.existingRecipeId);
+          },
+        );
       });
 
-      test('should return null when non-existent id is given', () async {
-        var recipe = await repo.getRecipeBySourceRecipeId(RecipeMockData.nonExistentSourceRecipeId);
+      test('should return null when non-existent id is given', () {
+        final recipe = repo.getRecipeBySourceRecipeId(RecipeMockData.nonExistentSourceRecipeId);
 
-        expect(recipe, isNull);
+        expect(recipe, emits(isNull));
       });
 
-      test('should throw exception when empty id is given', () async {
-        var callback = () async {
-          await repo.getRecipeBySourceRecipeId(null);
-        };
+      test('should throw exception when empty id is given', () {
+        final recipe = repo.getRecipeBySourceRecipeId(null);
 
-        expect(callback, throwsArgumentError);
+        expect(recipe, emitsError(isArgumentError));
       });
     });
 
@@ -99,33 +96,29 @@ void main() {
             .setData(RecipeMockData.existingRecipe.toMap());
       });
 
-      test('should return recipe when valid url is given', () async {
-        var recipe = await repo.getRecipeBySourceUrl(RecipeMockData.existingRecipe.sourceUrl);
-
-        expect(recipe, isA<Recipe>());
-        expect(recipe.id, RecipeMockData.existingRecipeId);
+      test('should return recipe when valid url is given', () {
+        repo.getRecipeBySourceUrl(RecipeMockData.existingRecipe.sourceUrl).listen((recipe) {
+          expect(recipe, isA<Recipe>());
+          expect(recipe.id, RecipeMockData.existingRecipeId);
+        });
       });
 
-      test('should return null when non-existent url is given', () async {
-        var recipe = await repo.getRecipeBySourceUrl(RecipeMockData.validSourceUrl);
+      test('should return null when non-existent url is given', () {
+        final recipe = repo.getRecipeBySourceUrl(RecipeMockData.validSourceUrl);
 
-        expect(recipe, isNull);
+        expect(recipe, emits(isNull));
       });
 
-      test('should throw exception when empty url is given', () async {
-        var callback = () async {
-          await repo.getRecipeBySourceUrl(null);
-        };
+      test('should throw exception when empty url is given', () {
+        final recipe = repo.getRecipeBySourceUrl(null);
 
-        expect(callback, throwsArgumentError);
+        expect(recipe, emitsError(isArgumentError));
       });
 
-      test('should throw exception when invalid url is given', () async {
-        var callback = () async {
-          await repo.getRecipeBySourceUrl(RecipeMockData.invalidSourceUrl);
-        };
+      test('should throw exception when invalid url is given', () {
+        final recipe = repo.getRecipeBySourceUrl(RecipeMockData.invalidSourceUrl);
 
-        expect(callback, throwsArgumentError);
+        expect(recipe, emitsError(isArgumentError));
       });
     });
 
@@ -138,13 +131,13 @@ void main() {
             .setData(RecipeMockData.existingUserRecipe.toMap());
       });
 
-      test('should return favorite recipes when user id is given', () async {
-        var recipes = await repo.getFavoriteRecipes(currentUser.uid);
-
-        expect(recipes, isA<List>());
-        expect(recipes, isNotEmpty);
-        expect(recipes[0], isA<UserRecipe>());
-        expect(recipes[0].favoritedAt, isA<DateTime>());
+      test('should return favorite recipes when user id is given', () {
+        repo.getFavoriteRecipes(currentUser.uid).listen((recipes) {
+          expect(recipes, isA<List>());
+          expect(recipes, isNotEmpty);
+          expect(recipes[0], isA<UserRecipe>());
+          expect(recipes[0].favoritedAt, isA<DateTime>());
+        });
       });
 
       test('should return empty list when given user id has no favorites', () async {
@@ -153,25 +146,23 @@ void main() {
             .document(RecipeMockData.existingUserRecipeId)
             .updateData({'isFavorite': false, 'favoritedAt': ''});
 
-        var recipes = await repo.getFavoriteRecipes(currentUser.uid);
-
-        expect(recipes, isA<List>());
-        expect(recipes, isEmpty);
+        repo.getFavoriteRecipes(currentUser.uid).listen((recipes) {
+          expect(recipes, isA<List>());
+          expect(recipes, isEmpty);
+        });
       });
 
-      test('should return empty list when non-existent user id is given', () async {
-        var recipes = await repo.getFavoriteRecipes(RecipeMockData.nonExistentUserId);
-
-        expect(recipes, isA<List>());
-        expect(recipes, isEmpty);
+      test('should return empty list when non-existent user id is given', () {
+        repo.getFavoriteRecipes(RecipeMockData.nonExistentUserId).listen((recipes) {
+          expect(recipes, isA<List>());
+          expect(recipes, isEmpty);
+        });
       });
 
-      test('should throw exception when empty user id is given', () async {
-        var callback = () async {
-          await repo.getFavoriteRecipes(null);
-        };
+      test('should throw exception when empty user id is given', () {
+        final recipes = repo.getFavoriteRecipes(null);
 
-        expect(callback, throwsArgumentError);
+        expect(recipes, emitsError(isArgumentError));
       });
     });
 
@@ -184,13 +175,13 @@ void main() {
             .setData(RecipeMockData.existingUserRecipe.toMap());
       });
 
-      test('should return played recipes when user id is given', () async {
-        var recipes = await repo.getPlayedRecipes(currentUser.uid);
-
-        expect(recipes, isA<List>());
-        expect(recipes, isNotEmpty);
-        expect(recipes[0], isA<UserRecipe>());
-        expect(recipes[0].playedAt, isNotEmpty);
+      test('should return played recipes when user id is given', () {
+        repo.getPlayedRecipes(currentUser.uid).listen((recipes) {
+          expect(recipes, isA<List>());
+          expect(recipes, isNotEmpty);
+          expect(recipes[0], isA<UserRecipe>());
+          expect(recipes[0].playedAt, isNotEmpty);
+        });
       });
 
       test('should return empty list when given user id has no plays', () async {
@@ -199,25 +190,23 @@ void main() {
             .document(RecipeMockData.existingUserRecipeId)
             .updateData({'isPlayed': false, 'playedAt': []});
 
-        var recipes = await repo.getPlayedRecipes(currentUser.uid);
-
-        expect(recipes, isA<List>());
-        expect(recipes, isEmpty);
+        repo.getPlayedRecipes(currentUser.uid).listen((recipes) {
+          expect(recipes, isA<List>());
+          expect(recipes, isEmpty);
+        });
       });
 
-      test('should return empty list when non-existent user id is given', () async {
-        var recipes = await repo.getPlayedRecipes(RecipeMockData.nonExistentUserId);
-
-        expect(recipes, isA<List>());
-        expect(recipes, isEmpty);
+      test('should return empty list when non-existent user id is given', () {
+        repo.getPlayedRecipes(RecipeMockData.nonExistentUserId).listen((recipes) {
+          expect(recipes, isA<List>());
+          expect(recipes, isEmpty);
+        });
       });
 
-      test('should throw exception when empty user id is given', () async {
-        var callback = () async {
-          await repo.getPlayedRecipes(null);
-        };
+      test('should throw exception when empty user id is given', () {
+        final recipes = repo.getPlayedRecipes(null);
 
-        expect(callback, throwsArgumentError);
+        expect(recipes, emitsError(isArgumentError));
       });
     });
 
@@ -230,13 +219,13 @@ void main() {
             .setData(RecipeMockData.existingUserRecipe.toMap());
       });
 
-      test('should return viewed recipes when user id is given', () async {
-        var recipes = await repo.getViewedRecipes();
-
-        expect(recipes, isA<List>());
-        expect(recipes, isNotEmpty);
-        expect(recipes[0], isA<UserRecipe>());
-        expect(recipes[0].viewedAt, isNotEmpty);
+      test('should return viewed recipes when user id is given', () {
+        repo.getViewedRecipes().listen((recipes) {
+          expect(recipes, isA<List>());
+          expect(recipes, isNotEmpty);
+          expect(recipes[0], isA<UserRecipe>());
+          expect(recipes[0].viewedAt, isNotEmpty);
+        });
       });
 
       test('should return empty list when given user id has no views', () async {
@@ -245,10 +234,10 @@ void main() {
             .document(RecipeMockData.existingUserRecipeId)
             .delete();
 
-        var recipes = await repo.getViewedRecipes();
-
-        expect(recipes, isA<List>());
-        expect(recipes, isEmpty);
+        repo.getViewedRecipes().listen((recipes) {
+          expect(recipes, isA<List>());
+          expect(recipes, isEmpty);
+        });
       });
 
       test('should throw exception when user is not logged in', () {
@@ -258,11 +247,9 @@ void main() {
           authInstance: authSignedOut,
         );
 
-        var callback = () async {
-          await repoWihoutUser.getViewedRecipes();
-        };
+        final recipes = repoWihoutUser.getViewedRecipes();
 
-        expect(callback, throwsA(predicate((e) => e is AuthException)));
+        expect(recipes, emitsError(isA<AuthException>()));
       });
     });
 
@@ -275,27 +262,25 @@ void main() {
             .setData(RecipeMockData.existingUserRecipe.toMap());
       });
 
-      test('should return users when recipe id is given', () async {
-        var users = await repo.getUsersForRecipe(RecipeMockData.existingRecipeId);
-
-        expect(users, isA<List>());
-        expect(users, isNotEmpty);
-        expect(users[0], isA<UserRecipe>());
+      test('should return users when recipe id is given', () {
+        repo.getUsersForRecipe(RecipeMockData.existingRecipeId).listen((users) {
+          expect(users, isA<List>());
+          expect(users, isNotEmpty);
+          expect(users[0], isA<UserRecipe>());
+        });
       });
 
-      test('should return empty list when non-existent recipe id is given', () async {
-        var users = await repo.getUsersForRecipe(RecipeMockData.nonExistentRecipeId);
-
-        expect(users, isA<List>());
-        expect(users, isEmpty);
+      test('should return empty list when non-existent recipe id is given', () {
+        repo.getUsersForRecipe(RecipeMockData.nonExistentRecipeId).listen((users) {
+          expect(users, isA<List>());
+          expect(users, isEmpty);
+        });
       });
 
-      test('should throw exception when empty recipe id is given', () async {
-        var callback = () async {
-          await repo.getUsersForRecipe(null);
-        };
+      test('should throw exception when empty recipe id is given', () {
+        final users = repo.getUsersForRecipe(null);
 
-        expect(callback, throwsArgumentError);
+        expect(users, emitsError(isArgumentError));
       });
     });
 

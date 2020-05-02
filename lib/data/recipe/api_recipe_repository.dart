@@ -1,10 +1,11 @@
 import 'dart:convert' as convert;
-import 'package:foodieapp/constants.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:foodieapp/data/recipe/recipe.dart';
 import 'package:foodieapp/data/recipe/recipe_repository.dart';
 import 'package:foodieapp/data/recipe/user_recipe.dart';
+import 'package:foodieapp/util/string_util.dart';
+import 'package:foodieapp/constants.dart';
 
 /// A concrete implementation of [RecipeRepository] based on external API calls.
 ///
@@ -45,8 +46,8 @@ class ApiRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<Recipe> getRecipe(String id) async {
-    if (id == null || id.isEmpty) {
+  Stream<Recipe> getRecipe(String id) async* {
+    if (StringUtil.isNullOrEmpty(id)) {
       throw ArgumentError('id cannot be null or empty');
     }
 
@@ -57,7 +58,8 @@ class ApiRecipeRepository implements RecipeRepository {
     switch (response.statusCode) {
       case 200:
         var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
-        return this._parseFromSpoonacular(jsonResponse);
+        yield this._parseFromSpoonacular(jsonResponse);
+        break;
       case 402:
         throw QuotaExceededException('Daily API quota exhausted.');
       default:
@@ -66,8 +68,8 @@ class ApiRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<Recipe> getRecipeBySourceUrl(String url) async {
-    if (url == null || url.isEmpty) {
+  Stream<Recipe> getRecipeBySourceUrl(String url) async* {
+    if (StringUtil.isNullOrEmpty(url)) {
       throw ArgumentError('url cannot be null or empty');
     }
 
@@ -78,7 +80,8 @@ class ApiRecipeRepository implements RecipeRepository {
     switch (response.statusCode) {
       case 200:
         var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
-        return this._parseFromSpoonacular(jsonResponse);
+        yield this._parseFromSpoonacular(jsonResponse);
+        break;
       case 402:
         throw QuotaExceededException('Daily API quota exhausted.');
       default:
@@ -87,7 +90,7 @@ class ApiRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<Recipe> getRecipeBySourceRecipeId(String id) {
+  Stream<Recipe> getRecipeBySourceRecipeId(String id) {
     throw UnsupportedError('This operation is not supported.');
   }
 
@@ -97,22 +100,22 @@ class ApiRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<List<UserRecipe>> getFavoriteRecipes(String userId) {
+  Stream<List<UserRecipe>> getFavoriteRecipes(String userId) {
     throw UnsupportedError('This operation is not supported.');
   }
 
   @override
-  Future<List<UserRecipe>> getPlayedRecipes(String userId) {
+  Stream<List<UserRecipe>> getPlayedRecipes(String userId) {
     throw UnsupportedError('This operation is not supported.');
   }
 
   @override
-  Future<List<UserRecipe>> getUsersForRecipe(String recipeId) {
+  Stream<List<UserRecipe>> getUsersForRecipe(String recipeId) {
     throw UnsupportedError('This operation is not supported.');
   }
 
   @override
-  Future<List<UserRecipe>> getViewedRecipes() {
+  Stream<List<UserRecipe>> getViewedRecipes() {
     throw UnsupportedError('This operation is not supported.');
   }
 

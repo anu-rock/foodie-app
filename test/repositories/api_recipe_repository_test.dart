@@ -55,29 +55,25 @@ void main() {
     });
 
     group('getRecipe', () {
-      test('should return recipe when valid id is given', () async {
-        var recipe = await repo.getRecipe(RecipeMockData.validSourceId);
+      test('should return recipe when valid id is given', () {
+        final recipe = repo.getRecipe(RecipeMockData.validSourceId);
 
-        expect(recipe, isA<Recipe>());
+        expect(recipe, emits(isA<Recipe>()));
       });
 
-      test('should throw exception when invalid id is given', () async {
-        var callback = () async {
-          await repo.getRecipe(RecipeMockData.invalidSourceId);
-        };
+      test('should throw exception when invalid id is given', () {
+        final recipe = repo.getRecipe(RecipeMockData.invalidSourceId);
 
-        expect(callback, throwsException);
+        expect(recipe, emitsError(isA<Exception>()));
       });
 
-      test('should throw exception when empty id is given', () async {
-        var callback = () async {
-          await repo.getRecipe(null);
-        };
+      test('should throw exception when empty id is given', () {
+        final recipe = repo.getRecipe(null);
 
-        expect(callback, throwsArgumentError);
+        expect(recipe, emitsError(isA<ArgumentError>()));
       });
 
-      test('should throw exception when API quota has expired', () async {
+      test('should throw exception when API quota has expired', () {
         when(mockHttpClient.get(any)).thenAnswer((_) => Future.value(
               http.Response(
                 convert.jsonEncode(RecipeMockData.quotaExpiredResponse),
@@ -85,38 +81,32 @@ void main() {
               ),
             ));
 
-        var callback = () async {
-          await repo.getRecipe(RecipeMockData.validSourceId);
-        };
+        final recipe = repo.getRecipe(RecipeMockData.validSourceId);
 
-        expect(callback, throwsA(isA<QuotaExceededException>()));
+        expect(recipe, emitsError(isA<QuotaExceededException>()));
       });
     });
 
     group('getRecipeBySourceUrl', () {
-      test('should return recipe when valid url is given', () async {
-        var recipe = await repo.getRecipeBySourceUrl(RecipeMockData.validSourceUrl);
+      test('should return recipe when valid url is given', () {
+        final recipe = repo.getRecipeBySourceUrl(RecipeMockData.validSourceUrl);
 
-        expect(recipe, isA<Recipe>());
+        expect(recipe, emits(isA<Recipe>()));
       });
 
-      test('should throw exception when invalid url is given', () async {
-        var callback = () async {
-          await repo.getRecipeBySourceUrl(RecipeMockData.invalidSourceUrl);
-        };
+      test('should throw exception when invalid url is given', () {
+        final recipe = repo.getRecipeBySourceUrl(RecipeMockData.invalidSourceUrl);
 
-        expect(callback, throwsException);
+        expect(recipe, emitsError(isA<Exception>()));
       });
 
-      test('should throw exception when empty url is given', () async {
-        var callback = () async {
-          await repo.getRecipeBySourceUrl(null);
-        };
+      test('should throw exception when empty url is given', () {
+        final recipe = repo.getRecipeBySourceUrl(null);
 
-        expect(callback, throwsArgumentError);
+        expect(recipe, emitsError(isA<ArgumentError>()));
       });
 
-      test('should throw exception when API quota has expired', () async {
+      test('should throw exception when API quota has expired', () {
         when(mockHttpClient.get(any)).thenAnswer((_) => Future.value(
               http.Response(
                 convert.jsonEncode(RecipeMockData.quotaExpiredResponse),
@@ -124,11 +114,9 @@ void main() {
               ),
             ));
 
-        var callback = () async {
-          await repo.getRecipeBySourceUrl(RecipeMockData.validSourceUrl);
-        };
+        final recipe = repo.getRecipeBySourceUrl(RecipeMockData.validSourceUrl);
 
-        expect(callback, throwsA(isA<QuotaExceededException>()));
+        expect(recipe, emitsError(isA<QuotaExceededException>()));
       });
     });
   });

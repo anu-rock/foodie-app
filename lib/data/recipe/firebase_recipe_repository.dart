@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:foodieapp/constants.dart';
 import 'package:foodieapp/data/recipe/user_recipe.dart';
 import 'package:foodieapp/util/date_util.dart';
+import 'package:foodieapp/util/string_util.dart';
 import 'recipe_repository.dart';
 import 'recipe.dart';
 
@@ -28,51 +30,55 @@ class FirebaseRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<Recipe> getRecipe(String id) async {
-    if (id == null || id.isEmpty) {
+  Stream<Recipe> getRecipe(String id) async* {
+    if (StringUtil.isNullOrEmpty(id)) {
       throw ArgumentError('id cannot be null or empty');
     }
 
-    var snapshot = await this._recipesCollection.document(id).get();
-    if (snapshot.data == null) {
-      return null;
-    }
-    var data = snapshot.data;
-    data['id'] = snapshot.documentID;
-    return Recipe.fromMap(data);
+    var snapshots = this._recipesCollection.document(id).snapshots();
+
+    yield* snapshots.map<Recipe>((snap) {
+      if (!snap.exists) return null;
+      var data = snap.data;
+      data['id'] = snap.documentID;
+      return Recipe.fromMap(data);
+    });
   }
 
   @override
-  Future<Recipe> getRecipeBySourceUrl(String url) async {
-    if (url == null || url.isEmpty) {
+  Stream<Recipe> getRecipeBySourceUrl(String url) async* {
+    if (StringUtil.isNullOrEmpty(url)) {
       throw ArgumentError('url cannot be null or empty');
     } else if (!kRegexUrl.hasMatch(url)) {
       throw ArgumentError('Input is not a valid URL');
     }
 
-    var snapshot = await this._recipesCollection.where('sourceUrl', isEqualTo: url).getDocuments();
-    if (snapshot.documents.length == 0) {
-      return null;
-    }
-    var data = snapshot.documents[0].data;
-    data['id'] = snapshot.documents[0].documentID;
-    return Recipe.fromMap(data);
+    var querySnapshots = this._recipesCollection.where('sourceUrl', isEqualTo: url).snapshots();
+
+    yield* querySnapshots.map<Recipe>((qSnap) {
+      if (qSnap.documents.isEmpty) return null;
+      final snap = qSnap.documents.first;
+      var data = snap.data;
+      data['id'] = snap.documentID;
+      return Recipe.fromMap(data);
+    });
   }
 
   @override
-  Future<Recipe> getRecipeBySourceRecipeId(String id) async {
-    if (id == null || id.isEmpty) {
+  Stream<Recipe> getRecipeBySourceRecipeId(String id) async* {
+    if (StringUtil.isNullOrEmpty(id)) {
       throw ArgumentError('id cannot be null or empty');
     }
 
-    var snapshot =
-        await this._recipesCollection.where('sourceRecipeId', isEqualTo: id).getDocuments();
-    if (snapshot.documents.length == 0) {
-      return null;
-    }
-    var data = snapshot.documents[0].data;
-    data['id'] = snapshot.documents[0].documentID;
-    return Recipe.fromMap(data);
+    var querySnapshots = this._recipesCollection.where('sourceRecipeId', isEqualTo: id).snapshots();
+
+    yield* querySnapshots.map<Recipe>((qSnap) {
+      if (qSnap.documents.isEmpty) return null;
+      final snap = qSnap.documents.first;
+      var data = snap.data;
+      data['id'] = snap.documentID;
+      return Recipe.fromMap(data);
+    });
   }
 
   @override
@@ -98,66 +104,79 @@ class FirebaseRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<List<UserRecipe>> getFavoriteRecipes(String userId) async {
-    if (userId == null || userId.isEmpty) {
+  Stream<List<UserRecipe>> getFavoriteRecipes(String userId) async* {
+    if (StringUtil.isNullOrEmpty(userId)) {
       throw ArgumentError('userId cannot be null or empty.');
     }
 
-    var snapshot = await this
+    var qSnapshots = this
         ._userRecipesCollection
         .where('userId', isEqualTo: userId)
         .where('isFavorite', isEqualTo: true)
-        .getDocuments();
+        .snapshots();
 
-    return snapshot.documents.map((doc) => UserRecipe.fromMap(doc.data)).toList();
+    yield* qSnapshots.map((qSnap) {
+      return qSnap.documents.map<UserRecipe>((snap) {
+        return UserRecipe.fromMap(snap.data);
+      }).toList();
+    });
   }
 
   @override
-  Future<List<UserRecipe>> getPlayedRecipes(String userId) async {
-    if (userId == null || userId.isEmpty) {
+  Stream<List<UserRecipe>> getPlayedRecipes(String userId) async* {
+    if (StringUtil.isNullOrEmpty(userId)) {
       throw ArgumentError('userId cannot be null or empty.');
     }
 
-    var snapshot = await this
+    var qSnapshots = this
         ._userRecipesCollection
         .where('userId', isEqualTo: userId)
         .where('isPlayed', isEqualTo: true)
-        .getDocuments();
+        .snapshots();
 
-    return snapshot.documents.map((doc) => UserRecipe.fromMap(doc.data)).toList();
+    yield* qSnapshots.map((qSnap) {
+      return qSnap.documents.map<UserRecipe>((snap) {
+        return UserRecipe.fromMap(snap.data);
+      }).toList();
+    });
   }
 
   @override
-  Future<List<UserRecipe>> getViewedRecipes() async {
+  Stream<List<UserRecipe>> getViewedRecipes() async* {
     var currentUser = await this._auth.currentUser();
     if (currentUser == null) {
       throw AuthException(
           'not_logged_in', 'No current user found probably because user is not logged in.');
     }
 
-    var snapshot = await this
-        ._userRecipesCollection
-        .where('userId', isEqualTo: currentUser.uid)
-        .getDocuments();
+    var qSnapshots =
+        this._userRecipesCollection.where('userId', isEqualTo: currentUser.uid).snapshots();
 
-    return snapshot.documents.map((doc) => UserRecipe.fromMap(doc.data)).toList();
+    yield* qSnapshots.map((qSnap) {
+      return qSnap.documents.map<UserRecipe>((snap) {
+        return UserRecipe.fromMap(snap.data);
+      }).toList();
+    });
   }
 
   @override
-  Future<List<UserRecipe>> getUsersForRecipe(String recipeId) async {
-    if (recipeId == null || recipeId.isEmpty) {
+  Stream<List<UserRecipe>> getUsersForRecipe(String recipeId) async* {
+    if (StringUtil.isNullOrEmpty(recipeId)) {
       throw ArgumentError('recipeId cannot be null or empty.');
     }
 
-    var snapshot =
-        await this._userRecipesCollection.where('recipeId', isEqualTo: recipeId).getDocuments();
+    var qSnapshots = this._userRecipesCollection.where('recipeId', isEqualTo: recipeId).snapshots();
 
-    return snapshot.documents.map((doc) => UserRecipe.fromMap(doc.data)).toList();
+    yield* qSnapshots.map((qSnap) {
+      return qSnap.documents.map<UserRecipe>((snap) {
+        return UserRecipe.fromMap(snap.data);
+      }).toList();
+    });
   }
 
   @override
   Future<UserRecipe> toggleFavorite(String recipeId) async {
-    if (recipeId == null || recipeId.isEmpty) {
+    if (StringUtil.isNullOrEmpty(recipeId)) {
       throw ArgumentError('recipeId cannot be null or empty.');
     }
 
@@ -238,12 +257,13 @@ class FirebaseRecipeRepository implements RecipeRepository {
   Future<UserRecipe> viewRecipe(Recipe recipe) async {
     if (recipe == null) {
       throw ArgumentError('recipe cannot be null or empty.');
-    } else if (recipe.id == null || recipe.id.isEmpty) {
+    } else if (StringUtil.isNullOrEmpty(recipe.id)) {
       throw ArgumentError('recipe does not exist in store.');
     }
 
-    var storedRecipe = await this._recipesCollection.document(recipe.id).get();
-    if (!storedRecipe.exists) {
+    final storedRecipeStream = this.getRecipe(recipe.id);
+    final storedRecipe = await storedRecipeStream.first;
+    if (storedRecipe == null) {
       throw ArgumentError('recipe does not exist in store.');
     }
 
@@ -253,17 +273,21 @@ class FirebaseRecipeRepository implements RecipeRepository {
           'not_logged_in', 'No current user found probably because user is not logged in.');
     }
 
-    var docs = await this
+    final docs = this
         ._userRecipesCollection
         .where('recipeId', isEqualTo: recipe.id)
         .where('userId', isEqualTo: currentUser.uid)
-        .getDocuments();
+        .snapshots();
+
+    final snap = (await docs.first).documents;
+    final notExists = snap.isEmpty;
+    final userRecipe = notExists ? null : snap.first;
 
     // Create corresponding UserRecipe when it doesn't already exist
-    if (docs.documents.isEmpty) {
-      var newUserRecipe = UserRecipe(
+    if (notExists) {
+      final newUserRecipe = UserRecipe(
         recipeId: recipe.id,
-        recipeTitle: storedRecipe.data['title'] as String,
+        recipeTitle: storedRecipe.title,
         userId: currentUser.uid,
         userName: currentUser.displayName,
         viewedAt: [DateTime.now()],
@@ -273,9 +297,9 @@ class FirebaseRecipeRepository implements RecipeRepository {
     }
 
     // Otherwise, continue to update the existing corresponding UserRecipe
-    var userRecipeRef = this._userRecipesCollection.document(docs.documents.first.documentID);
+    final userRecipeId = userRecipe.documentID;
+    var userRecipeRef = this._userRecipesCollection.document(userRecipeId);
     await userRecipeRef.updateData({
-      'isViewed': true,
       'viewedAt': FieldValue.arrayUnion([DateUtil.dateToUtcIsoString(DateTime.now())]),
     });
     var updatedUserRecipe = (await userRecipeRef.get()).data;

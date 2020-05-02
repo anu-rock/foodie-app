@@ -15,13 +15,13 @@ abstract class RecipeRepository {
   Future<List<Recipe>> findRecipesByIngredients(List<String> ingredients);
 
   /// Returns a [Recipe] identified by given unique id.
-  Future<Recipe> getRecipe(String id);
+  Stream<Recipe> getRecipe(String id);
 
   /// Returns a [Recipe] identified by given source recipe id.
-  Future<Recipe> getRecipeBySourceRecipeId(String id);
+  Stream<Recipe> getRecipeBySourceRecipeId(String id);
 
   /// Returns a [Recipe] found at `url`.
-  Future<Recipe> getRecipeBySourceUrl(String url);
+  Stream<Recipe> getRecipeBySourceUrl(String url);
 
   /// Saves given recipe to database or other persistent store.
   ///
@@ -69,10 +69,10 @@ abstract class RecipeRepository {
   Future<UserRecipe> playRecipe(String recipeId);
 
   /// Returns favorite recipes of given user.
-  Future<List<UserRecipe>> getFavoriteRecipes(String userId);
+  Stream<List<UserRecipe>> getFavoriteRecipes(String userId);
 
   /// Returns recipes played by given user.
-  Future<List<UserRecipe>> getPlayedRecipes(String userId);
+  Stream<List<UserRecipe>> getPlayedRecipes(String userId);
 
   /// Returns recipes viewed by current user.
   ///
@@ -80,8 +80,8 @@ abstract class RecipeRepository {
   /// because we want to keep a user's views private.
   /// This is in contrast to favorite and played recipes,
   /// data that we want to publicly display on a user's profile screen.
-  Future<List<UserRecipe>> getViewedRecipes();
+  Stream<List<UserRecipe>> getViewedRecipes();
 
   /// Returns users associated with given recipe.
-  Future<List<UserRecipe>> getUsersForRecipe(String recipeId);
+  Stream<List<UserRecipe>> getUsersForRecipe(String recipeId);
 }

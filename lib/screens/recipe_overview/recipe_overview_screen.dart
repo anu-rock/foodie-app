@@ -48,8 +48,8 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
           ? Center(
               child: Text('No valid Recipe instance received!'),
             )
-          : FutureBuilder<Recipe>(
-              future: this._getStoredDetails(this.recipeFromRoute),
+          : StreamBuilder<Recipe>(
+              stream: this._getStoredDetails(this.recipeFromRoute),
               builder: (context, snapshot) {
                 return ListView(
                   children: <Widget>[
@@ -71,21 +71,24 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
   ///
   /// This saves unnecessary API/storage calls that would otherwise occur
   /// because of rebuilds of this widget.
-  Future<Recipe> _getStoredDetails(Recipe r) async {
+  Stream<Recipe> _getStoredDetails(Recipe r) async* {
     if (this.recipe != null) {
-      return this.recipe;
+      yield this.recipe;
+      return;
     }
 
-    final recipeRepo = Provider.of<RecipeRepository>(context);
+    final recipeRepo = Provider.of<RecipeRepository>(context, listen: false);
 
+    Stream<Recipe> recipeStream;
     if (r.id == r.sourceRecipeId) {
       // This will be true when coming here from search screen
-      this.recipe = await recipeRepo.getRecipeBySourceRecipeId(r.id);
+      recipeStream = recipeRepo.getRecipeBySourceRecipeId(r.id);
     } else {
       // This will be true in all other cases
-      this.recipe = await recipeRepo.getRecipe(r.id);
+      recipeStream = recipeRepo.getRecipe(r.id);
     }
-    this.recipe = this.recipe ?? r; // an unstored recipe will be null in both cases above
+    this.recipe =
+        (await recipeStream.first) ?? r; // an unstored recipe will be null in both cases above
     this.userRecipe = await recipeRepo.viewRecipe(this.recipe);
 
     if (this.recipe.id == null) {
@@ -94,7 +97,7 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
       this.recipe = Recipe.fromMap(recipeMap);
     }
 
-    return this.recipe;
+    yield this.recipe;
   }
 
   Widget _hero() {

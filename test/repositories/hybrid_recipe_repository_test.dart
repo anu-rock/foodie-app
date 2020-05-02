@@ -47,28 +47,28 @@ void main() {
     });
 
     group('getRecipe()', () {
-      test('should return recipe from database when id of stored recipe is given', () async {
+      test('should return recipe from database when id of stored recipe is given', () {
         var id = MockData.existingRecipeId;
-        var recipe = await repo.getRecipe(id);
-
-        expect(recipe, isA<Recipe>());
-        expect(recipe, isNotNull);
-        expect(recipe.id, isNotNull); // Recipe received from API will not have id set
+        repo.getRecipe(id).listen((recipe) {
+          expect(recipe, isA<Recipe>());
+          expect(recipe, isNotNull);
+          expect(recipe.id, isNotNull); // Recipe received from API will not have id set
+        });
       });
 
       test('should return recipe from database when source recipe id of stored recipe is given',
-          () async {
+          () {
         // If you are wondering, this case is possible when coming from recipe search screen,
         // which is when we may not have access to stored recipe ids because search results
         // may solely be returned from API. The only id we may have at that point is source recipe id.
         var id = MockData.validSourceRecipeId;
-        var recipe = await repo.getRecipe(id);
-
-        expect(recipe, isA<Recipe>());
-        expect(recipe, isNotNull);
-        expect(recipe.id, isNotNull); // Recipe received from API will not have id set
-        expect(recipe.sourceRecipeId, id);
-        expect(recipe.id, isNot(id));
+        repo.getRecipe(id).listen((recipe) {
+          expect(recipe, isA<Recipe>());
+          expect(recipe, isNotNull);
+          expect(recipe.id, isNotNull); // Recipe received from API will not have id set
+          expect(recipe.sourceRecipeId, id);
+          expect(recipe.id, isNot(id));
+        });
       });
 
       test('should return recipe from API when valid source recipe id of unstored recipe is given',
@@ -76,12 +76,12 @@ void main() {
         await store.collection(kFirestoreRecipes).document(MockData.existingRecipeId).delete();
 
         var id = MockData.validSourceRecipeId;
-        var recipe = await repo.getRecipe(id);
-
-        expect(recipe, isA<Recipe>());
-        expect(recipe, isNotNull);
-        expect(recipe.id, id); // Recipe received from API will have id same as source id
-        expect(recipe.sourceRecipeId, id);
+        repo.getRecipe(id).listen((recipe) {
+          expect(recipe, isA<Recipe>());
+          expect(recipe, isNotNull);
+          expect(recipe.id, id); // Recipe received from API will have id same as source id
+          expect(recipe.sourceRecipeId, id);
+        });
       });
 
       test(
@@ -90,19 +90,15 @@ void main() {
         await store.collection(kFirestoreRecipes).document(MockData.existingRecipeId).delete();
 
         var id = MockData.invalidSourceRecipeId;
-        var callback = () async {
-          await repo.getRecipe(id);
-        };
+        final recipe = repo.getRecipe(id);
 
-        expect(callback, throwsException);
+        expect(recipe, emitsError(isException));
       });
 
-      test('should throw exception when empty recipe id is given', () async {
-        var callback = () async {
-          await repo.getRecipe(null);
-        };
+      test('should throw exception when empty recipe id is given', () {
+        final recipe = repo.getRecipe(null);
 
-        expect(callback, throwsArgumentError);
+        expect(recipe, emitsError(isArgumentError));
       });
     });
 

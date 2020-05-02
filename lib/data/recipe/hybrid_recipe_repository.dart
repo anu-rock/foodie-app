@@ -32,21 +32,30 @@ class HybridRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<Recipe> getRecipe(String id) async {
+  Stream<Recipe> getRecipe(String id) async* {
     // Attempt to get recipe from Firestore
-    Recipe recipe = await this._fbRepo.getRecipe(id);
+    Stream<Recipe> recipeStream = this._fbRepo.getRecipe(id);
+    Recipe recipe = await recipeStream.first;
+
+    if (recipe != null) {
+      yield recipe;
+      return;
+    }
 
     // If not found by id, try searching by source recipe id
-    if (recipe == null) {
-      recipe = await this._fbRepo.getRecipeBySourceRecipeId(id);
+    recipeStream = this._fbRepo.getRecipeBySourceRecipeId(id);
+    recipe = await recipeStream.first;
+
+    if (recipe != null) {
+      yield recipe;
+      return;
     }
 
     // If nothing works, get it from API
-    if (recipe == null) {
-      recipe = await this._apiRepo.getRecipe(id);
-    }
+    recipeStream = this._apiRepo.getRecipe(id);
+    recipe = await recipeStream.first;
 
-    return recipe;
+    yield recipe;
   }
 
   @override
@@ -82,32 +91,32 @@ class HybridRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<List<UserRecipe>> getFavoriteRecipes(String userId) {
+  Stream<List<UserRecipe>> getFavoriteRecipes(String userId) {
     return this._fbRepo.getFavoriteRecipes(userId);
   }
 
   @override
-  Future<List<UserRecipe>> getPlayedRecipes(String userId) {
+  Stream<List<UserRecipe>> getPlayedRecipes(String userId) {
     return this._fbRepo.getPlayedRecipes(userId);
   }
 
   @override
-  Future<Recipe> getRecipeBySourceRecipeId(String id) {
+  Stream<Recipe> getRecipeBySourceRecipeId(String id) {
     return this._fbRepo.getRecipeBySourceRecipeId(id);
   }
 
   @override
-  Future<Recipe> getRecipeBySourceUrl(String url) {
+  Stream<Recipe> getRecipeBySourceUrl(String url) {
     return this._fbRepo.getRecipeBySourceUrl(url);
   }
 
   @override
-  Future<List<UserRecipe>> getUsersForRecipe(String recipeId) {
+  Stream<List<UserRecipe>> getUsersForRecipe(String recipeId) {
     return this._fbRepo.getUsersForRecipe(recipeId);
   }
 
   @override
-  Future<List<UserRecipe>> getViewedRecipes() {
+  Stream<List<UserRecipe>> getViewedRecipes() {
     return this._fbRepo.getViewedRecipes();
   }
 
