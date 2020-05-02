@@ -5,11 +5,11 @@ import 'package:foodieapp/screens/recipe_overview/recipe_overview_screen.dart';
 import 'package:foodieapp/util/string_util.dart';
 import 'package:foodieapp/widgets/heading_3.dart';
 
-class RecipeCoverTile extends StatelessWidget {
+class RecipeCard extends StatelessWidget {
   /// The [Recipe] this tile represents.
   final Recipe recipe;
 
-  RecipeCoverTile({@required this.recipe});
+  RecipeCard({@required this.recipe});
 
   @override
   Widget build(BuildContext context) {

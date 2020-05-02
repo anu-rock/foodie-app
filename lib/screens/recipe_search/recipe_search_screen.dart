@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodieapp/widgets/heading_3.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/constants.dart';
@@ -8,7 +7,9 @@ import 'package:foodieapp/data/ingredient/ingredient_repository.dart';
 import 'package:foodieapp/data/recipe/recipe.dart';
 import 'package:foodieapp/data/recipe/recipe_repository.dart';
 import 'package:foodieapp/widgets/heading_2.dart';
-import 'package:foodieapp/widgets/recipe_cover_tile.dart';
+import 'package:foodieapp/widgets/recipe_card.dart';
+import 'package:foodieapp/widgets/heading_3.dart';
+import 'package:foodieapp/widgets/recipe_card_loader.dart';
 
 class RecipeSearchScreen extends StatefulWidget {
   static const id = 'recipe_search';
@@ -26,12 +27,13 @@ class _RecipeSearchScreenState extends State<RecipeSearchScreen> {
       return this.recipes;
     }
 
-    final ingredientsRepo = Provider.of<IngredientRepository>(context);
-    final recipeRepo = Provider.of<RecipeRepository>(context);
+    final ingredientsRepo = Provider.of<IngredientRepository>(context, listen: false);
+    final recipeRepo = Provider.of<RecipeRepository>(context, listen: false);
     final ingredients = await ingredientsRepo.getIngredientsAsFuture();
     this.recipes = await recipeRepo.findRecipesByIngredients(
       ingredients.map((i) => i.name).toList(),
     );
+
     return this.recipes;
   }
 
@@ -46,49 +48,62 @@ class _RecipeSearchScreenState extends State<RecipeSearchScreen> {
         title: Heading2('Recipe Suggestions'),
       ),
       body: FutureBuilder<List<Recipe>>(
-        future: this._getRecipes(),
+        future: _getRecipes(),
         builder: (context, recipesSnapshot) {
+          Widget mainBody;
           if (!recipesSnapshot.hasData) {
-            return Center(
-              child: CupertinoActivityIndicator(),
-            );
+            mainBody = _appShell();
+          } else {
+            if (recipesSnapshot.data.length > 0) {
+              mainBody = _suggestionList(recipesSnapshot.data);
+            } else {
+              mainBody = _noResultsMessage();
+            }
           }
 
-          if (recipesSnapshot.data.length > 0) {
-            return this._buildSuggestionList(recipesSnapshot.data);
-          } else {
-            return this._buildNoResultsMessage();
-          }
+          return Container(
+            child: mainBody,
+            color: kColorLightGrey,
+            padding: EdgeInsets.only(
+              top: kPaddingUnitsSm,
+              left: kPaddingUnitsSm,
+              right: kPaddingUnitsSm,
+            ),
+          );
         },
       ),
     );
   }
 
-  Widget _buildSuggestionList(List<Recipe> recipes) {
-    return Container(
-      color: kColorLightGrey,
-      padding: EdgeInsets.only(
-        top: kPaddingUnitsSm,
-        left: kPaddingUnitsSm,
-        right: kPaddingUnitsSm,
-      ),
-      child: ListView(
-        children: recipes
-            .map(
-              (r) => Column(
-                children: <Widget>[
-                  RecipeCoverTile(recipe: r),
-                  SizedBox(height: 20.0),
-                ],
-              ),
-            )
-            .toList(),
-      ),
+  ListView _appShell() {
+    return ListView(
+      children: <Widget>[
+        RecipeCardLoader(),
+        SizedBox(height: 20.0),
+        RecipeCardLoader(),
+        SizedBox(height: 20.0),
+        RecipeCardLoader(),
+      ],
     );
   }
 
-  Widget _buildNoResultsMessage() {
-    return Padding(
+  ListView _suggestionList(List<Recipe> recipes) {
+    return ListView(
+      children: recipes
+          .map(
+            (r) => Column(
+              children: <Widget>[
+                RecipeCard(recipe: r),
+                SizedBox(height: 20.0),
+              ],
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  Container _noResultsMessage() {
+    return Container(
       padding: kPaddingAll,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
