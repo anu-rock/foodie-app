@@ -5,6 +5,8 @@ class User {
   final String phoneNumber;
   final String photoUrl;
   final bool isEmailVerified;
+  final int playedRecipes;
+  final int favoriteRecipes;
 
   User({
     this.id,
@@ -12,7 +14,9 @@ class User {
     this.email,
     this.phoneNumber,
     this.photoUrl,
-    this.isEmailVerified,
+    this.isEmailVerified = false,
+    this.playedRecipes = 0,
+    this.favoriteRecipes = 0,
   });
 
   @override
@@ -32,7 +36,7 @@ class User {
     return 'User{id: $id, displayName: $displayName, email: $email}';
   }
 
-  Map<String, Object> toJson() {
+  Map<String, Object> toMap() {
     return {
       'id': this.id,
       'displayName': this.displayName,
@@ -40,17 +44,21 @@ class User {
       'phoneNumber': this.phoneNumber,
       'photoUrl': this.photoUrl,
       'isEmailVerified': this.isEmailVerified,
+      'playedRecipes': this.playedRecipes,
+      'favoriteRecipes': this.favoriteRecipes
     };
   }
 
-  static User fromJson(Map<String, Object> json) {
+  static User fromMap(Map<String, Object> map) {
     return User(
-      id: json['id'] as String,
-      displayName: json['displayName'] as String,
-      email: json['email'] as String,
-      phoneNumber: json['phoneNumber'] as String,
-      photoUrl: json['photoUrl'] as String,
-      isEmailVerified: json['isEmailVerified'] as bool,
+      id: map['id'] as String,
+      displayName: map['displayName'] as String,
+      email: map['email'] as String,
+      phoneNumber: map['phoneNumber'] as String,
+      photoUrl: map['photoUrl'] as String,
+      isEmailVerified: (map['isEmailVerified'] as bool) ?? false,
+      playedRecipes: map['playedRecipes'] as int,
+      favoriteRecipes: map['favoriteRecipes'] as int,
     );
   }
 }

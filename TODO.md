@@ -4,7 +4,6 @@
 
 #### Remove tasks when they get completed
 
-- Add tests for each model class (esp. for `toMap()` and `fromMap()` methods)
 - Widget tests for `RecipeOverviewScreen`
   - is recipe displayed when coming from search screen?
   - is recipe displayed when coming from some other screen?
@@ -12,7 +11,6 @@
   - is total favorites for recipe data visible?
 - Infinite scroll based pagination on search screen
 - Move User’s `email`, `phoneNumber`, `isEmailVerified` fields to private_data subcollection
-- Add `playedRecipes` and `favoriteRecipes` (count) fields to User
 
 ## Database
 

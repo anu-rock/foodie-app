@@ -32,4 +32,13 @@ class StringUtil {
 
     return str.replaceRange(maxLen, null, endWithEllipses ? '...' : '');
   }
+
+  /// Returns a nullish string representation of given enum value.
+  ///
+  /// The root of this method's purpose is in the fact that
+  /// null.toString() in Dart returns the string 'null',
+  /// which in our case is not the greatest thing in the world.
+  static String toStringFromEnum(dynamic value) {
+    return value == null ? null : value.toString();
+  }
 }

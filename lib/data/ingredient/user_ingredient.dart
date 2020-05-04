@@ -1,4 +1,5 @@
 import 'package:foodieapp/util/date_util.dart';
+import 'package:foodieapp/util/string_util.dart';
 
 import 'ingredient.dart';
 
@@ -61,7 +62,7 @@ class UserIngredient extends Ingredient {
     return {
       'id': this.id,
       'name': this.name,
-      'unitOfMeasure': this.unitOfMeasure.toString(),
+      'unitOfMeasure': StringUtil.toStringFromEnum(this.unitOfMeasure),
       'userId': this.userId,
       'quantity': this.quantity,
       'createdAt': DateUtil.dateToUtcIsoString(this.createdAt),

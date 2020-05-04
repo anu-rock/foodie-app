@@ -1,3 +1,5 @@
+import 'package:foodieapp/util/string_util.dart';
+
 /// Represents a recipe.
 ///
 /// This entity is to provide full details about a recipe,
@@ -106,7 +108,7 @@ class Recipe {
       'photoUrl': this.photoUrl,
       'ingredients': this.ingredients,
       'cookingTime': this.cookingTime,
-      'difficulty': this.difficulty.toString(),
+      'difficulty': StringUtil.toStringFromEnum(this.difficulty),
       'servings': this.servings,
       'sourceRecipeId': this.sourceRecipeId,
       'sourceName': this.sourceName,
@@ -128,7 +130,7 @@ class Recipe {
       title: map['title'] as String,
       desc: map['desc'] as String,
       photoUrl: map['photoUrl'] as String,
-      ingredients: (map['ingredients'] as List).map((i) => i as String).toList(),
+      ingredients: ((map['ingredients'] as List) ?? []).map((i) => i as String).toList(),
       cookingTime: map['cookingTime'] as int,
       difficulty: getRecipeDifficultyfromString(map['difficulty'].toString()),
       servings: map['servings'] as int,
@@ -138,7 +140,7 @@ class Recipe {
       plays: map['plays'] as int,
       favs: map['favs'] as int,
       views: map['views'] as int,
-      instructions: (map['instructions'] as List).map((i) => i as String).toList(),
+      instructions: ((map['instructions'] as List) ?? []).map((i) => i as String).toList(),
     );
   }
 
