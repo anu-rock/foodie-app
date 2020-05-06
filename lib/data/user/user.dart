@@ -2,21 +2,19 @@ class User {
   final String id;
   final String displayName;
   final String email;
-  final String phoneNumber;
   final String photoUrl;
-  final bool isEmailVerified;
   final int playedRecipes;
   final int favoriteRecipes;
+  final PrivateUserData privateUserData;
 
   User({
     this.id,
     this.displayName,
     this.email,
-    this.phoneNumber,
     this.photoUrl,
-    this.isEmailVerified = false,
     this.playedRecipes = 0,
     this.favoriteRecipes = 0,
+    this.privateUserData,
   });
 
   @override
@@ -41,24 +39,54 @@ class User {
       'id': this.id,
       'displayName': this.displayName,
       'email': this.email,
-      'phoneNumber': this.phoneNumber,
       'photoUrl': this.photoUrl,
-      'isEmailVerified': this.isEmailVerified,
       'playedRecipes': this.playedRecipes,
-      'favoriteRecipes': this.favoriteRecipes
+      'favoriteRecipes': this.favoriteRecipes,
+      'privateUserData': this.privateUserData == null ? null : this.privateUserData.toMap(),
     };
   }
 
   static User fromMap(Map<String, Object> map) {
+    if (map == null) {
+      return null;
+    }
+
     return User(
       id: map['id'] as String,
       displayName: map['displayName'] as String,
       email: map['email'] as String,
-      phoneNumber: map['phoneNumber'] as String,
       photoUrl: map['photoUrl'] as String,
-      isEmailVerified: (map['isEmailVerified'] as bool) ?? false,
       playedRecipes: map['playedRecipes'] as int,
       favoriteRecipes: map['favoriteRecipes'] as int,
+      privateUserData: PrivateUserData.fromMap(map['privateUserData']),
+    );
+  }
+}
+
+class PrivateUserData {
+  final String phoneNumber;
+  final bool isEmailVerified;
+
+  PrivateUserData({
+    this.phoneNumber,
+    this.isEmailVerified = false,
+  });
+
+  Map<String, Object> toMap() {
+    return {
+      'phoneNumber': this.phoneNumber,
+      'isEmailVerified': this.isEmailVerified,
+    };
+  }
+
+  static PrivateUserData fromMap(Map<String, Object> map) {
+    if (map == null) {
+      return null;
+    }
+
+    return PrivateUserData(
+      phoneNumber: map['phoneNumber'] as String,
+      isEmailVerified: map['isEmailVerified'] as bool,
     );
   }
 }

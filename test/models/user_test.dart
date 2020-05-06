@@ -27,7 +27,6 @@ void main() {
         var user = User.fromMap(map);
 
         expect(user, isA<User>());
-        expect(user.isEmailVerified, false);
       });
 
       test('should work with map with email only', () {

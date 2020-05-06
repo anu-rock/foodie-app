@@ -34,9 +34,7 @@ class FirebaseUserRepository implements UserRepository {
   Future<LoginResult> loginWithEmail(String email, String password) async {
     try {
       this._status = AuthStatus.Authenticating;
-      await this
-          ._auth
-          .signInWithEmailAndPassword(email: email, password: password);
+      await this._auth.signInWithEmailAndPassword(email: email, password: password);
       this._status = AuthStatus.Authenticated;
       return Future<LoginResult>.value(
         LoginResult(
@@ -81,9 +79,11 @@ class FirebaseUserRepository implements UserRepository {
       id: fbUser.uid,
       displayName: fbUser.displayName,
       email: fbUser.email,
-      phoneNumber: fbUser.phoneNumber,
       photoUrl: fbUser.photoUrl,
-      isEmailVerified: fbUser.isEmailVerified,
+      privateUserData: PrivateUserData(
+        phoneNumber: fbUser.phoneNumber,
+        isEmailVerified: fbUser.isEmailVerified,
+      ),
     );
   }
 }

@@ -4,13 +4,7 @@
 
 #### Remove tasks when they get completed
 
-- Widget tests for `RecipeOverviewScreen`
-  - is recipe displayed when coming from search screen?
-  - is recipe displayed when coming from some other screen?
-  - is favorite button visible?
-  - is total favorites for recipe data visible?
-- Infinite scroll based pagination on search screen
-- Move User’s `email`, `phoneNumber`, `isEmailVerified` fields to private_data subcollection
+- Beautify `RecipeOverviewScreen`
 
 ## Database
 
@@ -69,6 +63,11 @@
 ## Tests
 
 - [ ] More screen/widget tests
+  - [ ] Widget tests for `RecipeOverviewScreen`
+    - is recipe displayed when coming from search screen?
+    - is recipe displayed when coming from some other screen?
+    - is favorite button visible?
+    - is total favorites for recipe data visible?
 - [ ] More integration tests
 
 ## CI/CD
