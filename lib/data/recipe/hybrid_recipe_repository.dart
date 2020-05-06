@@ -86,8 +86,8 @@ class HybridRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<List<Recipe>> findRecipesByIngredients(List<String> ingredients) {
-    return this._apiRepo.findRecipesByIngredients(ingredients);
+  Future<List<Recipe>> findRecipesByIngredients(List<String> ingredients, int offset) {
+    return this._apiRepo.findRecipesByIngredients(ingredients, offset);
   }
 
   @override

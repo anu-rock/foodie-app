@@ -24,12 +24,15 @@ class ApiRecipeRepository implements RecipeRepository {
   }) : this._http = httpClient ?? http.Client();
 
   @override
-  Future<List<Recipe>> findRecipesByIngredients(List<String> ingredients) async {
+  Future<List<Recipe>> findRecipesByIngredients(List<String> ingredients, int offset) async {
     if (ingredients == null || ingredients.length == 0) {
       throw ArgumentError('ingredients cannot be null or empty');
     }
 
-    var apiUrl = kUrlFindRecipesApi.format({'ingredients': ingredients.join(',')});
+    var apiUrl = kUrlFindRecipesApi.format({
+      'ingredients': ingredients.join(','),
+      'offset': offset.toString(),
+    });
 
     var response = await this._http.get(apiUrl);
 
@@ -37,6 +40,14 @@ class ApiRecipeRepository implements RecipeRepository {
       case 200:
         var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
         var searchResults = jsonResponse['results'] as List;
+        final totalResults = jsonResponse['totalResults'] as int;
+
+        // When we reach the last page of search results,
+        // add a dummy recipe at the end as an indicator of end of results.
+        if (offset + searchResults.length >= totalResults) {
+          searchResults.add({'id': -1});
+        }
+
         return searchResults.map((r) => this._parseFromSpoonacular(r)).toList();
       case 402:
         throw QuotaExceededException('Daily API quota exhausted.');
@@ -139,7 +150,7 @@ class ApiRecipeRepository implements RecipeRepository {
     List<String> ingredients = [];
     final analyzedInstructions = json['analyzedInstructions'] as List;
 
-    if (analyzedInstructions.length > 0) {
+    if (analyzedInstructions != null && analyzedInstructions.length > 0) {
       var firstAnalyzedInstructions = analyzedInstructions[0] as Map<String, dynamic>;
       var steps = firstAnalyzedInstructions['steps'] as List;
       steps.forEach((s) {

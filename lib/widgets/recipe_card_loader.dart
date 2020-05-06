@@ -113,7 +113,10 @@ class _RecipeCardLoaderState extends State<RecipeCardLoader> with SingleTickerPr
         Container(
           width: double.infinity,
           height: 10.0,
-          color: Colors.white,
+          decoration: BoxDecoration(
+            borderRadius: kContBorderRadiusSm,
+            color: Colors.white,
+          ),
         ),
       ],
     );
@@ -125,7 +128,10 @@ class _RecipeCardLoaderState extends State<RecipeCardLoader> with SingleTickerPr
         Container(
           width: double.infinity,
           height: 20.0,
-          color: Colors.white,
+          decoration: BoxDecoration(
+            borderRadius: kContBorderRadiusSm,
+            color: Colors.white,
+          ),
         ),
       ],
     );

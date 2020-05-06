@@ -82,7 +82,7 @@ class FirebaseRecipeRepository implements RecipeRepository {
   }
 
   @override
-  Future<List<Recipe>> findRecipesByIngredients(List<String> ingredients) async {
+  Future<List<Recipe>> findRecipesByIngredients(List<String> ingredients, int offset) async {
     if (ingredients == null || ingredients.length == 0) {
       throw ArgumentError('ingredients cannot be null or empty');
     } else if (ingredients.length > 10) {

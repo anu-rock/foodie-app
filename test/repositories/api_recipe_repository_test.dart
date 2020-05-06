@@ -29,7 +29,7 @@ void main() {
   group('ApiRecipeRepository', () {
     group('findRecipesByIngredients', () {
       test('should return recipes when valid ingredients are given', () async {
-        var foundRecipes = await repo.findRecipesByIngredients(RecipeMockData.validIngredients);
+        var foundRecipes = await repo.findRecipesByIngredients(RecipeMockData.validIngredients, 0);
 
         var expectedSearchResults = RecipeMockData.searchResults['results'] as List;
         expect(foundRecipes.length, expectedSearchResults.length);
@@ -39,15 +39,28 @@ void main() {
         expect(foundRecipes[0].instructions, isA<List>());
       });
 
+      test('should honor the given offset', () async {
+        var foundRecipes = await repo.findRecipesByIngredients(
+          RecipeMockData.validIngredients,
+          1,
+        );
+
+        var expectedSearchResults = RecipeMockData.searchResults['results'] as List;
+        expect(foundRecipes.length, expectedSearchResults.length - 1);
+        expect(foundRecipes[0], isA<Recipe>());
+        expect(foundRecipes[0].id, '488463');
+      });
+
       test('should return an empty list when invalid ingredients are given', () async {
-        var foundRecipes = await repo.findRecipesByIngredients(RecipeMockData.invalidIngredients);
+        var foundRecipes =
+            await repo.findRecipesByIngredients(RecipeMockData.invalidIngredients, 0);
 
         expect(foundRecipes.length, 0);
       });
 
       test('should throw exception when no ingredients are given', () async {
         var callback = () async {
-          await repo.findRecipesByIngredients([]);
+          await repo.findRecipesByIngredients([], 0);
         };
 
         expect(callback, throwsArgumentError);
@@ -123,23 +136,54 @@ void main() {
 }
 
 defineStubs() {
-  when(mockHttpClient.get(
-          kUrlFindRecipesApi.format({'ingredients': RecipeMockData.validIngredients.join(',')})))
-      .thenAnswer((_) => Future.value(
-            http.Response(
-              convert.jsonEncode(RecipeMockData.searchResults),
-              200,
-            ),
-          ));
+  when(
+    mockHttpClient.get(
+      kUrlFindRecipesApi.format({
+        'ingredients': RecipeMockData.validIngredients.join(','),
+        'offset': 0,
+      }),
+    ),
+  ).thenAnswer(
+    (_) => Future.value(
+      http.Response(
+        convert.jsonEncode(RecipeMockData.searchResults),
+        200,
+      ),
+    ),
+  );
 
-  when(mockHttpClient.get(
-          kUrlFindRecipesApi.format({'ingredients': RecipeMockData.invalidIngredients.join(',')})))
-      .thenAnswer((_) => Future.value(
-            http.Response(
-              convert.jsonEncode(RecipeMockData.emptySearchResults),
-              200,
-            ),
-          ));
+  when(
+    mockHttpClient.get(
+      kUrlFindRecipesApi.format({
+        'ingredients': RecipeMockData.validIngredients.join(','),
+        'offset': 1,
+      }),
+    ),
+  ).thenAnswer((_) {
+    final offsetResults = convert.json.decode(
+      convert.json.encode(RecipeMockData.searchResults),
+    ); // cloning
+    (offsetResults['results'] as List).removeAt(0);
+    offsetResults['offset'] = 1;
+    offsetResults['number'] = 1;
+
+    return Future.value(
+      http.Response(
+        convert.jsonEncode(offsetResults),
+        200,
+      ),
+    );
+  });
+
+  when(mockHttpClient.get(kUrlFindRecipesApi.format({
+    'ingredients': RecipeMockData.invalidIngredients.join(','),
+    'offset': 0,
+  }))).thenAnswer((_) => Future.value(
+        http.Response(
+          convert.jsonEncode(RecipeMockData.emptySearchResults),
+          200,
+        ),
+      ));
 
   when(mockHttpClient.get(kUrlGetRecipeApi.format({'id': RecipeMockData.validSourceId})))
       .thenAnswer((_) => Future.value(
@@ -494,7 +538,7 @@ class RecipeMockData {
       },
     ],
     "offset": 0,
-    "number": 3,
+    "number": 2,
     "totalResults": 45
   };
   static final emptySearchResults = {

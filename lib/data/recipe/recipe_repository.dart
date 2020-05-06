@@ -12,7 +12,9 @@ import 'user_recipe.dart';
 abstract class RecipeRepository {
   /// Returns a list of [Recipe]s that contain specified ingredients
   /// in their own list of ingredients.
-  Future<List<Recipe>> findRecipesByIngredients(List<String> ingredients);
+  ///
+  /// `offset` is the number of results to skip, useful for pagination.
+  Future<List<Recipe>> findRecipesByIngredients(List<String> ingredients, int offset);
 
   /// Returns a [Recipe] identified by given unique id.
   Stream<Recipe> getRecipe(String id);
