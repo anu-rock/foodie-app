@@ -4,8 +4,6 @@
 
 #### Remove tasks when they get completed
 
-- Beautify `RecipeOverviewScreen`
-
 ## Database
 
 - [x] Ingredients master list

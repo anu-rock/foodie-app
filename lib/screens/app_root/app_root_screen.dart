@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodieapp/constants.dart';
 import 'package:foodieapp/screens/recipe_search/recipe_search_screen.dart';
 import 'package:foodieapp/tabs/browse_tab_navigator.dart';
 import 'package:foodieapp/tabs/home_tab_navigator.dart';
@@ -35,7 +34,12 @@ class _AppRootScreenState extends State<AppRootScreen> {
           selectedTab: this.selectedTab,
           onTabPress: (String tabId) {
             this.setState(() {
-              this.selectedTab = tabId;
+              if (tabId == 'recipe_search') {
+                this.selectedTab = HomeTabNavigator.id;
+                navigatorKeys[HomeTabNavigator.id].currentState.pushNamed(RecipeSearchScreen.id);
+              } else {
+                this.selectedTab = tabId;
+              }
             });
           },
         ),
@@ -56,17 +60,6 @@ class _AppRootScreenState extends State<AppRootScreen> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.blur_on),
-          backgroundColor: kColorGreen,
-          onPressed: () {
-            this.setState(() {
-              this.selectedTab = HomeTabNavigator.id;
-              navigatorKeys[HomeTabNavigator.id].currentState.pushNamed(RecipeSearchScreen.id);
-            });
-          },
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
