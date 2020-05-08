@@ -127,17 +127,16 @@ void main() {
         expect(userRecipe.viewedAt, hasLength(2));
       });
 
-      test('should return correct UserRecipe even when given recipe does not exists in store',
-          () async {
+      test('should throw error given recipe does not exists in store', () async {
         var recipe = Recipe(
           // A lack of id means it is not in store
           title: MockData.existingRecipe.title,
         );
-        var userRecipe = await repo.viewRecipe(recipe);
+        final callback = () async {
+          await repo.viewRecipe(recipe);
+        };
 
-        expect(userRecipe, isA<UserRecipe>());
-        expect(userRecipe.viewedAt, isA<List>());
-        expect(userRecipe.viewedAt, hasLength(1));
+        expect(callback, throwsArgumentError);
       });
     });
   });

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodieapp/constants.dart';
 import 'package:foodieapp/data/recipe/recipe.dart';
@@ -14,10 +15,13 @@ class RecipeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(
+      onTap: () => Navigator.push(
         context,
-        RecipeOverviewScreen.id,
-        arguments: this.recipe,
+        CupertinoPageRoute(
+          builder: (context) => RecipeOverviewScreen(
+            recipe: this.recipe,
+          ),
+        ),
       ),
       child: Container(
         margin: kPaddingHorizontalSm,

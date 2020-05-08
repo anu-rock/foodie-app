@@ -8,6 +8,8 @@ class AppState extends ChangeNotifier {
   /// [FirebaseAuth] and [UserRepository] classes.
   User _currentUser;
 
+  bool _isTabBarVisible = true;
+
   /// Getter for currentUser state.
   User get currentUser {
     return this._currentUser;
@@ -16,5 +18,22 @@ class AppState extends ChangeNotifier {
   /// Updates `currentUser` state to the given user object.
   void setCurrentUser(User user) {
     this._currentUser = user;
+  }
+
+  /// Getter for isTabBarVisible state.
+  bool get isTabBarVisible {
+    return this._isTabBarVisible;
+  }
+
+  /// Updates `isTabBarVisible` state to false.
+  void hideTabBar() {
+    this._isTabBarVisible = false;
+    this.notifyListeners();
+  }
+
+  /// Updates `isTabBarVisible` state to true.
+  void showTabBar() {
+    this._isTabBarVisible = true;
+    this.notifyListeners();
   }
 }

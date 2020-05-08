@@ -1,85 +1,294 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodieapp/widgets/text_icon_button.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/constants.dart';
 import 'package:foodieapp/data/recipe/recipe.dart';
 import 'package:foodieapp/data/recipe/recipe_repository.dart';
-import 'package:foodieapp/screens/recipe_cook/recipe_cook_screen.dart';
-import 'package:foodieapp/screens/recipe_overview/prop_tile.dart';
-import 'package:foodieapp/widgets/heading_2.dart';
-import 'package:foodieapp/widgets/page_action_button.dart';
 import 'package:foodieapp/data/recipe/user_recipe.dart';
+import 'package:foodieapp/models/app_state.dart';
+import 'package:foodieapp/util/string_util.dart';
+import 'package:foodieapp/widgets/text_icon_button.dart';
+import 'package:foodieapp/screens/recipe_directions/recipe_directions_screen.dart';
+import 'prop_badge.dart';
 
 class RecipeOverviewScreen extends StatefulWidget {
   static const id = 'recipe_overview';
+  final Recipe recipe;
+
+  RecipeOverviewScreen({@required this.recipe});
 
   @override
   _RecipeOverviewScreenState createState() => _RecipeOverviewScreenState();
 }
 
 class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
-  Recipe recipeFromRoute;
   Recipe recipe;
   UserRecipe userRecipe;
+  AppState appState;
+  bool recipeViewed = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Delaying call to `appState.hideTabBar` gets rid of nasty
+    // state/build related errors
+    Future.delayed(Duration(milliseconds: 500), () {
+      appState = Provider.of<AppState>(context, listen: false);
+      appState.hideTabBar();
+    });
+  }
+
+  @override
+  void dispose() {
+    // Delaying call to `appState.hideTabBar` gets rid of nasty
+    // state/build related errors
+    Future.delayed(Duration(milliseconds: 500), () {
+      appState.showTabBar();
+    });
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // A more elegant solution than programatically calculating body
-    // would be to use the [Visibility] widget (with `replacement` prop).
-    // It was tried at first.
-    // Sadly, it seems to build both child and replacement widgets
-    // despite its `visible` prop evaluating to false.
-    // As a result all uses of `recipe.<prop>` result in null reference error
-    // inside child's widget tree.
-    this.recipeFromRoute = ModalRoute.of(context).settings.arguments;
+    return SafeArea(
+      child: StreamBuilder<Recipe>(
+        stream: this._getStoredDetails(),
+        initialData: this.widget.recipe,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            this.recipe = snapshot.data;
+            // The following condition will ensure the recipe is marked as viewed
+            // only once per screen opened
+            if (!this.recipeViewed && snapshot.connectionState == ConnectionState.active) {
+              _viewRecipe();
+            }
+          } else {
+            // When the stream returns no data, it means recipe is not stored yet;
+            // so this is when we persistently store recipe
+            _saveRecipe();
+          }
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: BackButton(
-          color: kColorBluegrey,
-        ),
-        title:
-            Heading2(this.recipeFromRoute != null ? this.recipeFromRoute.title : 'Recipe Overview'),
+          return Column(
+            children: <Widget>[
+              Stack(
+                overflow: Overflow.visible,
+                alignment: Alignment.topCenter,
+                children: <Widget>[
+                  this._hero(),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: BackButton(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Positioned(
+                    top: 10.0,
+                    right: 10.0,
+                    child: this.userRecipe == null ? CupertinoActivityIndicator() : _favButton(),
+                  ),
+                  Positioned(
+                    top: 120.0,
+                    left: kPaddingUnits,
+                    child: _title(),
+                  ),
+                  Positioned(
+                    top: 160.0,
+                    child: _metaData(),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 80.0,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: kPaddingHorizontal,
+                  child: _description(),
+                ),
+              )
+            ],
+          );
+        },
       ),
-      body: this.recipeFromRoute == null
-          ? Center(
-              child: Text('No valid Recipe instance received!'),
-            )
-          : StreamBuilder<Recipe>(
-              stream: this._getStoredDetails(this.recipeFromRoute),
-              builder: (context, snapshot) {
-                return ListView(
-                  children: <Widget>[
-                    this._hero(),
-                    (!snapshot.hasData)
-                        ? Padding(
-                            padding: kPaddingAll,
-                            child: CupertinoActivityIndicator(),
-                          )
-                        : this._recipeDetails(),
-                  ],
-                );
-              },
-            ),
     );
   }
 
-  /// Returns recipe in cache-first fashion.
-  ///
-  /// This saves unnecessary API/storage calls that would otherwise occur
-  /// because of rebuilds of this widget.
-  Stream<Recipe> _getStoredDetails(Recipe r) async* {
-    if (this.recipe != null) {
-      yield this.recipe;
-      return;
-    }
+  Widget _hero() {
+    return Hero(
+      tag: 'recipe_pic_${this.recipe.id}',
+      child: Stack(
+        children: <Widget>[
+          Container(
+            height: 250.0,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(this.recipe.photoUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Container(
+            height: 250.0,
+            color: Color.fromRGBO(0, 0, 0, 0.5),
+          ),
+        ],
+      ),
+    );
+  }
 
+  ListView _description() {
+    return ListView(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(bottom: kPaddingUnits),
+          child: Text(StringUtil.removeHtmlTags(this.recipe.desc)),
+        ),
+      ],
+    );
+  }
+
+  Container _metaData() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        vertical: kPaddingUnitsSm,
+        horizontal: kPaddingUnits,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: kContBorderRadiusSm,
+        color: Color.fromRGBO(255, 255, 255, 0.9),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 2.0,
+            spreadRadius: 1.0,
+            offset: Offset(
+              2.0,
+              2.0,
+            ),
+          ),
+        ],
+      ),
+      child: Column(
+        children: <Widget>[
+          _propBadges(),
+          SizedBox(
+            height: 10.0,
+          ),
+          _cookButton(),
+        ],
+      ),
+    );
+  }
+
+  ButtonTheme _cookButton() {
+    return ButtonTheme(
+      minWidth: 200.0,
+      child: OutlineButton(
+        borderSide: BorderSide(color: kColorGreen),
+        padding: kPaddingHorizontal,
+        child: Text('Cook'),
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            RecipeDirectionsScreen.id,
+            arguments: this.widget.recipe,
+          );
+        },
+      ),
+    );
+  }
+
+  Row _propBadges() {
+    return Row(
+      children: <Widget>[
+        PropBadge(
+          propName: 'time to cook',
+          propValue: this.widget.recipe.cookingTime.toString(),
+          icon: Icons.timer,
+          color: Colors.red,
+        ),
+        SizedBox(
+          width: 15.0,
+        ),
+        PropBadge(
+          propName: 'ingredients',
+          propValue: this.widget.recipe.ingredients.length.toString(),
+          icon: Icons.format_list_numbered,
+          color: Colors.amber,
+        ),
+        SizedBox(
+          width: 15.0,
+        ),
+        PropBadge(
+          propName: 'servings',
+          propValue: this.widget.recipe.servings.toString(),
+          icon: Icons.people,
+          color: Colors.blue,
+        ),
+      ],
+    );
+  }
+
+  Text _title() {
+    return Text(
+      StringUtil.truncateString(str: this.recipe.title),
+      textAlign: TextAlign.left,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 20.0,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Container _favButton() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10.0,
+        vertical: 5.0,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: kContBorderRadiusSm,
+      ),
+      child: TextIconButton(
+        text: this.recipe.favs.toString(),
+        leadingIcon: Icon(
+          Icons.favorite,
+          color: userRecipe.isFavorite ? Colors.red : Colors.grey,
+        ),
+        onPressed: this._onFavoritePressed,
+      ),
+    );
+  }
+
+  Future<void> _viewRecipe() async {
+    print('_viewRecipe called');
     final recipeRepo = Provider.of<RecipeRepository>(context, listen: false);
+    final result = await recipeRepo.viewRecipe(this.recipe);
+    this.setState(() {
+      this.recipeViewed = true;
+      this.userRecipe = result;
+    });
+  }
 
+  Future<Recipe> _saveRecipe() async {
+    print('_saveRecipe called');
+    final recipeRepo = Provider.of<RecipeRepository>(context, listen: false);
+    return await recipeRepo.saveRecipe(this.recipe);
+  }
+
+  Stream<Recipe> _getStoredDetails() {
+    print('_getStoredDetails called');
+
+    final r = this.widget.recipe;
+    final recipeRepo = Provider.of<RecipeRepository>(context, listen: false);
     Stream<Recipe> recipeStream;
+
     if (r.id == r.sourceRecipeId) {
       // This will be true when coming here from search screen
       recipeStream = recipeRepo.getRecipeBySourceRecipeId(r.id);
@@ -87,138 +296,8 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
       // This will be true in all other cases
       recipeStream = recipeRepo.getRecipe(r.id);
     }
-    this.recipe =
-        (await recipeStream.first) ?? r; // an unstored recipe will be null in both cases above
-    this.userRecipe = await recipeRepo.viewRecipe(this.recipe);
 
-    if (this.recipe.id == null) {
-      var recipeMap = this.recipe.toMap();
-      recipeMap['id'] = this.userRecipe.recipeId;
-      this.recipe = Recipe.fromMap(recipeMap);
-    }
-
-    yield this.recipe;
-  }
-
-  Widget _hero() {
-    return Hero(
-      tag: 'recipe_pic_${this.recipeFromRoute.id}',
-      child: Stack(
-        children: <Widget>[
-          Container(
-            height: 250.0,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(this.recipeFromRoute.photoUrl),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          this.userRecipe == null
-              ? SizedBox(width: 0, height: 0)
-              : Positioned(
-                  top: 10.0,
-                  right: 10.0,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                      vertical: 5.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: kContBorderRadiusSm,
-                    ),
-                    child: TextIconButton(
-                      text: this.recipe.favs.toString(),
-                      leadingIcon: Icon(
-                        Icons.favorite,
-                        color: userRecipe.isFavorite ? Colors.red : Colors.grey,
-                      ),
-                      onPressed: this._onFavoritePressed,
-                    ),
-                  ),
-                ),
-        ],
-      ),
-    );
-  }
-
-  Widget _recipeDetails() {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: kPaddingUnits,
-        right: kPaddingUnits,
-        bottom: kPaddingUnits,
-      ),
-      child: Material(
-        elevation: kContElevation,
-        shadowColor: kContShadowColor,
-        borderRadius: kContBorderRadiusSm,
-        child: Container(
-          padding: kPaddingAllSm,
-          decoration: BoxDecoration(
-            borderRadius: kContBorderRadiusSm,
-          ),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: PropTile(
-                      propName: 'Cooking Time',
-                      propValue: '${recipe.cookingTime} mins',
-                    ),
-                  ),
-                  Expanded(
-                    child: PropTile(
-                      propName: 'Difficulty',
-                      propValue:
-                          recipe.difficulty == null ? 'unknown' : recipe.difficulty.toString(),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: PropTile(
-                      propName: 'Ingredients',
-                      propValue: recipe.ingredients.length.toString(),
-                    ),
-                  ),
-                  Expanded(
-                    child: PropTile(
-                      propName: 'Servings',
-                      propValue: recipe.servings == null ? 'unknown' : recipe.servings.toString(),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: kPaddingAllSm,
-                child: PageActionButton(
-                  text: 'Cook',
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(kModalBorderRadiusUnits),
-                          topRight: Radius.circular(kModalBorderRadiusUnits),
-                        ),
-                      ),
-                      builder: (context) => RecipeCookScreen(
-                        recipe: recipe,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    return recipeStream;
   }
 
   void _onFavoritePressed() async {

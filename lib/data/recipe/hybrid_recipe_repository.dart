@@ -64,25 +64,7 @@ class HybridRecipeRepository implements RecipeRepository {
       throw ArgumentError('recipe cannot be null or empty.');
     }
 
-    UserRecipe updatedUserRecipe;
-
-    try {
-      // When given recipe exists in store:
-      // "view" it and return updated UserRecipe
-      updatedUserRecipe = await this._fbRepo.viewRecipe(recipe);
-    } on ArgumentError {
-      // When given recipe DOES NOT exist in store:
-      // first remove id, if any
-      var recipeMap = recipe.toMap();
-      recipeMap['id'] = null;
-      recipe = Recipe.fromMap(recipeMap);
-      // then add it to store
-      recipe = await this._fbRepo.saveRecipe(recipe);
-      // finally "view" it and return updated UserRecipe
-      updatedUserRecipe = await this._fbRepo.viewRecipe(recipe);
-    }
-
-    return updatedUserRecipe;
+    return await this._fbRepo.viewRecipe(recipe);
   }
 
   @override

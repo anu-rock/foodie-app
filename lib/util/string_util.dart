@@ -1,3 +1,5 @@
+import 'package:foodieapp/constants.dart';
+
 /// A collection of utility methods for working with strings.
 class StringUtil {
   /// Checks whether given string is null or empty string.
@@ -40,5 +42,11 @@ class StringUtil {
   /// which in our case is not the greatest thing in the world.
   static String toStringFromEnum(dynamic value) {
     return value == null ? null : value.toString();
+  }
+
+  /// Removes all HTML tags (and their attributes) from the given string
+  /// and returns the sanitized string.
+  static String removeHtmlTags(String str) {
+    return str.replaceAll(kRegexHtml, '');
   }
 }

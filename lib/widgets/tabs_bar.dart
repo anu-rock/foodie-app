@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:foodieapp/constants.dart';
+import 'package:foodieapp/models/app_state.dart';
 import 'package:foodieapp/tabs/browse_tab_navigator.dart';
 import 'package:foodieapp/tabs/home_tab_navigator.dart';
 import 'package:foodieapp/tabs/profile_tab_navigator.dart';
 import 'package:foodieapp/tabs/shop_tab_navigator.dart';
+import 'package:provider/provider.dart';
 
 const TAB_ICON_SIZE = 25.0;
 
@@ -24,58 +26,63 @@ class TabsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50.0,
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: kColorLightGrey,
-            width: 1.0,
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          IconButton(
-            key: Key('tab_home'),
-            icon: Icon(Icons.home),
-            color: this.selectedTab == HomeTabNavigator.id ? kColorBlue : kColorBluegrey,
-            iconSize: TAB_ICON_SIZE,
-            onPressed: () => this.onTabPress(HomeTabNavigator.id),
-          ),
-          IconButton(
-            key: Key('tab_browse'),
-            icon: Icon(Icons.fastfood),
-            color: this.selectedTab == BrowseTabNavigator.id ? kColorBlue : kColorBluegrey,
-            iconSize: TAB_ICON_SIZE,
-            onPressed: () => this.onTabPress(BrowseTabNavigator.id),
-          ),
-          Opacity(
-            opacity: 0,
-            child: IconButton(
-              key: Key('tab_hidden'),
-              icon: Icon(Icons.blur_on),
-              color: Colors.white,
-              iconSize: TAB_ICON_SIZE,
-              onPressed: () {},
+    final appState = Provider.of<AppState>(context);
+
+    return Visibility(
+      visible: appState.isTabBarVisible,
+      child: Container(
+        height: 50.0,
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: kColorLightGrey,
+              width: 1.0,
             ),
           ),
-          IconButton(
-            key: Key('tab_shop'),
-            icon: Icon(Icons.shopping_cart),
-            color: this.selectedTab == ShopTabNavigator.id ? kColorBlue : kColorBluegrey,
-            iconSize: TAB_ICON_SIZE,
-            onPressed: () => this.onTabPress(ShopTabNavigator.id),
-          ),
-          IconButton(
-            key: Key('tab_profile'),
-            icon: Icon(Icons.person),
-            color: this.selectedTab == ProfileTabNavigator.id ? kColorBlue : kColorBluegrey,
-            iconSize: TAB_ICON_SIZE,
-            onPressed: () => this.onTabPress(ProfileTabNavigator.id),
-          ),
-        ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            IconButton(
+              key: Key('tab_home'),
+              icon: Icon(Icons.home),
+              color: this.selectedTab == HomeTabNavigator.id ? kColorBlue : kColorBluegrey,
+              iconSize: TAB_ICON_SIZE,
+              onPressed: () => this.onTabPress(HomeTabNavigator.id),
+            ),
+            IconButton(
+              key: Key('tab_browse'),
+              icon: Icon(Icons.fastfood),
+              color: this.selectedTab == BrowseTabNavigator.id ? kColorBlue : kColorBluegrey,
+              iconSize: TAB_ICON_SIZE,
+              onPressed: () => this.onTabPress(BrowseTabNavigator.id),
+            ),
+            Opacity(
+              opacity: 0,
+              child: IconButton(
+                key: Key('tab_hidden'),
+                icon: Icon(Icons.blur_on),
+                color: Colors.white,
+                iconSize: TAB_ICON_SIZE,
+                onPressed: () {},
+              ),
+            ),
+            IconButton(
+              key: Key('tab_shop'),
+              icon: Icon(Icons.shopping_cart),
+              color: this.selectedTab == ShopTabNavigator.id ? kColorBlue : kColorBluegrey,
+              iconSize: TAB_ICON_SIZE,
+              onPressed: () => this.onTabPress(ShopTabNavigator.id),
+            ),
+            IconButton(
+              key: Key('tab_profile'),
+              icon: Icon(Icons.person),
+              color: this.selectedTab == ProfileTabNavigator.id ? kColorBlue : kColorBluegrey,
+              iconSize: TAB_ICON_SIZE,
+              onPressed: () => this.onTabPress(ProfileTabNavigator.id),
+            ),
+          ],
+        ),
       ),
     );
   }
