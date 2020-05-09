@@ -113,6 +113,7 @@ class FirebaseRecipeRepository implements RecipeRepository {
         ._userRecipesCollection
         .where('userId', isEqualTo: userId)
         .where('isFavorite', isEqualTo: true)
+        .orderBy('favoritedAt', descending: true)
         .snapshots();
 
     yield* qSnapshots.map((qSnap) {

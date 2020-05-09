@@ -28,6 +28,9 @@ abstract class UserRepository {
   /// success of failure message.
   Future<LoginResult> loginWithEmail(String email, String password);
 
+  /// Updates profile data of current user in database as well as [FirebaseAuth].
+  Future<void> updateProfile({String displayName, String photoUrl});
+
   /// Logs out the current user.
   Future<void> logout();
 }

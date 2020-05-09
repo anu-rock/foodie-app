@@ -23,6 +23,7 @@ class RecipeOverviewScreen extends StatefulWidget {
 }
 
 class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
+  Stream<Recipe> recipeStream;
   Recipe recipe;
   UserRecipe userRecipe;
   AppState appState;
@@ -31,6 +32,8 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
   @override
   void initState() {
     super.initState();
+
+    this.recipeStream = _getStoredDetails();
 
     // Delaying call to `appState.hideTabBar` gets rid of nasty
     // state/build related errors
@@ -55,14 +58,16 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: StreamBuilder<Recipe>(
-        stream: this._getStoredDetails(),
-        initialData: this.widget.recipe,
+        stream: this.recipeStream,
+        initialData: _getPlaceholderRecipe(this.widget.recipe),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             this.recipe = snapshot.data;
             // The following condition will ensure the recipe is marked as viewed
             // only once per screen opened
-            if (!this.recipeViewed && snapshot.connectionState == ConnectionState.active) {
+            if (!this.recipeViewed &&
+                (snapshot.connectionState == ConnectionState.active ||
+                    snapshot.connectionState == ConnectionState.done)) {
               _viewRecipe();
             }
           } else {
@@ -184,14 +189,14 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
 
   ButtonTheme _cookButton() {
     return ButtonTheme(
-      minWidth: 200.0,
-      child: OutlineButton(
-        borderSide: BorderSide(color: kColorGreen),
+      minWidth: 250.0,
+      child: FlatButton(
+        color: kColorGreen,
         shape: RoundedRectangleBorder(
           borderRadius: kContBorderRadiusSm,
         ),
         padding: kPaddingHorizontal,
-        child: Text('Cook'),
+        child: Text('Cook', style: TextStyle(color: Colors.white)),
         onPressed: () => Navigator.push(
           context,
           CupertinoPageRoute(
@@ -209,7 +214,7 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
       children: <Widget>[
         PropBadge(
           propName: 'time to cook',
-          propValue: this.widget.recipe.cookingTime.toString(),
+          propValue: this.recipe.cookingTime.toString(),
           icon: Icons.timer,
           color: Colors.red,
         ),
@@ -218,7 +223,7 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
         ),
         PropBadge(
           propName: 'ingredients',
-          propValue: this.widget.recipe.ingredients.length.toString(),
+          propValue: this.recipe.ingredients.length.toString(),
           icon: Icons.format_list_numbered,
           color: Colors.amber,
         ),
@@ -227,7 +232,7 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
         ),
         PropBadge(
           propName: 'servings',
-          propValue: this.widget.recipe.servings.toString(),
+          propValue: this.recipe.servings.toString(),
           icon: Icons.people,
           color: Colors.blue,
         ),
@@ -300,6 +305,28 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
     }
 
     return recipeStream;
+  }
+
+  Recipe _getPlaceholderRecipe(Recipe r) {
+    return Recipe(
+      id: r.id,
+      cookingTime: r.cookingTime ?? 0,
+      desc: StringUtil.ifNullOrEmpty(r.desc, '<desc>'),
+      favs: r.favs ?? 0,
+      ingredients: r.ingredients ?? [],
+      instructions: r.instructions ?? [],
+      photoUrl: StringUtil.ifNullOrEmpty(
+        r.photoUrl,
+        'https://via.placeholder.com/640x360.png/?text=Photo%20not%20available',
+      ),
+      plays: r.plays ?? 0,
+      servings: r.servings ?? 0,
+      sourceName: r.sourceName ?? '',
+      sourceRecipeId: r.sourceRecipeId ?? '0',
+      sourceUrl: r.sourceUrl ?? '',
+      title: StringUtil.ifNullOrEmpty(r.title, '<name>'),
+      views: r.views ?? 0,
+    );
   }
 
   void _onFavoritePressed() async {

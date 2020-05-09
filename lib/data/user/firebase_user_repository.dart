@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:foodieapp/constants.dart';
 
 import 'user_respository.dart';
 import 'user.dart';
@@ -9,12 +11,19 @@ import 'user.dart';
 /// [FirebaseAuth] package internally takes care of caching data,
 /// so a separate implementation of [UserRepository] for caching is not required.
 class FirebaseUserRepository implements UserRepository {
-  FirebaseAuth _auth;
+  final FirebaseAuth _auth;
+  final Firestore _store;
+  CollectionReference _usersCollection;
   AuthStatus _status = AuthStatus.Uninitialized;
 
   // Getting this from outside makes this class testable
-  FirebaseUserRepository({FirebaseAuth authInstance})
-      : this._auth = authInstance ?? FirebaseAuth.instance;
+  FirebaseUserRepository({
+    Firestore storeInstance,
+    FirebaseAuth authInstance,
+  })  : this._store = storeInstance ?? Firestore.instance,
+        this._auth = authInstance ?? FirebaseAuth.instance {
+    this._usersCollection = _store.collection(kFirestoreUsers);
+  }
 
   @override
   AuthStatus get authStatus => this._status;
@@ -24,7 +33,7 @@ class FirebaseUserRepository implements UserRepository {
     var fbUser = await this._auth.currentUser();
 
     if (fbUser != null) {
-      return this._fromFirebaseUser(fbUser);
+      return await this._fromDatabase(fbUser);
     }
 
     return null;
@@ -61,29 +70,44 @@ class FirebaseUserRepository implements UserRepository {
 
   @override
   Stream<User> onAuthChanged() {
-    return this._auth.onAuthStateChanged.map((fbUser) {
+    return this._auth.onAuthStateChanged.asyncMap((fbUser) async {
       if (fbUser == null) {
         this._status = AuthStatus.Unauthenticated;
         return null;
       }
 
       this._status = AuthStatus.Authenticated;
-      return this._fromFirebaseUser(fbUser);
+      final user = await this._fromDatabase(fbUser);
+      return user;
     });
   }
 
-  User _fromFirebaseUser(FirebaseUser fbUser) {
+  @override
+  Future<void> updateProfile({String displayName, String photoUrl}) async {
+    final updatedProfile = UserUpdateInfo();
+    updatedProfile.displayName = displayName;
+    updatedProfile.photoUrl = photoUrl;
+
+    // Update in FirebaseAuth
+    final currentUser = await this._auth.currentUser();
+    await currentUser.updateProfile(updatedProfile);
+
+    // Update in Firestore
+    await this._usersCollection.document(currentUser.uid).updateData({
+      'displayName': displayName,
+      'photoUrl': photoUrl,
+    });
+  }
+
+  Future<User> _fromDatabase(FirebaseUser fbUser) async {
     if (fbUser == null) return null;
 
-    return User(
-      id: fbUser.uid,
-      displayName: fbUser.displayName,
-      email: fbUser.email,
-      photoUrl: fbUser.photoUrl,
-      privateUserData: PrivateUserData(
-        phoneNumber: fbUser.phoneNumber,
-        isEmailVerified: fbUser.isEmailVerified,
-      ),
-    );
+    final snapshots =
+        await this._usersCollection.where('email', isEqualTo: fbUser.email).getDocuments();
+    final userDoc = snapshots.documents.first;
+    var userData = userDoc.data;
+    userData['id'] = userDoc.documentID;
+
+    return User.fromMap(userData);
   }
 }

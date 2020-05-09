@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/screens/profile/account_screen.dart';
 import 'package:foodieapp/screens/profile/profile_screen.dart';
 
 class ProfileTabNavigator extends StatelessWidget {
@@ -19,6 +20,11 @@ class ProfileTabNavigator extends StatelessWidget {
 
   Route _buildRoute(RouteSettings settings) {
     switch (settings.name) {
+      case AccountScreen.id:
+        return CupertinoPageRoute(
+          builder: (context) => AccountScreen(),
+          settings: settings,
+        );
       case ProfileScreen.id:
       default:
         return CupertinoPageRoute(

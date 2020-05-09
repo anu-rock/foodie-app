@@ -26,13 +26,14 @@ const kPaddingAll = EdgeInsets.all(kPaddingUnits);
 const kPaddingAllSm = EdgeInsets.all(kPaddingUnitsSm);
 
 // Firestore collections
+const kFirestoreUsers = 'users';
 const kFirestoreIngredients = 'ingredients';
 const kFirestoreUserIngredients = 'user_ingredients';
 const kFirestoreRecipes = 'recipes';
 const kFirestoreUserRecipes = 'user_recipes';
 
 // Miscellaneous
-const kDefaultUsername = 'Rockstar';
+const kDefaultUsername = 'Foodie';
 
 // API urls
 final kUrlFindRecipesApi = TemplateString(
