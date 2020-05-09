@@ -102,7 +102,7 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
                 ],
               ),
               SizedBox(
-                height: 80.0,
+                height: 90.0,
               ),
               Expanded(
                 child: Padding(
@@ -174,11 +174,9 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
       ),
       child: Column(
         children: <Widget>[
-          _propBadges(),
-          SizedBox(
-            height: 10.0,
-          ),
           _cookButton(),
+          SizedBox(height: 10.0),
+          _propBadges(),
         ],
       ),
     );
@@ -189,15 +187,19 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
       minWidth: 200.0,
       child: OutlineButton(
         borderSide: BorderSide(color: kColorGreen),
+        shape: RoundedRectangleBorder(
+          borderRadius: kContBorderRadiusSm,
+        ),
         padding: kPaddingHorizontal,
         child: Text('Cook'),
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            RecipeDirectionsScreen.id,
-            arguments: this.widget.recipe,
-          );
-        },
+        onPressed: () => Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => RecipeDirectionsScreen(
+              recipe: this.widget.recipe,
+            ),
+          ),
+        ),
       ),
     );
   }
