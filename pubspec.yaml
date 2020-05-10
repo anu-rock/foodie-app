@@ -22,6 +22,7 @@ dependencies:
   url_launcher: ^5.4.5
   carousel_slider: ^2.1.0
   share: '>=0.6.4+1 <2.0.0'
+  google_fonts: ^1.1.0
 
 dev_dependencies:
   flutter_test:

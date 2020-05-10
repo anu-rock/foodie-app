@@ -4,7 +4,6 @@
 
 #### Remove tasks when they get completed
 
-- Change typography
 - Fix broken tests
 - On `ProfileScreen`:
   - implement 'Preferences'

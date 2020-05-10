@@ -150,7 +150,12 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(bottom: kPaddingUnits),
-          child: Text(StringUtil.removeHtmlTags(this.recipe.desc)),
+          child: Text(
+            StringUtil.removeHtmlTags(this.recipe.desc),
+            style: TextStyle(
+              fontSize: 16.0,
+            ),
+          ),
         ),
       ],
     );

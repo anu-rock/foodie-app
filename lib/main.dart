@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/screens/app_root/app_root_screen.dart';
@@ -43,6 +44,9 @@ class FoodieApp extends StatelessWidget {
         title: 'Foodie App',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          textTheme: GoogleFonts.notoSansTextTheme(
+            Theme.of(context).textTheme,
+          ),
         ),
         home: StreamBuilder(
           stream: user.onAuthChanged(),
