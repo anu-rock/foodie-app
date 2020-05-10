@@ -8,7 +8,6 @@ import 'package:foodieapp/data/ingredient/ingredient_repository.dart';
 import 'package:foodieapp/data/ingredient/user_ingredient.dart';
 import 'package:foodieapp/data/recipe/recipe.dart';
 import 'package:foodieapp/data/recipe/recipe_repository.dart';
-import 'package:foodieapp/widgets/heading_2.dart';
 import 'package:foodieapp/widgets/recipe_card.dart';
 import 'package:foodieapp/widgets/heading_3.dart';
 import 'package:foodieapp/widgets/recipe_card_loader.dart';

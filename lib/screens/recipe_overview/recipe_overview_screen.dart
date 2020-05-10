@@ -9,7 +9,6 @@ import 'package:foodieapp/data/recipe/recipe_repository.dart';
 import 'package:foodieapp/data/recipe/user_recipe.dart';
 import 'package:foodieapp/models/app_state.dart';
 import 'package:foodieapp/util/string_util.dart';
-import 'package:foodieapp/widgets/text_icon_button.dart';
 import 'package:foodieapp/screens/recipe_directions/recipe_directions_screen.dart';
 import 'prop_badge.dart';
 
