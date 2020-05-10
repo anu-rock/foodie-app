@@ -21,17 +21,13 @@ class RecipeDirectionsScreen extends StatefulWidget {
 }
 
 class _RecipeDirectionsScreenState extends State<RecipeDirectionsScreen> {
+  CardLayout selectedLayout = CardLayout.carousel;
+
   @override
   void initState() {
     super.initState();
 
     _playRecipe();
-  }
-
-  Future<void> _playRecipe() async {
-    print('_playRecipe called');
-    final recipeRepo = Provider.of<RecipeRepository>(context, listen: false);
-    await recipeRepo.playRecipe(this.widget.recipe.id);
   }
 
   @override
@@ -40,13 +36,51 @@ class _RecipeDirectionsScreenState extends State<RecipeDirectionsScreen> {
       alignment: Alignment.center,
       children: <Widget>[
         FancyBackground(),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        ListView(
+          shrinkWrap: true,
           children: <Widget>[
-            _directionsCarousel(),
-            SizedBox(height: 50.0),
-            _shareButton(),
+            _cardLayout(),
           ],
+        ),
+        Positioned(
+          top: 30.0,
+          child: _layoutSelector(),
+        ),
+        Positioned(
+          top: 90.0,
+          child: _shareButton(),
+        ),
+      ],
+    );
+  }
+
+  Widget _cardLayout() {
+    switch (this.selectedLayout) {
+      case CardLayout.list:
+        return _directionList();
+      case CardLayout.carousel:
+      default:
+        return _directionsCarousel();
+    }
+  }
+
+  Row _layoutSelector() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.view_carousel,
+            color: this.selectedLayout == CardLayout.carousel ? kColorGreen : Colors.white,
+          ),
+          onPressed: () => _switchLayout(CardLayout.carousel),
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.list,
+            color: this.selectedLayout == CardLayout.list ? kColorGreen : Colors.white,
+          ),
+          onPressed: () => _switchLayout(CardLayout.list),
         ),
       ],
     );
@@ -80,4 +114,48 @@ class _RecipeDirectionsScreenState extends State<RecipeDirectionsScreen> {
       },
     );
   }
+
+  Container _directionList() {
+    return Container(
+      padding: EdgeInsets.only(
+        left: kPaddingUnits,
+        right: kPaddingUnits,
+        top: 140.0,
+      ),
+      child: Column(
+        children: this
+            .widget
+            .recipe
+            .instructions
+            .asMap()
+            .map((idx, direction) => MapEntry(
+                  idx,
+                  Container(
+                    margin: EdgeInsets.only(bottom: kPaddingUnits),
+                    child: DirectionCard(
+                      step: idx + 1,
+                      directionText: direction,
+                    ),
+                  ),
+                ))
+            .values
+            .toList(),
+      ),
+    );
+  }
+
+  Future<void> _playRecipe() async {
+    print('_playRecipe called');
+    final recipeRepo = Provider.of<RecipeRepository>(context, listen: false);
+    await recipeRepo.playRecipe(this.widget.recipe.id);
+  }
+
+  void _switchLayout(CardLayout layout) {
+    this.setState(() => this.selectedLayout = layout);
+  }
+}
+
+enum CardLayout {
+  carousel,
+  list,
 }
