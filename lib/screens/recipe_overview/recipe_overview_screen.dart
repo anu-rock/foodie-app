@@ -201,7 +201,7 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
           context,
           CupertinoPageRoute(
             builder: (context) => RecipeDirectionsScreen(
-              recipe: this.widget.recipe,
+              recipe: this.recipe,
             ),
           ),
         ),

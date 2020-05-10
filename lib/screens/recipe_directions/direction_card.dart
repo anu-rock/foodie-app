@@ -18,7 +18,8 @@ class DirectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: kContElevation,
-      child: Padding(
+      child: Container(
+        alignment: Alignment.center,
         padding: kPaddingAllSm,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,6 +40,7 @@ class DirectionCard extends StatelessWidget {
       this.directionText,
       style: TextStyle(
         color: kColorBluegrey,
+        fontSize: 18.0,
       ),
     );
   }

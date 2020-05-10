@@ -10,7 +10,6 @@
   - implement 'Preferences'
   - implement 'About Foodie App'
   - add option to change password
-- Mark recipe as played when navigated to `RecipeDirectionsScreen`
 - Optimistically update UI when un/favorating a recipe
 - Do not display 'Cook' button for recipes without instructions (eg. Cheeseburger Chowder)
 - Add a background image on home page to reduce boringness
@@ -25,11 +24,11 @@
 - [x] Ingredients screen
   - [x] Add/remove (manual)
 - [x] Recipe suggestions screen (wire up repository with existing screen)
-- [ ] Recipe details screen (wire up repository with existing screen)
+- [x] Recipe details screen (wire up repository with existing screen)
   - [x] Save
   - [x] Favorite
-  - [ ] Play
-  - [ ] Share
+  - [x] Play
+  - [x] Share
 - [x] User Profile screen
   - [x] favorites
   - [x] played history
