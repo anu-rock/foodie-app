@@ -137,7 +137,10 @@ class _AccountScreenState extends State<AccountScreen> {
   Future<void> _onSavePressed() async {
     this.setState(() => this.savingInProgress = true);
     final userRepo = Provider.of<UserRepository>(context, listen: false);
-    await userRepo.updateProfile(displayName: this.displayName);
+    await userRepo.updateProfile(
+      displayName: this.displayName,
+      photoUrl: this.photoUrl,
+    );
 
     _showSnackBar(
       'Profile updated. Log out and sign back in for changes to reflect.',

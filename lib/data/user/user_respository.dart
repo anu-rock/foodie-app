@@ -28,6 +28,18 @@ abstract class UserRepository {
   /// success of failure message.
   Future<LoginResult> loginWithEmail(String email, String password);
 
+  /// Creates a new user account based on email and password.
+  ///
+  /// Returned [LoginResult] instance will have `isSuccessful` set as per
+  /// the authentication result and message set to indicate the appropriate
+  /// success of failure message.
+  Future<SignupResult> signupWithEmail(
+    String email,
+    String displaName,
+    String password,
+    String confirmPassword,
+  );
+
   /// Updates profile data of current user in database as well as [FirebaseAuth].
   Future<void> updateProfile({String displayName, String photoUrl});
 
@@ -47,6 +59,16 @@ class LoginResult {
   final String message;
 
   LoginResult({
+    this.isSuccessful = false,
+    this.message,
+  });
+}
+
+class SignupResult {
+  final bool isSuccessful;
+  final String message;
+
+  SignupResult({
     this.isSuccessful = false,
     this.message,
   });

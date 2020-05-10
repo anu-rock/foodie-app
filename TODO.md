@@ -37,8 +37,7 @@
   - [x] account settings
 - [ ] Friend Profile screen
   - [ ] friend's user profile details
-- [ ] Better login screen
-- [ ] Sign up screen
+- [x] Sign up screen
 - [ ] Status screen (updates from friends)
 - [ ] Splash screen
 - [ ] Launcher icon
@@ -46,9 +45,9 @@
 
 ## Business Logic
 
-- [ ] User repository
-  - [ ] store users in Firestore
-  - [ ] while creating user, documentID should be set as `FirebaseUser.uid` and photoUrl should be set as Gravatar url
+- [x] User repository
+  - [x] store users in Firestore
+  - [x] while creating user, documentID should be set as `FirebaseUser.uid` and photoUrl should be set as Gravatar url
 - [ ] Friend repository
 - [x] Recipe repository (recipes + user_recipes collections)
   - [x] find recipes by ingredients

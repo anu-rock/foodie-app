@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-import 'package:foodieapp/constants.dart';
+import 'dart:convert';
+import 'package:crypto/crypto.dart' as crypto;
 
+import 'package:foodieapp/constants.dart';
 import 'user_respository.dart';
 import 'user.dart';
 
@@ -63,6 +65,44 @@ class FirebaseUserRepository implements UserRepository {
   }
 
   @override
+  Future<SignupResult> signupWithEmail(
+    String email,
+    String displayName,
+    String password,
+    String confirmPassword,
+  ) async {
+    try {
+      if (confirmPassword != password) {
+        return Future<SignupResult>.value(
+          SignupResult(
+            isSuccessful: false,
+            message: 'Password and Confirm Password do not match.',
+          ),
+        );
+      }
+
+      final authResult =
+          await this._auth.createUserWithEmailAndPassword(email: email, password: password);
+      await _createUserInDatabase(authResult.user);
+      await this.updateProfile(displayName: displayName, photoUrl: _createGravatarUrl(email));
+      await this.logout(); // because Firebase auto logs in after successful signup
+      return Future<SignupResult>.value(
+        SignupResult(
+          isSuccessful: true,
+          message: 'Successfully signed up.',
+        ),
+      );
+    } on PlatformException catch (e) {
+      return Future<SignupResult>.value(
+        SignupResult(
+          isSuccessful: false,
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
   Future<void> logout() async {
     this._status = AuthStatus.Unauthenticated;
     await this._auth.signOut();
@@ -104,10 +144,40 @@ class FirebaseUserRepository implements UserRepository {
 
     final snapshots =
         await this._usersCollection.where('email', isEqualTo: fbUser.email).getDocuments();
+
+    if (snapshots.documents.isEmpty) {
+      return null;
+    }
+
     final userDoc = snapshots.documents.first;
     var userData = userDoc.data;
     userData['id'] = userDoc.documentID;
 
     return User.fromMap(userData);
+  }
+
+  Future<void> _createUserInDatabase(FirebaseUser fbUser) async {
+    if (fbUser == null) return null;
+
+    await this._usersCollection.document(fbUser.uid).setData({
+      'email': fbUser.email,
+      'favoriteRecipes': 0,
+      'playedRecipes': 0,
+    });
+
+    this._usersCollection.document(fbUser.uid).collection('private').add({
+      'key': 'isEmailVerified',
+      'value': false,
+    });
+    this._usersCollection.document(fbUser.uid).collection('private').add({
+      'key': 'viewedRecipes',
+      'value': 0,
+    });
+  }
+
+  String _createGravatarUrl(String email) {
+    email = email.toLowerCase();
+    final hash = crypto.md5.convert(utf8.encode(email)).toString();
+    return 'https://www.gravatar.com/avatar/$hash?s=200';
   }
 }
