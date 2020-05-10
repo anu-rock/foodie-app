@@ -10,10 +10,7 @@
   - implement 'Preferences'
   - implement 'About Foodie App'
   - add option to change password
-- Optimistically update UI when un/favorating a recipe
-- Do not display 'Cook' button for recipes without instructions (eg. Cheeseburger Chowder)
 - Add a background image on home page to reduce boringness
-- Replace `RecipeSearchScreen`'s appbar with `CustomAppBar`
 
 ## Database
 

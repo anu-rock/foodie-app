@@ -16,6 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: BackButton(
         color: kColorBluegrey,
       ),
+      shape: Border(bottom: BorderSide(color: Colors.black12)),
       title: Heading2(this.title),
       elevation: 0,
     );

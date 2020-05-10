@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/widgets/custom_app_bar.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/constants.dart';
@@ -88,16 +89,9 @@ class _RecipeSearchScreenState extends State<RecipeSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: BackButton(
-          color: kColorBluegrey,
-        ),
-        title: Heading2('Recipe Suggestions'),
-      ),
+      appBar: CustomAppBar(title: 'Recipe Suggestions'),
       body: Container(
         child: this.recipes.length > 0 || this.isLoading ? _suggestionList() : _noResultsMessage(),
-        color: kColorLightGrey,
         padding: EdgeInsets.only(
           top: kPaddingUnitsSm,
           left: kPaddingUnitsSm,
