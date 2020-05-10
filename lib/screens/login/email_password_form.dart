@@ -16,7 +16,8 @@ class EmailPasswordFormState extends State<EmailPasswordForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  String _authMsg = '';
+  String resultMsg = '';
+  bool loginInProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +60,13 @@ class EmailPasswordFormState extends State<EmailPasswordForm> {
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(
-                      this._authMsg,
+                      this.resultMsg,
                       style: TextStyle(
                         color: Colors.red,
                       ),
                     ),
                   ),
+                  SizedBox(height: 10.0),
                 ],
               ),
             ),
@@ -75,8 +77,8 @@ class EmailPasswordFormState extends State<EmailPasswordForm> {
               width: MediaQuery.of(context).size.width - kPaddingUnits * 2,
               padding: EdgeInsets.symmetric(horizontal: kPaddingUnits),
               child: PageActionButton(
-                text: 'Come on in',
-                onPressed: this._submitForm,
+                text: this.loginInProgress ? 'Logging in...' : 'Come on in',
+                onPressed: this.loginInProgress ? null : this._submitForm,
               ),
             ),
           ),
@@ -85,12 +87,14 @@ class EmailPasswordFormState extends State<EmailPasswordForm> {
 
   void _submitForm() async {
     if (_formKey.currentState.validate()) {
+      this.setState(() => this.loginInProgress = true);
       var result = await user.loginWithEmail(
         this._emailController.text,
         this._passwordController.text,
       );
       setState(() {
-        this._authMsg = result.message;
+        this.loginInProgress = false;
+        this.resultMsg = result.message;
       });
     }
   }
