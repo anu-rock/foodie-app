@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/widgets/animated_heart_button.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/constants.dart';
@@ -254,21 +255,25 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
 
   Container _favButton() {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 10.0,
-        vertical: 5.0,
-      ),
+      width: 80.0,
+      height: 40.0,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: kContBorderRadiusSm,
       ),
-      child: TextIconButton(
-        text: this.recipe.favs.toString(),
-        leadingIcon: Icon(
-          Icons.favorite,
-          color: userRecipe.isFavorite ? Colors.red : Colors.grey,
-        ),
-        onPressed: this._onFavoritePressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          AnimatedHeartButton(
+            color: userRecipe.isFavorite ? Colors.red : Colors.grey,
+            onPressed: this._onFavoritePressed,
+          ),
+          SizedBox(width: 5.0),
+          Text(
+            this.recipe.favs.toString(),
+            style: TextStyle(fontSize: 20.0),
+          ),
+        ],
       ),
     );
   }
