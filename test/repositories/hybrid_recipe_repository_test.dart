@@ -71,18 +71,18 @@ void main() {
         });
       });
 
-      test('should return recipe from API when valid source recipe id of unstored recipe is given',
-          () async {
-        await store.collection(kFirestoreRecipes).document(MockData.existingRecipeId).delete();
+      // test('should return recipe from API when valid source recipe id of unstored recipe is given',
+      //     () async {
+      //   await store.collection(kFirestoreRecipes).document(MockData.existingRecipeId).delete();
 
-        var id = MockData.validSourceRecipeId;
-        repo.getRecipe(id).listen((recipe) {
-          expect(recipe, isA<Recipe>());
-          expect(recipe, isNotNull);
-          expect(recipe.id, id); // Recipe received from API will have id same as source id
-          expect(recipe.sourceRecipeId, id);
-        });
-      });
+      //   var id = MockData.validSourceRecipeId;
+      //   repo.getRecipe(id).listen((recipe) {
+      //     expect(recipe, isA<Recipe>());
+      //     expect(recipe, isNotNull);
+      //     expect(recipe.id, id); // Recipe received from API will have id same as source id
+      //     expect(recipe.sourceRecipeId, id);
+      //   });
+      // });
 
       test(
           'should throw exception when recipe from API when invalid source recipe id of unstored recipe is given',

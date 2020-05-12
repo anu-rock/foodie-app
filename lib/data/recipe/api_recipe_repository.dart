@@ -44,7 +44,7 @@ class ApiRecipeRepository implements RecipeRepository {
 
         // When we reach the last page of search results,
         // add a dummy recipe at the end as an indicator of end of results.
-        if (offset + searchResults.length >= totalResults) {
+        if (totalResults > 0 && offset + searchResults.length >= totalResults) {
           searchResults.add({'id': -1});
         }
 

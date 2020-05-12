@@ -542,10 +542,10 @@ class RecipeMockData {
     "totalResults": 45
   };
   static final emptySearchResults = {
-    "title": "Recipe Puppy",
-    "version": 0.1,
-    "href": "http://www.recipepuppy.com/",
-    "results": []
+    "results": [],
+    "offset": 0,
+    "number": 10,
+    "totalResults": 0,
   };
   static final quotaExpiredResponse = {
     "status": "failure",
