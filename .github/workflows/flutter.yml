@@ -1,23 +1,28 @@
 on: push
-name: build and test app
+name: CI
 jobs:
   build:
-    name: install dependencies
+    name: test and build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: install dependencies
-      uses: steebchen/flutter@v1.0.0
-      with:
-        args: pub get
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
 
-    - name: run tests
-      uses: steebchen/flutter@v1.0.0
-      with:
-        args: test
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
 
-    - name: build apk
-      uses: steebchen/flutter@v1.0.0
-      with:
-        args: build apk --release
+      - name: flutter info
+        run: flutter --version
+
+      - name: install dependencies
+        run: flutter pub get
+
+      - name: run tests
+        run: flutter test
+
+      - name: build apk
+        run: flutter build apk
