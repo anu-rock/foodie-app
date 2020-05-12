@@ -23,6 +23,3 @@ jobs:
 
       - name: run tests
         run: flutter test
-
-      - name: build apk
-        run: flutter build apk
