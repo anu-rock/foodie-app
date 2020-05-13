@@ -4,7 +4,6 @@
 
 #### Remove tasks when they get completed
 
-- Fix broken tests
 - On `ProfileScreen`:
   - implement 'Preferences'
   - implement 'About Foodie App'
@@ -25,15 +24,19 @@
   - [x] Favorite
   - [x] Play
   - [x] Share
-- [x] User Profile screen
+- [x] My Profile screen
   - [x] favorites
   - [x] played history
   - [x] profile settings
   - [x] account settings
-- [ ] Friend Profile screen
-  - [ ] friend's user profile details
+- [ ] User screen
+  - [ ] profile details
+  - [ ] network connections (followers, following)
+  - [ ] last status
+- [ ] Discover screen
+  - [ ] popular recipes
 - [x] Sign up screen
-- [ ] Status screen (updates from friends)
+- [ ] Social Feed (Status) screen (updates from network)
 - [ ] Splash screen
 - [ ] Launcher icon
 - [ ] Refactor styling into ThemeData (optional)
@@ -43,7 +46,7 @@
 - [x] User repository
   - [x] store users in Firestore
   - [x] while creating user, documentID should be set as `FirebaseUser.uid` and photoUrl should be set as Gravatar url
-- [ ] Friend repository
+- [x] Network repository
 - [x] Recipe repository (recipes + user_recipes collections)
   - [x] find recipes by ingredients
   - [x] add recipe (automatically done by viewing a recipe the first time from search results)
