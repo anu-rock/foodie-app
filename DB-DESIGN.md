@@ -19,14 +19,16 @@ https://www.youtube.com/watch?v=haMOUb3KVSo&list=LLwzfmF6Imu2lIG3IhQsa84w&index=
   id: string,
   displayName: string,
   email: string,
-  phoneNumber: string,
   photoUrl: string,
   favoriteRecipes: number, // kept in sync via Cloud Function
   playedRecipes: number, // kept in sync via Cloud Function
+  followers: number, // kept in sync via Cloud Function
+  following: number, // kept in sync via Cloud Function
   private: [ // subcollection
     {
-      key: string,value: dynamic
+      key: string, value: dynamic
       // eg. 'isEmailVerified': true
+      // eg. 'phoneNumber': '9876543210',
     }
   ],
 }
@@ -96,16 +98,17 @@ This is just a static, one-time master list mostly for typeahead searching.
 }
 ```
 
-### friends
+### network
 
 ```
 {
-  userId: string,
-  userName: string, // kept in sync via Cloud Function
-  userPhotoUrl: string, // kept in sync via Cloud Function
-  friendId: string,
-  friendName: string, // kept in sync via Cloud Function
-  friendPhotoUrl: string, // kept in sync via Cloud Function
+  followerId: string,
+  followerName: string, // kept in sync via Cloud Function
+  followerPhotoUrl: string, // kept in sync via Cloud Function
+  followeeId: string,
+  followeeName: string, // kept in sync via Cloud Function
+  followeePhotoUrl: string, // kept in sync via Cloud Function
+  followedAt: string,
 }
 ```
 
@@ -114,8 +117,12 @@ This is just a static, one-time master list mostly for typeahead searching.
 ```
 {
   userId: string,
-  status: string,
+  type: string, // [ recipe_played, recipe_favorited, custom ]
+  message: string, // only used with type == custom
   photoUrl: string,
+  recipeId: string,
+  recipeName: string,
+  createdAt: string,
 }
 ```
 
