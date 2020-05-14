@@ -32,6 +32,7 @@ const kFirestoreUserIngredients = 'user_ingredients';
 const kFirestoreRecipes = 'recipes';
 const kFirestoreUserRecipes = 'user_recipes';
 const kFirestoreNetwork = 'network';
+const kFirestoreStatuses = 'statuses';
 
 // Miscellaneous
 const kDefaultUsername = 'Foodie';

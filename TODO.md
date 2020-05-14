@@ -52,7 +52,7 @@
   - [x] add recipe (automatically done by viewing a recipe the first time from search results)
   - [x] get recipe by id/title
   - [ ] get popular recipes
-- [ ] Status repository
+- [x] Status repository
   - [ ] now playing recipe (à la Steam)
 - [ ] Log respository
   - [ ] recipe search
@@ -92,6 +92,10 @@ Time machine (see ingredients during a time range).
 #### Custom status
 
 Phase 1 manages status automatically. Last cooked recipe is auto-set as the current status. Phase 2 to have an option to set a custom status text & pic (a la WhatsApp).
+
+#### Status interactions
+
+Ability to comment on and like status updates of followees.
 
 #### Cook along
 
