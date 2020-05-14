@@ -4,10 +4,7 @@
 
 #### Remove tasks when they get completed
 
-- On `ProfileScreen`:
-  - implement 'Preferences'
-  - implement 'About Foodie App'
-  - add option to change password
+- Add option to change password
 - Add a background image on home page to reduce boringness
 
 ## Database
@@ -29,10 +26,15 @@
   - [x] played history
   - [x] profile settings
   - [x] account settings
+  - [ ] import/invite connections from phonebook
+  - [ ] import/invite connections from Facebook
+  - [ ] dietary preferences
+  - [ ] about Foodie App
 - [ ] User screen
   - [ ] profile details
   - [ ] network connections (followers, following)
   - [ ] last status
+  - [ ] follow/unfollow button
 - [ ] Discover screen
   - [ ] popular recipes
 - [x] Sign up screen
