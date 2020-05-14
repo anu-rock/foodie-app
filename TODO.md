@@ -53,7 +53,7 @@
   - [x] get recipe by id/title
   - [ ] get popular recipes
 - [x] Status repository
-  - [ ] now playing recipe (à la Steam)
+  - [x] now playing recipe (à la Steam)
 - [ ] Log respository
   - [ ] recipe search
   - [ ] errors

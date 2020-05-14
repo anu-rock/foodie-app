@@ -7,6 +7,8 @@ import 'package:foodieapp/data/recipe/recipe_repository.dart';
 import 'package:foodieapp/screens/recipe_directions/direction_card.dart';
 import 'package:foodieapp/screens/recipe_directions/fancy_background.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:foodieapp/data/status/status.dart';
+import 'package:foodieapp/data/status/status_repository.dart';
 import 'package:foodieapp/constants.dart';
 
 class RecipeDirectionsScreen extends StatefulWidget {
@@ -28,6 +30,7 @@ class _RecipeDirectionsScreenState extends State<RecipeDirectionsScreen> {
     super.initState();
 
     _playRecipe();
+    _updateStatus();
   }
 
   @override
@@ -152,6 +155,18 @@ class _RecipeDirectionsScreenState extends State<RecipeDirectionsScreen> {
 
   void _switchLayout(CardLayout layout) {
     this.setState(() => this.selectedLayout = layout);
+  }
+
+  Future<void> _updateStatus() async {
+    print('_updateStatus called');
+    final recipe = this.widget.recipe;
+    final statusRepo = Provider.of<StatusRepository>(context, listen: false);
+    statusRepo.addUpdate(
+      StatusType.recipe_played,
+      recipeId: recipe.id,
+      recipeTitle: recipe.title,
+      photoUrl: recipe.photoUrl,
+    );
   }
 }
 
