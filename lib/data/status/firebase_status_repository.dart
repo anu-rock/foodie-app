@@ -86,6 +86,11 @@ class FirebaseStatusRepository implements StatusRepository {
     final followees = await networkRepo.getFollowees(currentUser.uid).first;
     final followeeIds = followees.map((f) => f.followeeId).toList();
 
+    if (followeeIds.isEmpty) {
+      yield [];
+      return;
+    }
+
     yield* this._statusCollection.where('userId', whereIn: followeeIds).snapshots().map(
           (snap) => snap.documents
               .map<Status>(

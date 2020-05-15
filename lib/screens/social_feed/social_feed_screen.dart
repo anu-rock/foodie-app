@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodieapp/constants.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/data/network/connection.dart';
@@ -39,8 +40,17 @@ class _SocialFeedScreenState extends State<SocialFeedScreen> {
                 stream: this.updateStream,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    final data = snapshot.data;
-                    return _updatesList(data, followees);
+                    final statuses = snapshot.data;
+                    if (statuses.isEmpty) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Aww crap, you don\'t have any connections yet. '),
+                          Text('Start following someone now.'),
+                        ],
+                      );
+                    }
+                    return _updatesList(statuses, followees);
                   }
                   return Text('Getting updates...');
                 },
