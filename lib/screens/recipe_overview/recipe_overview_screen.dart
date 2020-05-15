@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/data/status/status.dart';
+import 'package:foodieapp/data/status/status_repository.dart';
 import 'package:foodieapp/widgets/animated_heart_button.dart';
 import 'package:provider/provider.dart';
 
@@ -346,10 +348,22 @@ class _RecipeOverviewScreenState extends State<RecipeOverviewScreen> {
       var recipeMap = this.recipe.toMap();
       if (updatedUserRecipe.isFavorite) {
         recipeMap['favs'] = this.recipe.favs + 1;
+        _updateStatus();
       } else {
         recipeMap['favs'] = this.recipe.favs - 1;
       }
       this.recipe = Recipe.fromMap(recipeMap);
     });
+  }
+
+  Future<void> _updateStatus() async {
+    print('_updateStatus called');
+    final statusRepo = Provider.of<StatusRepository>(context, listen: false);
+    statusRepo.addUpdate(
+      StatusType.recipe_favorited,
+      recipeId: this.recipe.id,
+      recipeTitle: this.recipe.title,
+      photoUrl: this.recipe.photoUrl,
+    );
   }
 }
