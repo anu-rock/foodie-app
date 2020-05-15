@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:foodieapp/constants.dart';
+import 'package:provider/provider.dart';
+
 import 'package:foodieapp/models/app_state.dart';
 import 'package:foodieapp/tabs/browse_tab_navigator.dart';
 import 'package:foodieapp/tabs/home_tab_navigator.dart';
 import 'package:foodieapp/tabs/profile_tab_navigator.dart';
-import 'package:foodieapp/tabs/shop_tab_navigator.dart';
-import 'package:provider/provider.dart';
+import 'package:foodieapp/tabs/social_tab_navigator.dart';
 
 const TAB_ICON_SIZE = 25.0;
 
@@ -72,11 +73,11 @@ class TabsBar extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  key: Key('tab_shop'),
-                  icon: Icon(Icons.shopping_cart),
-                  color: this.selectedTab == ShopTabNavigator.id ? kColorBlue : kColorBluegrey,
+                  key: Key('tab_social'),
+                  icon: Icon(Icons.public),
+                  color: this.selectedTab == SocialTabNavigator.id ? kColorBlue : kColorBluegrey,
                   iconSize: TAB_ICON_SIZE,
-                  onPressed: () => this.onTabPress(ShopTabNavigator.id),
+                  onPressed: () => this.onTabPress(SocialTabNavigator.id),
                 ),
                 IconButton(
                   key: Key('tab_profile'),

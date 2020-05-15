@@ -93,7 +93,7 @@ class Status {
       type: getStatusTypefromString(map['type'].toString()),
       message: map['message'] as String,
       photoUrl: map['photoUrl'] as String,
-      recipeId: map['folrecipeIdloweeName'] as String,
+      recipeId: map['recipeId'] as String,
       recipeTitle: map['recipeTitle'] as String,
       createdAt: DateUtil.dateFromUtcIsoString(map['createdAt'] as String),
     );

@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodieapp/screens/shop/shop_screen.dart';
 
-class ShopTabNavigator extends StatelessWidget {
-  static const id = 'shop_tab';
+import 'package:foodieapp/screens/social_feed/social_feed_screen.dart';
+
+class SocialTabNavigator extends StatelessWidget {
+  static const id = 'social_tab';
 
   final GlobalKey<NavigatorState> navigatorKey;
 
-  ShopTabNavigator({this.navigatorKey});
+  SocialTabNavigator({this.navigatorKey});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +20,10 @@ class ShopTabNavigator extends StatelessWidget {
 
   Route _buildRoute(RouteSettings settings) {
     switch (settings.name) {
-      case ShopScreen.id:
+      case SocialFeedScreen.id:
       default:
         return CupertinoPageRoute(
-          builder: (context) => ShopScreen(),
+          builder: (context) => SocialFeedScreen(),
           settings: settings,
         );
     }

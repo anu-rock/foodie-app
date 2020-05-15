@@ -4,7 +4,7 @@ import 'package:foodieapp/screens/recipe_search/recipe_search_screen.dart';
 import 'package:foodieapp/tabs/browse_tab_navigator.dart';
 import 'package:foodieapp/tabs/home_tab_navigator.dart';
 import 'package:foodieapp/tabs/profile_tab_navigator.dart';
-import 'package:foodieapp/tabs/shop_tab_navigator.dart';
+import 'package:foodieapp/tabs/social_tab_navigator.dart';
 import 'package:foodieapp/widgets/tabs_bar.dart';
 
 class AppRootScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class _AppRootScreenState extends State<AppRootScreen> {
   final navigatorKeys = {
     HomeTabNavigator.id: GlobalKey<NavigatorState>(),
     BrowseTabNavigator.id: GlobalKey<NavigatorState>(),
-    ShopTabNavigator.id: GlobalKey<NavigatorState>(),
+    SocialTabNavigator.id: GlobalKey<NavigatorState>(),
     ProfileTabNavigator.id: GlobalKey<NavigatorState>(),
   };
 
@@ -52,8 +52,11 @@ class _AppRootScreenState extends State<AppRootScreen> {
             BrowseTabNavigator(
               navigatorKey: navigatorKeys[BrowseTabNavigator.id],
             ),
-            ShopTabNavigator(
-              navigatorKey: navigatorKeys[ShopTabNavigator.id],
+            Visibility(
+              visible: this.selectedTab == SocialTabNavigator.id,
+              child: SocialTabNavigator(
+                navigatorKey: navigatorKeys[SocialTabNavigator.id],
+              ),
             ),
             ProfileTabNavigator(
               navigatorKey: navigatorKeys[ProfileTabNavigator.id],
@@ -72,7 +75,7 @@ class _AppRootScreenState extends State<AppRootScreen> {
     switch (tabId) {
       case BrowseTabNavigator.id:
         return 1;
-      case ShopTabNavigator.id:
+      case SocialTabNavigator.id:
         return 2;
       case ProfileTabNavigator.id:
         return 3;

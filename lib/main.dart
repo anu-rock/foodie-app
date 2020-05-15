@@ -14,6 +14,8 @@ import 'package:foodieapp/data/recipe/recipe_repository.dart';
 import 'package:foodieapp/data/recipe/hybrid_recipe_repository.dart';
 import 'package:foodieapp/data/status/firebase_status_repository.dart';
 import 'package:foodieapp/data/status/status_repository.dart';
+import 'package:foodieapp/data/network/firebase_network_repository.dart';
+import 'package:foodieapp/data/network/network_repository.dart';
 
 void main() => runApp(FoodieApp());
 
@@ -43,6 +45,9 @@ class FoodieApp extends StatelessWidget {
         ),
         Provider<StatusRepository>(
           create: (context) => FirebaseStatusRepository(),
+        ),
+        Provider<NetworkRepository>(
+          create: (context) => FirebaseNetworkRepository(),
         ),
       ],
       child: MaterialApp(

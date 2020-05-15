@@ -38,7 +38,7 @@
 - [ ] Discover screen
   - [ ] popular recipes
 - [x] Sign up screen
-- [ ] Social Feed (Status) screen (updates from network)
+- [x] Social Feed (Status) screen (updates from network)
 - [ ] Splash screen
 - [ ] Launcher icon
 - [ ] Refactor styling into ThemeData (optional)
