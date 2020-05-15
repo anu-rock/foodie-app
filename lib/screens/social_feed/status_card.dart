@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/screens/profile_user/user_profile_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:foodieapp/constants.dart';
@@ -46,9 +47,20 @@ class StatusCard extends StatelessWidget {
 
     return Row(
       children: <Widget>[
-        CircleAvatar(
-          radius: 25.0,
-          backgroundImage: NetworkImage(followeePhoto),
+        GestureDetector(
+          onTap: () => Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => UserProfileScreen(
+                userId: this.status.userId,
+                isCurrentUserFollowing: true,
+              ),
+            ),
+          ),
+          child: CircleAvatar(
+            radius: 25.0,
+            backgroundImage: NetworkImage(followeePhoto),
+          ),
         ),
         SizedBox(
           width: 10.0,

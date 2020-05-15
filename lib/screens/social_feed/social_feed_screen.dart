@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodieapp/constants.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/data/network/connection.dart';

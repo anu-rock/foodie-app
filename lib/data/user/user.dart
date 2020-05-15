@@ -5,6 +5,8 @@ class User {
   final String photoUrl;
   final int playedRecipes;
   final int favoriteRecipes;
+  final int followers;
+  final int following;
   final PrivateUserData privateUserData;
 
   User({
@@ -14,6 +16,8 @@ class User {
     this.photoUrl,
     this.playedRecipes = 0,
     this.favoriteRecipes = 0,
+    this.followers = 0,
+    this.following = 0,
     this.privateUserData,
   });
 
@@ -42,6 +46,8 @@ class User {
       'photoUrl': this.photoUrl,
       'playedRecipes': this.playedRecipes,
       'favoriteRecipes': this.favoriteRecipes,
+      'followers': this.followers,
+      'following': this.following,
       'privateUserData': this.privateUserData == null ? null : this.privateUserData.toMap(),
     };
   }
@@ -58,6 +64,8 @@ class User {
       photoUrl: map['photoUrl'] as String,
       playedRecipes: map['playedRecipes'] as int,
       favoriteRecipes: map['favoriteRecipes'] as int,
+      followers: map['followers'] as int,
+      following: map['following'] as int,
       privateUserData: PrivateUserData.fromMap(map['privateUserData']),
     );
   }

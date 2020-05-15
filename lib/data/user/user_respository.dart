@@ -15,6 +15,9 @@ abstract class UserRepository {
   /// null if no user is logged in.
   Future<User> getCurrentUser();
 
+  /// Returns the user identified by given id.
+  Stream<User> getUser(String id);
+
   /// Returns the current user when auth status changes.
   ///
   /// On successful login, current user is returned.

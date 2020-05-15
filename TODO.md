@@ -30,10 +30,10 @@
   - [ ] import/invite connections from Facebook
   - [ ] dietary preferences
   - [ ] about Foodie App
-- [ ] User screen
-  - [ ] profile details
-  - [ ] network connections (followers, following)
-  - [ ] last status
+- [x] User screen
+  - [x] profile details
+  - [x] network connections (followers, following)
+  - [x] last status
   - [ ] follow/unfollow button
 - [ ] Discover screen
   - [ ] popular recipes

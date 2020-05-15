@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:foodieapp/constants.dart';
 import 'package:foodieapp/data/user/user_respository.dart';
 import 'package:foodieapp/models/app_state.dart';
-import 'package:foodieapp/screens/profile/account_screen.dart';
 import 'package:foodieapp/screens/recipe_list/recipe_list_screen.dart';
 import 'package:foodieapp/util/string_util.dart';
+import 'account_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   static const id = 'profile';

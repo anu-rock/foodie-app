@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart' as crypto;
 
 import 'package:foodieapp/constants.dart';
+import 'package:foodieapp/util/string_util.dart';
 import 'user_respository.dart';
 import 'user.dart';
 
@@ -39,6 +40,21 @@ class FirebaseUserRepository implements UserRepository {
     }
 
     return null;
+  }
+
+  Stream<User> getUser(String id) async* {
+    if (StringUtil.isNullOrEmpty(id)) {
+      throw ArgumentError('id cannot be null or empty');
+    }
+
+    var snapshots = this._usersCollection.document(id).snapshots();
+
+    yield* snapshots.map<User>((snap) {
+      if (!snap.exists) return null;
+      var data = snap.data;
+      data['id'] = snap.documentID;
+      return User.fromMap(data);
+    });
   }
 
   @override
