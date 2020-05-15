@@ -91,7 +91,12 @@ class FirebaseStatusRepository implements StatusRepository {
       return;
     }
 
-    yield* this._statusCollection.where('userId', whereIn: followeeIds).snapshots().map(
+    yield* this
+        ._statusCollection
+        .where('userId', whereIn: followeeIds)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
           (snap) => snap.documents
               .map<Status>(
                 (doc) => Status.fromMap(doc.data),
