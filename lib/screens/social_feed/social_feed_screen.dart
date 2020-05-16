@@ -23,7 +23,6 @@ class _SocialFeedScreenState extends State<SocialFeedScreen> {
   void initState() {
     super.initState();
 
-    _getNetworkUpdates();
     _getFollowees();
   }
 
@@ -35,6 +34,12 @@ class _SocialFeedScreenState extends State<SocialFeedScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final followees = snapshot.data;
+              // Calling this here rather than inside `initState()` will ensure
+              // that following/unfollowing a user rebuilts this screen
+              // with a refreshes social feed, including or excluding updates
+              // from the user just followed or unfollowed.
+              _getNetworkUpdates();
+
               return StreamBuilder<List<Status>>(
                 stream: this.updateStream,
                 builder: (context, snapshot) {

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/data/user/user.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -19,10 +20,27 @@ import 'package:foodieapp/data/network/network_repository.dart';
 
 void main() => runApp(FoodieApp());
 
-class FoodieApp extends StatelessWidget {
-  final _appState = AppState();
+class FoodieApp extends StatefulWidget {
+  @override
+  _FoodieAppState createState() => _FoodieAppState();
+}
 
-  // This widget is the root of our application.
+class _FoodieAppState extends State<FoodieApp> {
+  User currentUser;
+  bool isAppStateInitialized = false;
+
+  void _initializeAppState(BuildContext context) async {
+    if (this.isAppStateInitialized == false) {
+      print('initializing global app state');
+      final appState = Provider.of<AppState>(context, listen: false);
+      final networkRepo = Provider.of<NetworkRepository>(context, listen: false);
+      appState.setCurrentUser(this.currentUser);
+      final currentUserFollowees = networkRepo.getFollowees(this.currentUser.id);
+      appState.setFollowees(await currentUserFollowees.first);
+      this.isAppStateInitialized = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     UserRepository user = FirebaseUserRepository();
@@ -31,7 +49,7 @@ class FoodieApp extends StatelessWidget {
       providers: [
         // State
         ChangeNotifierProvider<AppState>(
-          create: (context) => this._appState,
+          create: (context) => AppState(),
         ),
         // Dependency injection
         Provider<UserRepository>(
@@ -58,14 +76,19 @@ class FoodieApp extends StatelessWidget {
             Theme.of(context).textTheme,
           ),
         ),
-        home: StreamBuilder(
+        home: StreamBuilder<User>(
           stream: user.onAuthChanged(),
           builder: (context, snapshot) {
             final user = snapshot.data;
+
             if (user == null) {
               return LoginScreen();
             }
-            this._appState.setCurrentUser(user);
+
+            this.currentUser = user;
+
+            _initializeAppState(context);
+
             return AppRootScreen();
           },
         ),

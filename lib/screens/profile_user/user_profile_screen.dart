@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/data/network/network_repository.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/constants.dart';
@@ -7,6 +8,8 @@ import 'package:foodieapp/data/user/user_respository.dart';
 import 'package:foodieapp/screens/recipe_list/recipe_list_screen.dart';
 import 'package:foodieapp/util/string_util.dart';
 import 'package:foodieapp/data/user/user.dart';
+import 'package:foodieapp/data/network/connection.dart';
+import 'package:foodieapp/models/app_state.dart';
 
 import 'connection_list_screen.dart';
 
@@ -27,18 +30,28 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   Stream<User> userStream;
+  List<Connection> followees;
   User user;
+  bool isCurrentUserFollowing;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
     _getUserDetails();
   }
 
   void _getUserDetails() {
     final userRepo = Provider.of<UserRepository>(context, listen: false);
+    final appState = Provider.of<AppState>(context);
     this.userStream = userRepo.getUser(this.widget.userId);
+    this.isCurrentUserFollowing =
+        appState.followees.indexWhere((f) => f.followeeId == this.widget.userId) != -1;
   }
 
   @override
@@ -55,7 +68,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         stream: this.userStream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: Text('Loading...'));
+            return Center(child: Text('Loading user details...'));
           }
 
           this.user = snapshot.data;
@@ -101,18 +114,36 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   FlatButton _followButton() {
+    final networkRepo = Provider.of<NetworkRepository>(context, listen: false);
+    final appState = Provider.of<AppState>(context);
+
     return FlatButton(
       color: kColorGreen,
       child: Text(
-        (this.widget.isCurrentUserFollowing == false || this.widget.isCurrentUserFollowing == null)
-            ? 'Follow'
-            : 'Unfollow',
+        this.isCurrentUserFollowing ? 'Unfollow' : 'Follow',
         style: TextStyle(
           color: Colors.white,
           fontSize: 18.0,
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        if (this.isCurrentUserFollowing) {
+          networkRepo.unfollowUser(this.user);
+          appState.removeFollowee(Connection(
+            followerId: appState.currentUser.id,
+            followeeId: this.widget.userId,
+          ));
+          print('unfollowed user');
+        } else {
+          networkRepo.followUser(this.user);
+          appState.addFollowee(Connection(
+            followerId: appState.currentUser.id,
+            followeeId: this.widget.userId,
+            followedAt: DateTime.now(),
+          ));
+          print('followed user');
+        }
+      },
     );
   }
 

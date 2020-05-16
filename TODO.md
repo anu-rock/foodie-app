@@ -34,7 +34,7 @@
   - [x] profile details
   - [x] network connections (followers, following)
   - [x] last status
-  - [ ] follow/unfollow button
+  - [x] follow/unfollow button
 - [ ] Discover screen
   - [ ] popular recipes
 - [x] Sign up screen
