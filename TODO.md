@@ -67,7 +67,6 @@
   - [ ] password reset
   - [ ] all push notification scenarios
 - [ ] Facebook login
-- [ ] Google login
 - [ ] iOS support (Firebase and smoke testing)
 
 ## Tests
@@ -82,7 +81,7 @@
 
 ## CI/CD
 
-- [ ] Build automation
+- [x] Build automation
 
 # Phase 2
 
@@ -102,6 +101,10 @@ Ability to comment on and like status updates of followees.
 #### Cook along
 
 Option to set photo status at each step of recipe instructions. Friends/followers to be able to get "live" status update about the recipe being played/cooked. This feature will help in creating **food influencers**.
+
+#### Google signup/login
+
+Add Google as a new authentication method, alongside Email and Facebook.
 
 # Phase 3
 
