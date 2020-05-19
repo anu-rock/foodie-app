@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:foodieapp/screens/recipe_search/recipe_search_screen.dart';
 import 'package:foodieapp/tabs/browse_tab_navigator.dart';
 import 'package:foodieapp/tabs/home_tab_navigator.dart';
@@ -24,6 +25,8 @@ class _AppRootScreenState extends State<AppRootScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
     return WillPopScope(
       // A fix to handle back button per tabnavigator
       // See "One more thing" section here:

@@ -63,6 +63,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         leading: BackButton(
           color: kColorBluegrey,
         ),
+        brightness: Brightness.light,
       ),
       body: StreamBuilder<User>(
         stream: this.userStream,
