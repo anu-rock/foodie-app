@@ -18,6 +18,9 @@ abstract class UserRepository {
   /// Returns the user identified by given id.
   Stream<User> getUser(String id);
 
+  /// Returns the user identified by given email.
+  Stream<User> getUserByEmail(String email);
+
   /// Returns the current user when auth status changes.
   ///
   /// On successful login, current user is returned.

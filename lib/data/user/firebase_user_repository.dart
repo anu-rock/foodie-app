@@ -57,6 +57,22 @@ class FirebaseUserRepository implements UserRepository {
     });
   }
 
+  Stream<User> getUserByEmail(String email) async* {
+    if (StringUtil.isNullOrEmpty(email)) {
+      throw ArgumentError('email cannot be null or empty');
+    }
+
+    var snapshots = this._usersCollection.where('email', isEqualTo: email).snapshots();
+
+    yield* snapshots.map<User>((qSnap) {
+      if (qSnap.documents.isEmpty) return null;
+      final first = qSnap.documents.first;
+      var data = first.data;
+      data['id'] = first.documentID;
+      return User.fromMap(data);
+    });
+  }
+
   @override
   Future<LoginResult> loginWithEmail(String email, String password) async {
     try {

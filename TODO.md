@@ -26,7 +26,7 @@
   - [x] played history
   - [x] profile settings
   - [x] account settings
-  - [ ] import/invite connections from phonebook
+  - [x] import/invite connections from phonebook
   - [ ] import/invite connections from Facebook
   - [ ] dietary preferences
   - [ ] about Foodie App

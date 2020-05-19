@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodieapp/screens/profile_own/contact_list_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:foodieapp/constants.dart';
@@ -72,6 +73,19 @@ class ProfileScreen extends StatelessWidget {
           ListTile(
             onTap: () {},
             title: Text('Preferences'),
+            trailing: Icon(Icons.chevron_right),
+          ),
+          Divider(height: 1.0),
+          ListTile(
+            onTap: () => Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => ContactListScreen(
+                  type: ContactListType.phonebook,
+                ),
+              ),
+            ),
+            title: Text('Find Friends (from phonebook)'),
             trailing: Icon(Icons.chevron_right),
           ),
           Divider(height: 1.0),
