@@ -35,8 +35,8 @@
   - [x] network connections (followers, following)
   - [x] last status
   - [x] follow/unfollow button
-- [ ] Discover screen
-  - [ ] popular recipes
+- [x] Discover screen
+  - [x] popular recipes
 - [x] Sign up screen
 - [x] Social Feed (Status) screen (updates from network)
 - [ ] Splash screen
@@ -53,7 +53,7 @@
   - [x] find recipes by ingredients
   - [x] add recipe (automatically done by viewing a recipe the first time from search results)
   - [x] get recipe by id/title
-  - [ ] get popular recipes
+  - [x] get popular recipes
 - [x] Status repository
   - [x] now playing recipe (à la Steam)
 - [ ] Log respository
@@ -105,6 +105,15 @@ Option to set photo status at each step of recipe instructions. Friends/follower
 #### Google signup/login
 
 Add Google as a new authentication method, alongside Email and Facebook.
+
+#### More discovery options
+
+For now the Discover screen shows only popular (most cooked) recipes. Add more discovery options. For example:
+
+- most favorited recipes
+- most viewed recipes
+- popular in your network
+- top ingredients
 
 # Phase 3
 

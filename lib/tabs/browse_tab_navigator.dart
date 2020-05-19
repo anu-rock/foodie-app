@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodieapp/screens/browse/browse_screen.dart';
+
+import 'package:foodieapp/screens/discover/discover_screen.dart';
 
 class BrowseTabNavigator extends StatelessWidget {
   static const id = 'browse_tab';
@@ -19,10 +20,10 @@ class BrowseTabNavigator extends StatelessWidget {
 
   Route _buildRoute(RouteSettings settings) {
     switch (settings.name) {
-      case BrowseScreen.id:
+      case DiscoverScreen.id:
       default:
         return CupertinoPageRoute(
-          builder: (context) => BrowseScreen(),
+          builder: (context) => DiscoverScreen(),
           settings: settings,
         );
     }

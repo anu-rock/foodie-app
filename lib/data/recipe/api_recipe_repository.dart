@@ -101,6 +101,11 @@ class ApiRecipeRepository implements RecipeRepository {
   }
 
   @override
+  Stream<List<Recipe>> getPopularRecipes() {
+    throw UnsupportedError('This operation is not supported.');
+  }
+
+  @override
   Stream<Recipe> getRecipeBySourceRecipeId(String id) {
     throw UnsupportedError('This operation is not supported.');
   }

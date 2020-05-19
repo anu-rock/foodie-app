@@ -107,10 +107,12 @@ class RecipeCard extends StatelessWidget {
     return Wrap(
       children: <Widget>[
         Text(
-          StringUtil.truncateString(
-            str: this.recipe.desc.replaceAll(kRegexHtml, ''),
-            maxLen: 45,
-          ),
+          StringUtil.isNullOrEmpty(this.recipe.desc)
+              ? ''
+              : StringUtil.truncateString(
+                  str: this.recipe.desc.replaceAll(kRegexHtml, ''),
+                  maxLen: 45,
+                ),
         ),
       ],
     );

@@ -49,8 +49,11 @@ class _AppRootScreenState extends State<AppRootScreen> {
             HomeTabNavigator(
               navigatorKey: navigatorKeys[HomeTabNavigator.id],
             ),
-            BrowseTabNavigator(
-              navigatorKey: navigatorKeys[BrowseTabNavigator.id],
+            Visibility(
+              visible: this.selectedTab == BrowseTabNavigator.id,
+              child: BrowseTabNavigator(
+                navigatorKey: navigatorKeys[BrowseTabNavigator.id],
+              ),
             ),
             Visibility(
               visible: this.selectedTab == SocialTabNavigator.id,

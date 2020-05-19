@@ -16,6 +16,9 @@ abstract class RecipeRepository {
   /// `offset` is the number of results to skip, useful for pagination.
   Future<List<Recipe>> findRecipesByIngredients(List<String> ingredients, int offset);
 
+  /// Returns a list of 25 most cooked [Recipe]s.
+  Stream<List<Recipe>> getPopularRecipes();
+
   /// Returns a [Recipe] identified by given unique id.
   Stream<Recipe> getRecipe(String id);
 

@@ -73,6 +73,11 @@ class HybridRecipeRepository implements RecipeRepository {
   }
 
   @override
+  Stream<List<Recipe>> getPopularRecipes() {
+    return this._fbRepo.getPopularRecipes();
+  }
+
+  @override
   Stream<List<UserRecipe>> getFavoriteRecipes(String userId) {
     return this._fbRepo.getFavoriteRecipes(userId);
   }

@@ -104,6 +104,20 @@ class FirebaseRecipeRepository implements RecipeRepository {
   }
 
   @override
+  Stream<List<Recipe>> getPopularRecipes() {
+    var snapshots =
+        this._recipesCollection.orderBy('plays', descending: true).limit(25).snapshots();
+
+    return snapshots.map<List<Recipe>>((qSnap) {
+      return qSnap.documents.map<Recipe>((doc) {
+        var data = doc.data;
+        data['id'] = doc.documentID;
+        return Recipe.fromMap(data);
+      }).toList();
+    });
+  }
+
+  @override
   Stream<List<UserRecipe>> getFavoriteRecipes(String userId) async* {
     if (StringUtil.isNullOrEmpty(userId)) {
       throw ArgumentError('userId cannot be null or empty.');
