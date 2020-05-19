@@ -4,6 +4,7 @@
 
 #### Remove tasks when they get completed
 
+- Add labels below icons in bottom tab bar
 - Add option to change password
 - Add a background image on home page to reduce boringness
 
@@ -67,7 +68,7 @@
   - [ ] password reset
   - [ ] all push notification scenarios
 - [ ] Facebook login
-- [ ] iOS support (Firebase and smoke testing)
+- [x] iOS support (Firebase and smoke testing)
 
 ## Tests
 
