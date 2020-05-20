@@ -19,7 +19,7 @@ class HomeHeader extends StatelessWidget {
           height: 150.0,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('images/breakfast-1425702_1280.jpg'),
+              image: AssetImage('images/mediterranean-cuisine-2378758_1280.jpg'),
               fit: BoxFit.cover,
             ),
           ),
@@ -40,18 +40,30 @@ class HomeHeader extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(
-                  left: kPaddingUnits,
-                ),
-                child: Text(
-                  'Howdy, $userName',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.w700,
+                  padding: EdgeInsets.only(
+                    left: kPaddingUnits,
                   ),
-                ),
-              ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Howdy, $userName',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        'What are you going to cook today?',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15.0,
+                        ),
+                      ),
+                    ],
+                  )),
             ],
           ),
         ),

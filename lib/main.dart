@@ -72,7 +72,7 @@ class _FoodieAppState extends State<FoodieApp> {
         title: 'Foodie App',
         theme: ThemeData(
           primarySwatch: Colors.blue,
-          textTheme: GoogleFonts.notoSansTextTheme(
+          textTheme: GoogleFonts.robotoCondensedTextTheme(
             Theme.of(context).textTheme,
           ),
         ),
