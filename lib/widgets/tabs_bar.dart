@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodieapp/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:foodieapp/models/app_state.dart';
 import 'package:foodieapp/tabs/browse_tab_navigator.dart';
@@ -32,7 +33,8 @@ class TabsBar extends StatelessWidget {
     return Visibility(
       visible: appState.isTabBarVisible,
       child: Container(
-        height: 50.0,
+        height: 60.0,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
@@ -48,43 +50,53 @@ class TabsBar extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                IconButton(
-                  key: Key('tab_home'),
-                  icon: Icon(Icons.home),
-                  color: this.selectedTab == HomeTabNavigator.id ? kColorBlue : kColorBluegrey,
-                  iconSize: TAB_ICON_SIZE,
-                  onPressed: () => this.onTabPress(HomeTabNavigator.id),
-                ),
-                IconButton(
-                  key: Key('tab_browse'),
-                  icon: Icon(Icons.fastfood),
-                  color: this.selectedTab == BrowseTabNavigator.id ? kColorBlue : kColorBluegrey,
-                  iconSize: TAB_ICON_SIZE,
-                  onPressed: () => this.onTabPress(BrowseTabNavigator.id),
-                ),
-                Opacity(
-                  opacity: 0,
-                  child: IconButton(
-                    key: Key('tab_hidden'),
-                    icon: Icon(Icons.blur_on),
-                    color: Colors.white,
-                    iconSize: TAB_ICON_SIZE,
-                    onPressed: () {},
+                Expanded(
+                  child: _tabButton(
+                    key: Key('tab_home'),
+                    icon: Icons.home,
+                    text: 'Home',
+                    color: this.selectedTab == HomeTabNavigator.id ? kColorBlue : kColorBluegrey,
+                    onPressed: () => this.onTabPress(HomeTabNavigator.id),
                   ),
                 ),
-                IconButton(
-                  key: Key('tab_social'),
-                  icon: Icon(Icons.public),
-                  color: this.selectedTab == SocialTabNavigator.id ? kColorBlue : kColorBluegrey,
-                  iconSize: TAB_ICON_SIZE,
-                  onPressed: () => this.onTabPress(SocialTabNavigator.id),
+                Expanded(
+                  child: _tabButton(
+                    key: Key('tab_browse'),
+                    icon: FontAwesomeIcons.hamburger,
+                    text: 'Browse',
+                    color: this.selectedTab == BrowseTabNavigator.id ? kColorBlue : kColorBluegrey,
+                    onPressed: () => this.onTabPress(BrowseTabNavigator.id),
+                  ),
                 ),
-                IconButton(
-                  key: Key('tab_profile'),
-                  icon: Icon(Icons.person),
-                  color: this.selectedTab == ProfileTabNavigator.id ? kColorBlue : kColorBluegrey,
-                  iconSize: TAB_ICON_SIZE,
-                  onPressed: () => this.onTabPress(ProfileTabNavigator.id),
+                Expanded(
+                  child: Opacity(
+                    opacity: 0,
+                    child: _tabButton(
+                      key: Key('tab_hidden'),
+                      icon: Icons.blur_on,
+                      text: 'Hidden',
+                      color: Colors.white,
+                      onPressed: () {},
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: _tabButton(
+                    key: Key('tab_social'),
+                    icon: FontAwesomeIcons.solidCommentDots,
+                    text: 'Feed',
+                    color: this.selectedTab == SocialTabNavigator.id ? kColorBlue : kColorBluegrey,
+                    onPressed: () => this.onTabPress(SocialTabNavigator.id),
+                  ),
+                ),
+                Expanded(
+                  child: _tabButton(
+                    key: Key('tab_profile'),
+                    icon: FontAwesomeIcons.solidUserCircle,
+                    text: 'Me',
+                    color: this.selectedTab == ProfileTabNavigator.id ? kColorBlue : kColorBluegrey,
+                    onPressed: () => this.onTabPress(ProfileTabNavigator.id),
+                  ),
                 ),
               ],
             ),
@@ -92,13 +104,37 @@ class TabsBar extends StatelessWidget {
               top: -15.0,
               child: FloatingActionButton(
                 key: Key('tab_search'),
-                child: Icon(Icons.blur_on),
+                child: Icon(FontAwesomeIcons.magic),
                 backgroundColor: kColorGreen,
                 onPressed: () => this.onTabPress('recipe_search'),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  FlatButton _tabButton({Key key, Color color, IconData icon, String text, Function onPressed}) {
+    return FlatButton(
+      key: key,
+      onPressed: onPressed,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            icon,
+            size: TAB_ICON_SIZE,
+            color: color,
+          ),
+          Text(
+            text,
+            style: TextStyle(
+              color: color,
+              fontSize: 12.0,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -25,6 +25,7 @@ dependencies:
   google_fonts: ^1.1.0
   contacts_service: ^0.4.6
   permission_handler: ^5.0.0+hotfix.6
+  font_awesome_flutter: ^8.8.1
 
 dev_dependencies:
   flutter_test:
