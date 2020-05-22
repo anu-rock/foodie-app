@@ -79,3 +79,47 @@ exports.syncRecipeCounters = functions.firestore
     console.log('Counters synced.');
     return null;
   });
+
+/**
+ * Keeps a user's network counters such as followers and following in sync.
+ */
+exports.syncUserNetworkCounters = functions.firestore
+  .document('/network/{connectionId}')
+  .onWrite(async (change) => {
+    const prevData = change.before.data();
+    const newData = change.after.data();
+
+    let increment;
+    let followerId;
+    let followeeId;
+
+    if (!prevData && newData) {
+      // connection added
+      increment = 1;
+      followerId = newData.followerId;
+      followeeId = newData.followeeId;
+    } else if (prevData && !newData) {
+      // connection deleted
+      increment = -1;
+      followerId = prevData.followerId;
+      followeeId = prevData.followeeId;
+    }
+
+    const followerDoc = db.collection('users').doc(followerId);
+    const followeeDoc = db.collection('users').doc(followeeId);
+
+    await db.runTransaction(async (t) => {
+      const follower = await t.get(followerDoc);
+      const followee = await t.get(followeeDoc);
+
+      if (increment) {
+        const numFollowees = follower.data().following || 0;
+        t.update(followerDoc, { following: numFollowees + increment });
+        const numFollowers = followee.data().followers || 0;
+        t.update(followeeDoc, { followers: numFollowers + increment });
+      }
+    });
+
+    console.log('Counters synced.');
+    return null;
+  });
