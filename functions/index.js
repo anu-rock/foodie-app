@@ -16,8 +16,10 @@ exports.syncRecipeCounters = functions.firestore
     const prevData = change.before.data();
     const newData = change.after.data();
     const recipeId = newData.recipeId;
+    const userId = newData.userId;
 
     const recipeDoc = db.collection('recipes').doc(recipeId);
+    const userDoc = db.collection('users').doc(userId);
 
     let viewsIncrement;
     if (!prevData || newData.viewedAt.length > prevData.viewedAt.length) {
@@ -42,18 +44,35 @@ exports.syncRecipeCounters = functions.firestore
       const recipe = await t.get(recipeDoc);
 
       if (viewsIncrement) {
-        const views = recipe.data().views || 0;
-        t.update(recipeDoc, { views: views + viewsIncrement });
+        const userViewedRecipesDoc = userDoc
+          .collection('private')
+          .doc('viewedRecipes');
+        const userViewedRecipes = await t.get(userViewedRecipesDoc);
+
+        const recipeViews = recipe.data().views || 0;
+        t.update(recipeDoc, { views: recipeViews + viewsIncrement });
+        const userRecipeViews = userViewedRecipes.data().value || 0;
+        t.update(userViewedRecipesDoc, {
+          value: userRecipeViews + viewsIncrement,
+        });
       }
 
       if (favsIncrement) {
-        const favs = recipe.data().favs || 0;
-        t.update(recipeDoc, { favs: favs + favsIncrement });
+        const user = await t.get(userDoc);
+
+        const recipeFavs = recipe.data().favs || 0;
+        t.update(recipeDoc, { favs: recipeFavs + favsIncrement });
+        const userRecipeFavs = user.data().favoriteRecipes || 0;
+        t.update(userDoc, { favoriteRecipes: userRecipeFavs + favsIncrement });
       }
 
       if (playsIncrement) {
-        const plays = recipe.data().plays || 0;
-        t.update(recipeDoc, { plays: plays + playsIncrement });
+        const user = await t.get(userDoc);
+
+        const recipePlays = recipe.data().plays || 0;
+        t.update(recipeDoc, { plays: recipePlays + playsIncrement });
+        const userRecipePlays = user.data().playedRecipes || 0;
+        t.update(userDoc, { playedRecipes: userRecipePlays + playsIncrement });
       }
     });
 
