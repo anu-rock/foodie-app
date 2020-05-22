@@ -4,6 +4,7 @@
 
 #### Remove tasks when they get completed
 
+- Get user data from Firebase stream rather than from state (for realtime updates)
 - Add option to change password
 - Add a background image on home page to reduce boringness
 
@@ -61,6 +62,7 @@
   - [ ] errors
 - [ ] Push Notifications (use Firebase Functions)
   - [ ] status updates for friends
+  - [ ] new follower
 - [ ] Email Notifications (use Firebase Functions)
   - [ ] email verification
   - [ ] welcome email
