@@ -197,12 +197,20 @@ class FirebaseUserRepository implements UserRepository {
       'playedRecipes': 0,
     });
 
-    this._usersCollection.document(fbUser.uid).collection('private').add({
-      'key': 'isEmailVerified',
+    this
+        ._usersCollection
+        .document(fbUser.uid)
+        .collection('private')
+        .document('isEmailVerified')
+        .setData({
       'value': false,
     });
-    this._usersCollection.document(fbUser.uid).collection('private').add({
-      'key': 'viewedRecipes',
+    this
+        ._usersCollection
+        .document(fbUser.uid)
+        .collection('private')
+        .document('viewedRecipes')
+        .setData({
       'value': 0,
     });
   }
