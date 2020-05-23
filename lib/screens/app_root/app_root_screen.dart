@@ -73,10 +73,6 @@ class _AppRootScreenState extends State<AppRootScreen> {
     );
   }
 
-  /// TODO: Fix potential bug:
-  /// Maintaining indexes of navigators separately from navigator list
-  /// used inside [IndexStack] may introduce issues later when we add/remove
-  /// navigators. A more elegant solution would probably use a map.
   int _getIndexOfTab(String tabId) {
     switch (tabId) {
       case BrowseTabNavigator.id:
