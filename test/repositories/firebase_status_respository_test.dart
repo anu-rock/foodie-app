@@ -152,18 +152,14 @@ void main() {
     });
 
     group('getNetworkUpdates()', () {
-      // TODO:
-      // This test is commented out until cloud_firestore_mocks package
-      // adds support for whereIn in Query.where.
-      //
-      // test('should return updates from current user\'s followees', () async {
-      //   repo.getNetworkUpdates().listen((statuses) {
-      //     expect(statuses, isA<List>());
-      //     expect(statuses, isNotEmpty);
-      //     expect(statuses.first, isA<Status>());
-      //     expect(statuses.first.userId, MockData.dummyUser1.id);
-      //   });
-      // });
+      test('should return updates from current user\'s followees', () async {
+        repo.getNetworkUpdates().listen((statuses) {
+          expect(statuses, isA<List>());
+          expect(statuses, isNotEmpty);
+          expect(statuses.first, isA<Status>());
+          expect(statuses.first.userId, MockData.dummyUser1.id);
+        });
+      });
 
       test('should throw exception when user is not logged in', () {
         final authSignedOut = MockFirebaseAuth(signedIn: false);

@@ -34,7 +34,7 @@ dev_dependencies:
     sdk: flutter
   test: any
   mockito: ^4.1.1
-  cloud_firestore_mocks: ^0.4.2
+  cloud_firestore_mocks: ^0.4.4
   firebase_auth_mocks: ^0.1.3
 
 flutter:
