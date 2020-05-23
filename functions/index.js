@@ -123,3 +123,35 @@ exports.syncUserNetworkCounters = functions.firestore
     console.log('Counters synced.');
     return null;
   });
+
+/**
+ * Keeps a user's profile details such as name and photoUrl in sync.
+ * TODO: This is a work in progress.
+ */
+exports.syncUserDetails = functions.firestore
+  .document('/users/{userId}')
+  .onUpdate(async (change) => {
+    const prevData = change.before.data();
+    const newData = change.after.data();
+    const userId = prevData.userId;
+
+    const isNameChanged = prevData.displayName !== newData.displayName;
+    const isPhotoChanged = prevData.photoUrl !== newData.photoUrl;
+
+    const userRecipeDocs = db
+      .collection('user_recipes')
+      .where('userId', '==', userId);
+    const followerDocs = db
+      .collection('network')
+      .where('followerId', '==', userId);
+    const followeeDocs = db
+      .collection('network')
+      .where('followeeId', '==', userId);
+
+    if (isNameChanged || isPhotoChanged) {
+      await db.runTransaction(async (t) => {});
+
+      console.log('User details synced.');
+    }
+    return null;
+  });
