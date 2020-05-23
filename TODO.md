@@ -59,7 +59,7 @@
   - [x] now playing recipe (à la Steam)
 - [ ] Log respository
   - [ ] recipe search
-  - [ ] errors
+  - [ ] errors (https://flutter.dev/docs/cookbook/maintenance/error-reporting)
 - [ ] Push Notifications (use Firebase Functions)
   - [ ] status updates for friends
   - [ ] new follower
@@ -116,6 +116,10 @@ For now the Discover screen shows only popular (most cooked) recipes. Add more d
 - most viewed recipes
 - popular in your network
 - top ingredients
+
+#### Sync user profile details
+
+Keep user's profile details such as display name and photo url always in sync using a Firebase Function.
 
 # Phase 3
 
