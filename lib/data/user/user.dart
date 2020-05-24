@@ -74,16 +74,22 @@ class User {
 class PrivateUserData {
   final String phoneNumber;
   final bool isEmailVerified;
+  final int viewedRecipes;
+  final List<String> fcmTokens;
 
   PrivateUserData({
     this.phoneNumber,
     this.isEmailVerified = false,
+    this.viewedRecipes = 0,
+    this.fcmTokens = const [],
   });
 
   Map<String, Object> toMap() {
     return {
       'phoneNumber': this.phoneNumber,
       'isEmailVerified': this.isEmailVerified,
+      'viewedRecipes': this.viewedRecipes,
+      'fcmTokens': this.fcmTokens
     };
   }
 
@@ -95,6 +101,8 @@ class PrivateUserData {
     return PrivateUserData(
       phoneNumber: map['phoneNumber'] as String,
       isEmailVerified: map['isEmailVerified'] as bool,
+      viewedRecipes: map['viewedRecipes'] as int,
+      fcmTokens: (map['fcmTokens'] as List).map((t) => t as String).toList(),
     );
   }
 }

@@ -49,6 +49,9 @@ abstract class UserRepository {
   /// Updates profile data of current user in database as well as [FirebaseAuth].
   Future<void> updateProfile({String displayName, String photoUrl});
 
+  /// Adds the given Firebase Cloud Messaging (FCM) token to current user's profile.
+  Future<void> addMessagingToken(String token);
+
   /// Logs out the current user.
   Future<void> logout();
 }

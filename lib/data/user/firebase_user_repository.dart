@@ -171,6 +171,24 @@ class FirebaseUserRepository implements UserRepository {
     });
   }
 
+  Future<void> addMessagingToken(String token) async {
+    if (StringUtil.isNullOrEmpty(token)) {
+      throw ArgumentError('token cannot be null or empty');
+    }
+
+    final currentUser = await this._auth.currentUser();
+
+    // Update in Firestore
+    await this
+        ._usersCollection
+        .document(currentUser.uid)
+        .collection('private')
+        .document('fcmTokens')
+        .updateData({
+      'value': FieldValue.arrayUnion([token]),
+    });
+  }
+
   Future<User> _fromDatabase(FirebaseUser fbUser) async {
     if (fbUser == null) return null;
 
@@ -182,8 +200,16 @@ class FirebaseUserRepository implements UserRepository {
     }
 
     final userDoc = snapshots.documents.first;
+
     var userData = userDoc.data;
     userData['id'] = userDoc.documentID;
+
+    final privateCollectionData = await userDoc.reference.collection('private').getDocuments();
+    var privateUserData = Map<String, Object>();
+    privateCollectionData.documents.forEach((doc) {
+      privateUserData[doc.documentID] = doc.data['value'];
+    });
+    userData['privateUserData'] = privateUserData;
 
     return User.fromMap(userData);
   }
