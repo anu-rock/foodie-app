@@ -62,7 +62,7 @@
   - [ ] errors (https://flutter.dev/docs/cookbook/maintenance/error-reporting)
 - [ ] Push Notifications (use Firebase Functions)
   - [ ] status updates for friends
-  - [ ] new follower
+  - [x] new follower
 - [ ] Email Notifications (use Firebase Functions)
   - [ ] email verification
   - [ ] welcome email

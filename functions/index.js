@@ -120,6 +120,15 @@ exports.syncUserNetworkCounters = functions.firestore
       }
     });
 
+    if (!prevData && newData) {
+      await sendPushNotification(
+        newData.followeeId,
+        'You have a new follower!',
+        `${newData.followerName} is now following you.`,
+        newData.followerPhotoUrl
+      );
+    }
+
     console.log('Counters synced.');
     return null;
   });
@@ -128,30 +137,80 @@ exports.syncUserNetworkCounters = functions.firestore
  * Keeps a user's profile details such as name and photoUrl in sync.
  * TODO: This is a work in progress.
  */
-exports.syncUserDetails = functions.firestore
-  .document('/users/{userId}')
-  .onUpdate(async (change) => {
-    const prevData = change.before.data();
-    const newData = change.after.data();
-    const userId = prevData.userId;
+// exports.syncUserDetails = functions.firestore
+//   .document('/users/{userId}')
+//   .onUpdate(async (change) => {
+//     const prevData = change.before.data();
+//     const newData = change.after.data();
+//     const userId = prevData.userId;
 
-    const isNameChanged = prevData.displayName !== newData.displayName;
-    const isPhotoChanged = prevData.photoUrl !== newData.photoUrl;
+//     const isNameChanged = prevData.displayName !== newData.displayName;
+//     const isPhotoChanged = prevData.photoUrl !== newData.photoUrl;
 
-    const userRecipeDocs = db
-      .collection('user_recipes')
-      .where('userId', '==', userId);
-    const followerDocs = db
-      .collection('network')
-      .where('followerId', '==', userId);
-    const followeeDocs = db
-      .collection('network')
-      .where('followeeId', '==', userId);
+//     const userRecipeDocs = db
+//       .collection('user_recipes')
+//       .where('userId', '==', userId);
+//     const followerDocs = db
+//       .collection('network')
+//       .where('followerId', '==', userId);
+//     const followeeDocs = db
+//       .collection('network')
+//       .where('followeeId', '==', userId);
 
-    if (isNameChanged || isPhotoChanged) {
-      await db.runTransaction(async (t) => {});
+//     if (isNameChanged || isPhotoChanged) {
+//       await db.runTransaction(async (t) => {});
 
-      console.log('User details synced.');
+//       console.log('User details synced.');
+//     }
+//     return null;
+//   });
+
+async function sendPushNotification(userId, title, body, icon) {
+  console.log('Sending push notification...');
+
+  const tokensDoc = db
+    .collection('users')
+    .doc(userId)
+    .collection('private')
+    .doc('fcmTokens');
+  const tokens = (await tokensDoc.get()).data().value;
+
+  console.log(tokens);
+
+  // Check if there are any device tokens
+  if (!tokens.length) {
+    return console.log('There are no notification tokens to send to.');
+  }
+
+  // Notification details
+  const payload = {
+    notification: {
+      title,
+      body,
+      icon,
+    },
+  };
+
+  // Send notifications to all tokens
+  const response = await admin.messaging().sendToDevice(tokens, payload);
+  // For each message check if there was an error
+  const tokensToRemove = [];
+  response.results.forEach((result, index) => {
+    const error = result.error;
+    if (error) {
+      console.error('Failure sending notification to', tokens[index], error);
+      // Cleanup the tokens who are not registered anymore
+      if (
+        error.code === 'messaging/invalid-registration-token' ||
+        error.code === 'messaging/registration-token-not-registered'
+      ) {
+        tokensToRemove.push(
+          tokensDoc.update({
+            value: admin.firestore.FieldValue.arrayRemove(tokens[index]),
+          })
+        );
+      }
     }
-    return null;
   });
+  return Promise.all(tokensToRemove);
+}
